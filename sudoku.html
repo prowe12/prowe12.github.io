@@ -1,21 +1,58 @@
 <!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset="utf-8" />
-        <title>sudoku Page</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku</title>
 
-        <!-- Code to include nav bar-->
-        <div id="nav">
-            <a href="nav.html">Navigation Page</a>
-        </div>
-        <script src="script.js"></script>
+    <!-- Code to include nav bar-->
+    <div id="nav">
+        <a href=".nav.html">Navigation Page</a>
+    </div>
+    <script src="script.js"></script>
+
+    <style>
+        td {
+           width: 20px;
+           height: 20px;
+           border: 1px solid black; 
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <header> <h1>Sudoku</h1> </header>    
+    <main>
     
-    </head>
+        <!-- Print the Sudoku board to the screen -->
+        <table id="sudokuGraphic">
+        </table>
 
-      
-    <h1>Sudoku</h1>
+        <fieldset>
+            <legend>Controls</legend>
+          
+            <!-- Choose a puzzle from a drop-down list -->
+            Choose Puzzle
+            <select name="puzzle" id="dropdownpuzzle">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="evil">Evil</option>
+                <option value="random">Random</option>
+            </select>
 
-    <body>
-    </body>
-    <footer>Website created by Anna Van Boven and Penny Rowe</footer>
+            <!-- Add later  -->
+            <!-- Read in your own Sudoku file  -->
+            <!-- <input type="file" id="file-input">
+            <button id="read-button">Load File</button>
+            <pre id="file-contents"></pre>  -->
+        </fieldset>
+
+        <script src="sudoku/sudoku.js"></script>
+
+    </main>
+    
+    <footer>Page made by Penny Rowe.</footer>
+</body>
 </html>
