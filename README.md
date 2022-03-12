@@ -1,5 +1,5 @@
 # GameSolverHub
-<img src="./sudoku_easy_looping.gif?raw=true" alt="Sudoku puzzle">
+<img src="sudoku/sudoku_easy_looping.gif?raw=true" alt="Sudoku puzzle">
 
 A website that demonstrates AI game solvers in action.
 
