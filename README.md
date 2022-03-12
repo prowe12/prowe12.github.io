@@ -18,7 +18,7 @@ Acknowledge use by including the statement "By Penny Rowe and Anna Van Boven - O
 See the [LICENSE] LICENSE file for details.
 
 ## Dislaimer
-This code is not to be used in course assignments except with permission of the instructor. The original code must be credit as shown above.
+This code is not to be used in course assignments except with permission of the instructor. The original code must be credited as shown above.
 
 ## Acknowledgments
   - This project was inspired by the game solvers we developed in Introduction to Artificial Intelligence, taught by Professor America L. Chambers. 
