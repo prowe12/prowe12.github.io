@@ -1,9 +1,10 @@
 # GameSolverHub
+<img src="./sudoku_easy_looping.gif?raw=true" alt="Sudoku puzzle">
 
 A website that demonstrates AI game solvers in action.
 
 ## Features
-* Sudoku solver: Backtracking and AC-3 with various heuristics.
+* Sudoku solver: Options include backtracking and AC-3, Minimum Remaining Values heuristic and degree.
 * Connect Four solver: Minimax with heuristics.
 
 ## Authors
