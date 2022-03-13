@@ -10,6 +10,10 @@ label {
     width: 150px;
  }
 
+/* Style the Header tag */
+h1 {
+   text-align: center;
+}
 
 /* Make a grid for the puzzles */
 #grid-container {
