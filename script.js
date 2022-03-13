@@ -19,8 +19,6 @@ document.getElementById("nav").innerHTML = navHtmlText;
 ******************************************************/
 window.addEventListener('DOMContentLoaded', registerSudokuButtonHandler);
 window.addEventListener('DOMContentLoaded', registerConnectFourButtonHandler);
-//window.addEventListener('DOMContentLoaded', sudokuImageManipulator)
-//window.addEventListener('DOMContentLoaded', connectFourImageManipulator)
 
 /*****************************************************
     EVENT LISTENERS FOR USER GENERATED EVENTS
@@ -30,85 +28,35 @@ window.addEventListener('DOMContentLoaded', registerConnectFourButtonHandler);
  * On button click, solve Sudoku puzzle in image
  */
  function registerSudokuButtonHandler() {
-    let button = document.getElementById("sudokuImage");
-    button.addEventListener("click", function (event) {
-        if (button.innerHTML == '<img src="sudoku/sudoku_easy_looping.gif" alt="Sudoku">') {
-            imageName = "sudoku/sudoku_easy_original.jpg"
+    let button = document.getElementById("sudokuButton");
+    button.addEventListener("click", function changeImage(event) {
+        let currentImage = document.querySelector('#sudokuImage').getAttribute('src');
+        let imageName1 = "sudoku/sudoku_easy_original.jpg";
+        let imageName2 = "sudoku/sudoku_easy_looping.gif";
+        if (currentImage == imageName1) { 
+            document.querySelector('#sudokuImage').setAttribute('src', imageName2);
         }
         else {
-            imageName = "sudoku/sudoku_easy_looping.gif"
+            document.querySelector('#sudokuImage').setAttribute('src', imageName1);
         }
-        button.innerHTML = '<img src=' + imageName + ' alt="Sudoku"></img>'
-    })
+    });
 }
 
 
 /** 
- * On button click, solve Sudoku puzzle in image
+ * On button click, solve Connect Four puzzle in image
  */
  function registerConnectFourButtonHandler() {
     let button = document.getElementById("connectFourImage");
-    button.addEventListener("click", function (event) {
-        if (button.innerHTML == '<img src="connect-four/ConnectFour.gif" alt="Sudoku">') {
-            imageName = "connect-four/ConnectFourWin.jpg"
+    button.addEventListener("click", function changeImage(event) {
+        let currentImage = document.querySelector('#connectFourImage').getAttribute('src');
+        let imageName3 = "connect-four/ConnectFourWin.jpg";
+        let imageName4 = "connect-four/ConnectFour.gif";
+        if (currentImage == imageName3) { 
+            document.querySelector('#connectFourImage').setAttribute('src', imageName4);
         }
         else {
-            imageName = "connect-four/ConnectFour.gif"
+            document.querySelector('#connectFourImage').setAttribute('src', imageName3);
         }
-        button.innerHTML = '<img src=' + imageName + ' alt="Sudoku"></img>'
-    })
+    });
 }
-
-// function registerButtonHandler() {
-//     let button = document.getElementById("sudokuImage");
-//     let imageName =  "sudoku/sudoku_easy_looping.gif"
-//     button.addEventListener("click", clickToLoop("sudokuImage", imageName));
-// }
-
-// function clickToLoop( hrefID, imageName){
-//     //imageName = "sudoku/sudoku_easy_original.jpg"
-//     document.getElementById("sudokuImage").innerHTML = '<img src=' + imageName + ' alt="Sudoku"></img>'
-// }
-
-
-
-
-/**
- * Timers for image of Sudoku puzzle: Static, then moving, then static
- */
-
-// Promise to set Sudoku image
-// function delayedSetImage(hrefID, imageName, delay){
-//     // After some time delay, change the image and set the promise to resolved
-//     function setImage(resolve, reject){
-//         setTimeout(() => {
-//             document.getElementById(hrefID).innerHTML = '<img src=' + imageName + ' alt="Sudoku"></img>'
-//             resolve(); // This method sets the promise to resolved
-//         }, delay);
-//     }
-//     return new Promise(setImage)
-// }
-
-/**
- * For Sudoku image, alternate between static starting image, moving image, and static final image
- * on a loop (interval), with each occuring after a delay.
- */
-//function sudokuImageManipulator() {
-//    let timerID = setInterval(function(){
-//        delayedSetImage('sudokuImage', "sudoku/sudoku_easy_original.jpg", 3000)
-//        .then(() => delayedSetImage('sudokuImage', "sudoku/sudoku_easy_looping.gif", 3000))
-//        .then(() => delayedSetImage('sudokuImage', "sudoku/sudoku_easy_complete.jpg", 10000))
-//    }, 20000);
-//}
-
-/**
- * For Connect Four image, alternate between static starting image, moving image, and static final image
- * on a loop (interval), with each occuring after a delay.
- */
-function connectFourImageManipulator() {
-    let timerID = setInterval(function(){
-        delayedSetImage('connectFourImage', "connect-four/ConnectFourWin.jpg", 10000)
-        .then(() => delayedSetImage('connectFourImage', "connect-four/ConnectFour.gif", 10000))
-    }, 18000);
-}
-

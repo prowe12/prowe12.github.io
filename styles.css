@@ -18,15 +18,30 @@ h1 {
 /* Make a grid for the puzzles */
 #grid-container {
    display: grid;
-   grid-template-columns: auto auto;
+   grid-template-columns: 50% 50%;
 }
 
-/* Styles for the puzzles (div elements) in the grid */
+/* Styles for the grid for the puzzles (div elements) in the grid */
 #grid-container > div {
    text-align: center;
-   background: lightgreen;
-   border: 3px solid green;
+   background-color: none;
    padding: 20px;
+   border:brown;
+}
+
+/* Images */
+#sudokuImage {
+   width: 400px; 
+   height: 360px; 
+   object-fit: none; 
+   object-position: 58% 55%;
+}
+
+#connectFourImage {
+   width: 400px; 
+   height: auto; 
+   object-fit: cover; 
+   object-position: 90% 55%;
 }
 
  /* Links that are play buttons  */
