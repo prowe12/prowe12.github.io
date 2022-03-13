@@ -1,4 +1,24 @@
 
+/* Color scheme */
+/* #150A41, #FFE1C8, #55003B */
+/* light blue: rgb(200, 225, 250) */
+
+/* nav bar */
+/* make it bigger, and touch the top and sides */
+/* white font for text */
+#nav {
+   background-color: rgb(48, 3, 153);
+   color: white;
+}
+
+#nav > href {
+   color: white;
+}
+
+body {
+   background-color: rgb(200, 225, 250);
+};
+
 /* What is this for? */
 div {
     margin-bottom: 10px;

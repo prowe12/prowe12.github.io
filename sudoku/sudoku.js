@@ -249,20 +249,31 @@ function populateBoard(grid){
 
 }
 
+
+
+/*****************************************************
+    EVENTS TRIGGERED WHEN THE DOM IS FINISHED LOADING
+******************************************************/
+
 // Set up the empty grid after the DOM content is loaded
 document.addEventListener("DOMContentLoaded", function () {
     makeEmptyGrid(9, 9);
 });
   
+
+
+/*****************************************************
+    EVENT LISTENERS FOR USER GENERATED EVENTS
+******************************************************/
+
+// Get the desired puzzle based on the drop-down menu value
 document.querySelector("#dropdownpuzzle").addEventListener("change", function() {
-    // Get the desired puzzle based on the drop-down menu value
     let puzzleType = document.getElementById("dropdownpuzzle").value;
     grid = load_starting_vals(puzzleType);
 
     // Populate the Sudoku board with the values from grid
     populateBoard(grid);
 });
-
 
 
 // Read in the file provided by the user
@@ -274,5 +285,5 @@ document.querySelector("#read-button").addEventListener('click', function() {
             window.document.querySelector("#file-contents").textContent = text;
     });
     reader.readAsText(file);
-
 });
+
