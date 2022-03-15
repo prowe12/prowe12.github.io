@@ -5,18 +5,37 @@
 #sudokuGraphic {
    margin-left: auto;
    margin-right: auto;
-   text-align: center t
+   text-align: center;
 }
 
-/* Center the controls */
+/* Center the control fieldset */
 #sudokuControls {
-   margin-left: auto;
-   margin-right: auto;
-
+   text-align: center;
 }
+
 
 td {
    width: 20px;
    height: 20px;
    border: 1px solid black; 
 }
+
+/* Default Sudoku box styling */
+.sudokubox {
+   color: gray;
+}
+
+/* styling for fixed numbers (original grid) */
+.sudokubox.fixed {
+   color: black;
+   font-weight: bold;
+}
+
+.sudokubox.backtrack {
+   color: green;
+}
+
+.sudokubox.final {
+   color: blue;
+}
+

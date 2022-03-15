@@ -170,7 +170,7 @@ function isArrayEqual(array1, array2) {
             // To let player play the game, make a input box as a child to the cell
             let col = document.createElement("td");
             col.classList.add(`col-${j}`);
-            //col.innerHTML = '';
+            col.classList.add("sudokubox");
             row.appendChild(col);
         }
     }
@@ -183,38 +183,92 @@ function isArrayEqual(array1, array2) {
  * @param {number} col 
  * @param {number} value 
  */
-function populateSquare(irow, icol, value, numberColor='', borderColor=''){
+function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='black', numberFontWeight='', borderColor=''){
+    
 
     // Allowed values for modifiable cell properties
-    let allowedBorderColors = ['black', 'red', 'orange', 'green', 'blue'];
-    let allowedNumberColors = ['black', 'red', 'orange', 'green', 'blue'];
+    // let allowedNumberColors = ['black', 'red', 'orange', 'green', 'blue'];
+    // let allowedBorderColors = ['black', 'red', 'orange', 'green', 'blue'];
+    // let allowedNumberFontWeights = ['bold', 'normal'];
+    let allowedBoxStyles = ['empty', 'fixed', 'final', 'backtrack'];
+    let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    // The Sudoku cell at irow, icol
-    let box = document.querySelector(`.row-${irow} .col-${icol}`);
-    
-    // If the value is outside the range, do nothing
-    if (value in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] === false) {
+    // If the value is outside the range, throw error
+    if (!(value in allowedValues)) {
         console.log("Bad value for Sudoku square");
         return;
     } 
+    
+    // The Sudoku cell at irow, icol
+    let box = document.querySelector(`.row-${irow} .col-${icol}`);
+
+    // If this box has already been set to fixed, we should not be changing it
+    if (box.className.indexOf("fixed") !== -1) {
+        alert(`Error: trying to change fixed square at ${irow}, ${icol}.`);
+    }
+
+    let printstuff
+    if (boxStyle === 'fixed') {
+        printstuff = false;
+    }
+    else {
+        printstuff = true;
+    }
+
+
+    // Clear out all box style classes
+    for (let thisStyle of allowedBoxStyles) {
+        box.classList.remove(thisStyle);
+    }
+
+    // Add the input box style class
+    //if (allowedBoxStyles.includes(boxStyle)) {
+    if (allowedBoxStyles.indexOf(boxStyle) !== -1) {
+            box.classList.add(boxStyle);
+    }
+    else {
+        alert("Bad value for style of Sudoku box");
+    }
+  
+    if (printstuff) {
+        console.log(`irow is ${irow}, icol is ${icol}, value is ${value}`);
+    }
+    
 
     // Put the number in the box, unless it is zero, then keep empty
     if (value === 0) {
         box.innerHTML = '';
     }
     else  {
+        //if (printstuff) {
+        //    console.log(`The box innerHTML starts out as ${box.innerHTML}`);
+        //}
         box.innerHTML = value;
+        //if (printstuff) {
+        //    console.log(`The value is ${value}, and the box innerHTML is now ${box.innerHTML}`);
+        //    console.log(document.querySelector(`.row-${irow} .col-${icol}`).innerHTML);
+        //}
     }
 
-    // Set the color of the number in the cell, if color specified is allowed
-    if (allowedNumberColors.indexOf(numberColor) !== -1){
-        box.style.setProperty("color", numberColor);
-    }
+    // Set the color of the number in the cell, if color specified is allowed.
+    // Otherwise, throw an error
+    // if (allowedNumberColors.indexOf(numberColor) !== -1){
+    //     box.style.setProperty("color", numberColor);
+    // }
+    // else {
+    //     // TODO: throw an exception
+    //     console.log("Bad color choice!");
+    // }
+
+    // Set the style of the number in the cell, if it is allowed.
+    //if (allowedNumberFontWeights.includes(numberFontWeight)) {
+    //    box.style.setProperty("fontWeight", numberFontWeight);
+    //}
 
     // Add a border, if color specified is allowed
-    if (allowedBorderColors.indexOf(borderColor) !== -1) {
-        box.style.borderColor = borderColor; //("borderColor", "green");
-    }
+    //if (allowedBorderColors.indexOf(borderColor) !== -1) {
+    //    box.style.borderColor = borderColor; //("borderColor", "green");
+    //}
     return;
 }
 
@@ -241,9 +295,13 @@ function populateBoard(grid){
     //TODO: dimensions right?
     nrows = grid.length;
     ncols = grid[0].length;
+
+    // Put all non-zero values into the grid
     for (i=0; i<nrows; i++){
         for (j=0; j<ncols; j++){
-            populateSquare(i, j, grid[i][j]);
+            if (grid[i][j] > 0) {
+                populateSquare(i, j, grid[i][j], 'fixed');    //'black', 'bold');
+            }
         }
     }
 
@@ -255,9 +313,14 @@ function populateBoard(grid){
     EVENTS TRIGGERED WHEN THE DOM IS FINISHED LOADING
 ******************************************************/
 
-// Set up the empty grid after the DOM content is loaded
+// Global variables
+var puzzleType = document.getElementById("dropdownpuzzle").value;
+var originalgrid = load_starting_vals(puzzleType);
+
+// Set up the default grid after the DOM content is loaded
 document.addEventListener("DOMContentLoaded", function () {
     makeEmptyGrid(9, 9);
+    populateBoard(originalgrid);
 });
   
 
@@ -266,24 +329,46 @@ document.addEventListener("DOMContentLoaded", function () {
     EVENT LISTENERS FOR USER GENERATED EVENTS
 ******************************************************/
 
+
 // Get the desired puzzle based on the drop-down menu value
 document.querySelector("#dropdownpuzzle").addEventListener("change", function() {
-    let puzzleType = document.getElementById("dropdownpuzzle").value;
-    grid = load_starting_vals(puzzleType);
+    puzzleType = document.getElementById("dropdownpuzzle").value;
 
-    // Populate the Sudoku board with the values from grid
-    populateBoard(grid);
+    // The original grid will be in the global scope
+    originalgrid = load_starting_vals(puzzleType);
+
+    // Clear the Sudoku board and populate with the values from the selected puzzle
+    makeEmptyGrid(9, 9);
+    populateBoard(originalgrid);
 });
+
+
+// If the solve button is clicked, solve the game
+document.querySelector("#playSudokuSolver").addEventListener("click", function() {
+    // TODO: allow user to choose between solve and bactrack below, via a controller
+
+    // Solve the board using AC-3 + backtracking, using solve, in solver.js
+    //solve(originalgrid);  //, boardPlot)
+
+    // Solve the board using backtracking alone, using backtrack, in backtrack.js
+    backtracker(originalgrid, populateSquare);  //, boardPlot)
+
+});
+
+// document.querySelector("#playSudokuSolver").addEventListener("playSolver", function() {
+//     console.log("The button was pushed.")
+//     document.getElementById("#playSudokuSolver").value="ON PLAY!";
+// });
 
 
 // Read in the file provided by the user
-document.querySelector("#read-button").addEventListener('click', function() {
-    let file = window.document.querySelector("#file-input").files[0];
-    let reader = new FileReader();
-    reader.addEventListener('load', function(e) {
-            let text = e.target.result;
-            window.document.querySelector("#file-contents").textContent = text;
-    });
-    reader.readAsText(file);
-});
+// document.querySelector("#read-button").addEventListener('click', function() {
+//     let file = window.document.querySelector("#file-input").files[0];
+//     let reader = new FileReader();
+//     reader.addEventListener('load', function(e) {
+//             let text = e.target.result;
+//             window.document.querySelector("#file-contents").textContent = text;
+//     });
+//     reader.readAsText(file);
+// });
 
