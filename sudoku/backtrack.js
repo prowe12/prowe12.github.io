@@ -161,10 +161,6 @@ function backtrack(grid, putSquare, row, col){
             }
 
             // If backtrack got to a number that is not allowed, undo it
-            if (row===0 & col===2) {
-                console.log(testnum);
-                alert(`Pause: testnum = ${testnum}`);
-            }
             grid[row][col] = 0;
             putSquare(row, col, 0);
         }
