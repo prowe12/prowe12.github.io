@@ -1,11 +1,16 @@
 /**
  * Put the nav bar html text into the HTML
  */
-navHtmlText = '<a class="active" href="index.html">Home</a> ' +
-              '<a href="sudoku.html">Sudoku</a> ' +
-              '<a href="connectFour.html">Connect Four</a>'
+navHtmlText = '<ul>' +
+              '<li><a href="index.html">Home</a></li>' +
+              '<li><a href="sudoku.html">Sudoku</a>' +
+              '<li><a href="connectFour.html">Connect Four</a></li>' +
+              '</ul>'
 document.getElementById("nav").innerHTML = navHtmlText;
 
+// ' ' +
+//               ' ' +
+//               '' + 
 /**
  * Button to play Sudoku
  */
@@ -19,6 +24,8 @@ document.getElementById("nav").innerHTML = navHtmlText;
 ******************************************************/
 window.addEventListener('DOMContentLoaded', registerSudokuButtonHandler);
 window.addEventListener('DOMContentLoaded', registerConnectFourButtonHandler);
+
+
 
 /*****************************************************
     EVENT LISTENERS FOR USER GENERATED EVENTS

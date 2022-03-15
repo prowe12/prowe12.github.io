@@ -1,6 +1,20 @@
 /* Styles for Sudoku page (sudoku.html)
 */
 
+/* Center the Sudoku board */
+#sudokuGraphic {
+   margin-left: auto;
+   margin-right: auto;
+   text-align: center t
+}
+
+/* Center the controls */
+#sudokuControls {
+   margin-left: auto;
+   margin-right: auto;
+
+}
+
 td {
    width: 20px;
    height: 20px;
