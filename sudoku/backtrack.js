@@ -20,7 +20,7 @@
  * @return  The values in the 3x3 square
  */
 function getsquarevals(grid, row, col) {
-    console.log("In getsquarevals");
+    //console.log("In getsquarevals");
     let result = [];
 
     let irow = Math.floor(row / 3); // row//3; 
@@ -65,7 +65,6 @@ function alreadythere(grid, row, col, val){
     // Is the value already in the row?
     // if (val in grid[row]) {
     if (grid[row].includes(val)) {
-        console.log(`${val} already in row ${row}`);
         return true;
     }
 
@@ -82,7 +81,6 @@ function alreadythere(grid, row, col, val){
     }
     //if (val in colvals){
     if (colvals.includes(val)) {
-        console.log(`${val} already in column ${col}`);
         return true;
     }
 
@@ -106,7 +104,7 @@ function alreadythere(grid, row, col, val){
  */
 function backtrack(grid, putSquare, row, col){
 
-    console.log("In backtrack, of backtrack.js");
+    //console.log("In backtrack, of backtrack.js");
 
     // while (grid[row][col] > 0){
     //     if (row < 8){
@@ -139,33 +137,41 @@ function backtrack(grid, putSquare, row, col){
         }
     }
 
-    console.log(`At row: ${row}, col: ${col}`);
+    //console.log(`At row: ${row}, col: ${col}`);
 
     // For test numbers of 1 through nine, loop over them and check if 
     // the number is already in the row, column, or 3x3 square. Once
     // we get to a unique number, add it to the grid and continue with
     // the next empty box, as determined in the while-loop above
+    var delay = 1000;
     for (let testnum=1; testnum<10; testnum++) {   // in range(1, 10){
         if (!(alreadythere(grid, row, col, testnum))) {
             grid[row][col] = testnum;
 
             //boardRep.update(grid, row, col)
-            console.log("Putting the test value in the square");
             putSquare(row, col, testnum, 'backtrack');
 
-            grid, success = backtrack(grid, putSquare, row, col);
-            if (success) {
-                // This is the exit condition
-                console.log("Success!");
-                return grid, true;
-            }
+            function timeoutLoop() {
+                grid, success = backtrack(grid, putSquare, row, col);
+                setTimeout(timeoutLoop, delay);
 
-            // If backtrack got to a number that is not allowed, undo it
-            grid[row][col] = 0;
-            putSquare(row, col, 0);
+
+                if (success) {
+                    // This is the exit condition
+                    return grid, true;
+                }
+
+                // If backtrack got to a number that is not allowed, undo it
+                //function timeoutLoop2() {
+                    grid[row][col] = 0;
+                //    putSquare(row, col, 0);
+                //}
+                //setTimeout(timeoutLoop2, delay);
+            }
+            setTimeout(timeoutLoop, delay);
+          
         }
     }
-    console.log(`Backtrack failed for ${row}, ${col}`);
         
     return grid, false;
 }
@@ -176,7 +182,7 @@ function backtrack(grid, putSquare, row, col){
  * @param grid  The current numbers of the Sudoku board, list of lists
  */
 function quality_check(grid){
-    console.log("In quality_check, of backtrack.js");
+    //console.log("In quality_check, of backtrack.js");
     for (row=0; row<9; row++){        //row in range(9):
         for (col=0; col<9; col++) {   //col in range(9):
             val = grid[row][col];
@@ -206,7 +212,8 @@ function quality_check(grid){
  * populateSquare(irow, icol, value, numberColor='', borderColor='')
  */
 function backtracker(grid, putSquare){
-    console.log("In backtracker of backtrack.js");
+    //console.log("In backtracker of backtrack.js");
+    //console.log(`speed=${speed}, wait=${wait}`);
 
     // Check the starting grid
     quality_check(grid);
@@ -217,6 +224,7 @@ function backtracker(grid, putSquare){
     if (success){
         quality_check(grid);
     }
+    console.log("finished");
 
     return grid, success;
 }

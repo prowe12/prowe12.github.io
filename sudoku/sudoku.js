@@ -207,15 +207,6 @@ function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='bl
         alert(`Error: trying to change fixed square at ${irow}, ${icol}.`);
     }
 
-    let printstuff
-    if (boxStyle === 'fixed') {
-        printstuff = false;
-    }
-    else {
-        printstuff = true;
-    }
-
-
     // Clear out all box style classes
     for (let thisStyle of allowedBoxStyles) {
         box.classList.remove(thisStyle);
@@ -228,26 +219,14 @@ function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='bl
     }
     else {
         alert("Bad value for style of Sudoku box");
-    }
-  
-    if (printstuff) {
-        console.log(`irow is ${irow}, icol is ${icol}, value is ${value}`);
-    }
-    
+    }    
 
     // Put the number in the box, unless it is zero, then keep empty
     if (value === 0) {
         box.innerHTML = '';
     }
     else  {
-        //if (printstuff) {
-        //    console.log(`The box innerHTML starts out as ${box.innerHTML}`);
-        //}
         box.innerHTML = value;
-        //if (printstuff) {
-        //    console.log(`The value is ${value}, and the box innerHTML is now ${box.innerHTML}`);
-        //    console.log(document.querySelector(`.row-${irow} .col-${icol}`).innerHTML);
-        //}
     }
 
     // Set the color of the number in the cell, if color specified is allowed.
@@ -316,6 +295,8 @@ function populateBoard(grid){
 // Global variables
 var puzzleType = document.getElementById("dropdownpuzzle").value;
 var originalgrid = load_starting_vals(puzzleType);
+var speed = 1000;   // Speed of displaying results
+var wait;
 
 // Set up the default grid after the DOM content is loaded
 document.addEventListener("DOMContentLoaded", function () {
