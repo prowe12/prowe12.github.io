@@ -1,0 +1,49 @@
+#{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1{
+    text-align: center;
+}
+
+h3{
+    text-align: center;
+}
+
+.game{
+    position: relative;
+    top: 4rem;
+    left: 50%;
+    transform: translate(-50%);
+    width: 650px;
+    height: 600px;
+    background: rgb(1, 1, 255);
+    border: 1px solid black;
+}
+
+.slot{
+    width: 90px;
+    height: 90px;
+    background:rgb(200, 225, 250);
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.reset{
+    position: relative;
+    top: 10vh;
+    left: 50%; 
+    transform: translate(-50%);
+    border: 1px solid black;
+    width: 5rem;
+    text-align: center;
+}
+
+.footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    text-align: left;
+}
