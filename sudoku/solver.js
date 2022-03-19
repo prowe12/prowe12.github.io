@@ -2,7 +2,7 @@
  From python code with header:
  #!/usr/bin/env python3
  # -*- coding: utf-8 -*-
- """
+ 
  Created on Wed Mar 10 12:05:35 2021
 
  @author: prowe
@@ -14,8 +14,7 @@
  By Penny Rowe
  2021/03/10
  AI with Prof. America Chambers, Spring 2021
- """
-
+ 
  Converted to JavaScript
  By Penny M. Rowe
  March 14, 2021
@@ -37,24 +36,56 @@
 
 
 
-// def get_board(grid, nside=9):
-//     """
-//     Create the board has a list of lists of each cell, where each cell is a
-//     class containing a domain and a set of constraints
-//     @param grid  The Numbers in the Sudoku board, as a list of list of int
-//     @param nside  Elements in a side of the board; default 9
-//     """
-//     board = [[[] for i in range(nside)] for j in range(nside)]
+/**
+ * Create the board has a list of lists of each cell, where each cell is a
+ * class containing a domain and a set of constraints
+ * @param {} grid  The Numbers in the Sudoku board, as a list of list of int
+ * @param {} nside  Elements in a side of the board; default 9
+ * @returns 
+ */
+function getBoard(grid) {
+    console.log("In getBoard");
+    let nside = grid.length;
+    console.log(grid);
 
-//     board = [[Variable(i, j, nside) for i in range(nside)] for j in range(nside)]
+    var board = new Array();
 
-//     for i, row_vals in enumerate(grid):
-//         for j, val in enumerate(row_vals):
-//             if val == 0:
-//                 board[i][j] = Variable(i, j, nside)
-//             else:
-//                 board[i][j] = Variable(i, j, nside, {val}, fix=True)
-//     return board
+    // board = [[[] for i in range(nside)] for j in range(nside)]
+    // board = [[Variable(i, j, nside) for i in range(nside)] for j in range(nside)]
+    // for i, row_vals in enumerate(grid):
+    //     for j, val in enumerate(row_vals):
+    //         if val == 0:
+    //             board[i][j] = Variable(i, j, nside)
+    //         else:
+    //             board[i][j] = Variable(i, j, nside, {val}, fix=True)
+    let boardRow;
+    let value;
+    let allVals;
+    for (i=0; i<nside; i++) {
+        boardRow = new Array();
+        for (j=0; j<nside; j++) {
+            value = grid[i][j];
+            console.log(`value: ${value}`);
+            if (value == 0) {
+                allVals = new Set();
+                for (k=0; k<nside; k++) {
+                    allVals.add(k);
+                }            
+                console.log(`allVals: ${allVals}`);
+                console.log(allVals);
+                boardRow.push(new Variable(i, j, nside, allVals));
+            }
+            else {
+                allVals = new Set();
+                allVals.add(value);
+                console.log(`allVals (1 value): ${allVals}`);
+                boardRow.push(new Variable(i, j, nside, allVals, true));
+            }
+        }
+        board.push(boardRow);
+    }
+    return board
+}
 
 
 
@@ -110,37 +141,47 @@
 function solve(original) { //, boardPlot):
     console.log("I am in solve, in solver.js");
 
-//     max_domain_val = len(original)
-//     board = get_board(original, max_domain_val)   # list of lists of Variables
+    //let maxDomainVal = original.length;
 
-//     # .. Get the starting constraints
-//     constraints = get_all_constraints(board[0][0].max_domain_val)
+    // Get the board as an array of arrays of Variables
+    let board = getBoard(original);
+    console.log("Check out board:");
+    console.log(board);
+    console.log(board[0][0]);
+    console.log(board[0][1]);
+    console.log(board[1][0]);
+    console.log(board[1][1]);
 
-//     # .. Check if the fixed values are inconsistent
-//     #    and remove them from the board
-//     constraints, success = qc_board_and_constraints(board, constraints)
-//     if not success:
-//         boardPlot.message('Starting board is not valid.')
-//         return get_grid(board), False
+    // Get the starting constraints
+    console.log(`board[0][0].maxDomainVal: ${board[0][0].maxDomainVal}`);
+    constraints = getAllConstraints(board[0][0].maxDomainVal);
 
-//     # .. Try AC-3 alone first
-//     board = arc_consistency3(board, deepcopy(constraints), boardPlot)
-//     if is_complete(board):
-//         return get_grid(board), True
+    // TODO: Complete this
+    // Check if the fixed values are inconsistent and remove them from the board
+    // constraints, success = qc_board_and_constraints(board, constraints)
+    // if (!(success)) {
+    //     boardPlot.message('Starting board is not valid.')
+    //     return get_grid(board), False
+    // }
 
-//     # .. If it isn't solved, using backtracking with AC-3
-//     board = backtrack(deepcopy(board), constraints, original, boardPlot)
+    // Try AC-3 alone first
+    board = arcConsistency3(board, constraints); //, boardPlot)
+    // if is_complete(board):
+    //     return get_grid(board), True
 
-//     # .. Final check: check all constraints again, even the fixed ones
-//     constraints = get_all_constraints(max_domain_val)
-//     constraints, success = qc_board_and_constraints(board, constraints)
-//     if not success:
-//         print('Something went wrong')
-//     if not final_constraints(board, constraints):
-//         success = False
-//         print('Something is wrong with your board!')
+    // If it isn't solved, using backtracking with AC-3
+    // board = backtrack(deepcopy(board), constraints, original, boardPlot)
 
-//     return get_grid(board), success
+    // Final check: check all constraints again, even the fixed ones
+    // constraints = get_all_constraints(max_domain_val)
+    // constraints, success = qc_board_and_constraints(board, constraints)
+    // if not success:
+    //     print('Something went wrong')
+    // if not final_constraints(board, constraints):
+    //     success = False
+    //     print('Something is wrong with your board!')
+
+    // return get_grid(board), success
 }
 
 
@@ -166,7 +207,7 @@ function solve(original) { //, boardPlot):
 //         boardPlot.update(get_grid(assignment), unasgn.row, unasgn.col)
 //         temp_board = deepcopy(assignment)
 
-//         if arc_consistency3(temp_board, deepcopy(constraints), boardPlot) != -1:
+//         if arcConsistency3(temp_board, deepcopy(constraints), boardPlot) != -1:
 
 //             result = backtrack(temp_board, constraints, original, boardPlot)
 //                                                   #   assignment is returned
@@ -184,14 +225,29 @@ function solve(original) { //, boardPlot):
 //     return -1   # Fail
 
 
+/**
+ * 
+ * @param {*} assignment 
+ * @param {*} constraints 
+ * @param {*} boardPlot 
+ * @returns 
+ */
+function arcConsistency3(assignment, constraints) {   //, boardPlot) {
+    let constraint = constraints[0];
+    console.log(`constraint[1][0] ${constraint[1][0]}`);
+    console.log(`constraint[1][1] ${constraint[1][1]}`);
+    xi = assignment[constraint[0][0]][constraint[0][1]];
+    xj = assignment[constraint[1][0]][constraint[1][1]];
+    console.log(`xi: ${xi}`);
+    console.log(`xj: ${xj}`);
 
-// def arc_consistency3(assignment, constraints, boardPlot):
-//     """
-//     arc_consistency3
-//     @param assignment
-//     @param constraints
-//     @param boardPlot
-//     """
+    // Check if xi is fixed. It shouldn't be because we already removed
+    // it from the constraints
+    console.log(xi);
+    if (xi.fixed) {
+        alert("Adan,l whhhhy?");
+        //continue;
+    }
 
 //     while constraints:
 //         [irow, icol], [jrow, jcol] = constraints.pop(0)
@@ -224,7 +280,8 @@ function solve(original) { //, boardPlot):
 //             new_constraints = reverse_constraints(xi.row, xi.col, xi.max_domain_val)
 //             constraints += new_constraints
 
-//     return assignment
+    return assignment
+}
 
 
 

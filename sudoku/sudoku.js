@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-/** # -*- coding: utf-8 -*-
+/**
  * Created on Wed Mar 10 11:58:44 2021
  * 
  * @author: prowe
@@ -15,6 +14,7 @@
  * For AI and Software Engineering with Prof. Chambers
  * at the University of Puget Sound
  * Spring 2021, Spring 2022
+ * 
  */
 
 // Built-in modules
@@ -56,7 +56,7 @@ function load_starting_vals(puzzle='easy'){
     let grid;
 
     if (puzzle === 'random') {
-        puzzleTypes = ['easy', 'medium', 'hard', 'evil'];
+        let puzzleTypes = ['easy', 'medium', 'hard', 'evil'];
         randint = Math.floor(puzzleTypes.length * Math.random());
         puzzle = puzzleTypes[randint];
      }
@@ -138,23 +138,23 @@ function load_starting_vals(puzzle='easy'){
  * @param {array} arr2 
  * @returns 
  */
-function isArrayEqual(array1, array2) {
-    if (array1.length !== array2.length) {
-        return false;
-    }
-    // Go through row by row
-    let allEqual = true;
-    // for (i=0; i<9; i++) {
-    //     arr1 = array1[0];
-    //     arr2 = array2[0];
-    //     let isEqual = arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
-    //     allEqual = isEqual & allEqual;
-    return allEqual;
-}
+// function isArrayEqual(array1, array2) {
+//     if (array1.length !== array2.length) {
+//         return false;
+//     }
+//     // Go through row by row
+//     let allEqual = true;
+//     // for (i=0; i<9; i++) {
+//     //     arr1 = array1[0];
+//     //     arr2 = array2[0];
+//     //     let isEqual = arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+//     //     allEqual = isEqual & allEqual;
+//     return allEqual;
+// }
 
 
 /**
- * Display the grid
+ * Set up the empty grid
  * @param {array} grid 
  */
  function makeEmptyGrid(nrows, ncols){
@@ -329,10 +329,10 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // TODO: allow user to choose between solve and bactrack below, via a controller
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
-    //solve(originalgrid);  //, boardPlot)
+    solve(originalgrid);  //, boardPlot)
 
     // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    backtracker(originalgrid, populateSquare);  //, boardPlot)
+    //backtracker(originalgrid, populateSquare);  //, boardPlot)
 
 });
 
