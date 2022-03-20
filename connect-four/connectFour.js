@@ -202,19 +202,21 @@ function minimax(depth, maxDepth, board){
 function maxValue(depth, board, maxDepth, prevPlay){
     var actVal = [];
     actVal.length = 2;
+    console.log("depth: ",depth);
     if(cutoffTest(board, depth, maxDepth)){
+        console.log("depth: ",depth);
         const eval = evaluate(board);
         actVal[0] = prevPlay;
         actVal[1] = eval;
         return actVal;
     }
 
-    const value = -100000;
-    const action = -1;
+    var value = -100000;
+    var action = -1;
     depth++;
-    var validActs = action(board);
+    var validActs = getAction(board);
     for(let i = 0; i< validActs.length; i++){
-        let a = validActs[a];
+        let a = validActs[i];
         if(a === -1){
             continue;
         }
@@ -227,7 +229,7 @@ function maxValue(depth, board, maxDepth, prevPlay){
             actVal[1] = value;
         }
 
-        undoResult(a, rack);
+        undoResult(a, board);
     }
     return actVal;
 }
@@ -242,10 +244,10 @@ function minValue(depth, board, maxDepth, prevPlay){
         return actVal;
     }
 
-    const value = 10000;
-    const action = -1;
+    var value = 10000;
+    var action = -1;
     depth++;
-    var validActs = action(board);
+    var validActs = getAction(board);
     for(let i = 0; i<validActs.length; i++){
         let a = validActs[i];
         if(a===-1){
@@ -287,10 +289,10 @@ function undoResult(column, board){
 }
 
 function cutoffTest(board, depth, maxDepth){
-    return depth===maxDepth || mmWinCheck(board);
+    return depth >= maxDepth || winCheck();
 }
 
-function action(board){
+function getAction(board){
     var validActs = [];
     for(let i = 0; i<board[0].length; i++){
         if(board[0][i] ===0){
