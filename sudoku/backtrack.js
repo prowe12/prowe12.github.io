@@ -92,6 +92,8 @@ function alreadythere(grid, row, col, val){
     return false;
 }
 
+var delay = 1000;
+
 
 /**
  * Solve the sudoku board using ONLY Backtracking, recursively
@@ -143,32 +145,29 @@ function backtrack(grid, putSquare, row, col){
     // the number is already in the row, column, or 3x3 square. Once
     // we get to a unique number, add it to the grid and continue with
     // the next empty box, as determined in the while-loop above
-    var delay = 1000;
     for (let testnum=1; testnum<10; testnum++) {   // in range(1, 10){
         if (!(alreadythere(grid, row, col, testnum))) {
             grid[row][col] = testnum;
 
-            //boardRep.update(grid, row, col)
-            putSquare(row, col, testnum, 'backtrack');
+            console.log(delay);
+            setTimeout(function() {
+                putSquare(row, col, testnum, 'backtrack');
+            }, delay);
 
-            function timeoutLoop() {
-                grid, success = backtrack(grid, putSquare, row, col);
-                setTimeout(timeoutLoop, delay);
+            grid, success = backtrack(grid, putSquare, row, col);
 
 
-                if (success) {
-                    // This is the exit condition
-                    return grid, true;
-                }
-
-                // If backtrack got to a number that is not allowed, undo it
-                //function timeoutLoop2() {
-                    grid[row][col] = 0;
-                //    putSquare(row, col, 0);
-                //}
-                //setTimeout(timeoutLoop2, delay);
+            if (success) {
+                // This is the exit condition
+                return grid, true;
             }
-            setTimeout(timeoutLoop, delay);
+
+            // If backtrack got to a number that is not allowed, undo it
+            grid[row][col] = 0;
+            setTimeout(function() {
+                putSquare(row, col, 0);
+            }, delay);
+
           
         }
     }
