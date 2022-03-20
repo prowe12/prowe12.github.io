@@ -5,22 +5,19 @@ var tableSlot = document.querySelectorAll('.slot');
 const playerTurn = document.querySelector('.player-turn');
 const reset = document.querySelector('.reset');
 
+/*
 for(let i = 0; i < tableCell.length; i++){
     tableCell[i].addEventListener('click',(e)=>{
         console.log(`${e.target.parentElement.rowIndex}, ${e.target.cellIndex}`);
 
     })
 }
+*/
 
 //have players state their name
-while(!player1){
-    var player1 = prompt('Player One: Enter your name. You will be red.');
-}
+
 player1Color = 'red';
 
-while(!player2){
-    var player2 = prompt('Player Two: Enter your name. You will be yellow.');
-}
 player2Color = 'yellow';
 
 var board = [];
@@ -36,16 +33,17 @@ for(let i = 0; i<6; i++){
 
 //want current player to start as 1
 var currentPlayer = 1;
-playerTurn.textContent = `${player1}'s turn`;
+playerTurn.textContent = `Your turn!`;
 
 //go through the cells and show that we know they all have white background
 Array.prototype.forEach.call(tableCell, (cell)=>{
-    cell.addEventListener('click',changeColor);
     cell.style.backgroundColor = 'rgb(200, 225, 250)';
+    cell.addEventListener('click',playerMove);
 })
 
-function changeColor(e){
+function playerMove(e){
     let column = e.target.cellIndex;
+    console.log(typeof column);
     let row = [];
 
     for(let i = 5; i >=0; i --){
@@ -53,44 +51,58 @@ function changeColor(e){
             //empty slot you come across with a tile from the player
         if(tableRow[i].children[column].style.backgroundColor == 'rgb(200, 225, 250)'){
             row.push(tableRow[i].children[column]);
-            if(currentPlayer === 1){
-                board[i][column] = 1
-                row[0].style.backgroundColor = player1Color;
-                if(winCheck()){
-                    console.log(board);
-                    playerTurn.textContent = `${player1} wins!`;
-                    playerTurn.style.color = player1Color;
-                    return(alert('winner!'));
+            board[i][column] = 1
+            row[0].style.backgroundColor = player1Color;
+            if(winCheck()){
+                console.log(board);
+                playerTurn.textContent = `You won!`;
+                playerTurn.style.color = player1Color;
                 }
                 else if(drawCheck()){
                     playerTurn.textContent = 'game is a draw';
-                    return alert('draw!');
                 }
                 else{
-                    playerTurn.textContent = `${player2}'s turn!`;
-                    return currentPlayer = 2;
+                    playerTurn.textContent = `Computer's turn!`;
+                    currentPlayer = 2;
+                    return computerMove(board);
                 }
-            }
-            else{
-                board[i][column] = -1
-                row[0].style.backgroundColor = player2Color;
-                if(winCheck()){
-                    console.log(board);
-                    return(alert('winner!'));
-                }
-                else if(drawCheck()){
-                    playerTurn.textContent = 'game is a draw';
-                    return alert('draw!');
-                }
-                else{
-                    playerTurn.textContent = `${player1}'s turn!`;
-                    return  currentPlayer = 1;
-
-                }
-            }
         }
     }
 }
+
+function computerMove(board){
+    var depth = 0;
+    var maxDepth = 5;
+    var column = getNextPlay(depth, maxDepth, board);
+    console.log(column);
+    console.log(typeof column);
+    let row = [];
+
+    for(let i = 5; i >=0; i --){
+        //work up from the bottom of the column and fill the first
+            //empty slot you come across with a tile from the player
+        if(tableRow[i].children[column].style.backgroundColor == 'rgb(200, 225, 250)'){
+            row.push(tableRow[i].children[column]);
+            board[i][column] = -1
+            row[0].style.backgroundColor = player2Color;
+            if(winCheck()){
+                console.log(board);
+                playerTurn.textContent = "Computer won!";
+                }
+                else if(drawCheck()){
+                    playerTurn.textContent = 'game is a draw';
+                }
+                else{
+                    playerTurn.textContent = `your turn!`;
+                    return  currentPlayer = 1;
+
+                }
+            
+        }
+    }
+}
+
+
 
 //win checks
 function colorMatchCheck(one,two, three, four){
@@ -171,11 +183,13 @@ reset.addEventListener('click',()=>{
         slot.style.backgroundColor = 'rgb(200, 225, 250)';
     });
     playerTurn.style.backgroundColor = 'black';
-    return(currentPlayer ===1 ? playerTurn.textContent = `${player1}'s turn` : playerTurn.textContent = `${player2}'s turn!`);
+    return(currentPlayer ===1 ? playerTurn.textContent = `Your turn` : playerTurn.textContent = `Computer's turn!`);
 })
 
 //keep 2d array going of the rack the whole time,
     //and use this to calculate the next moves for the computer
+
+
 function getNextPlay(depth, maxDepth, board){
     return minimax(depth, maxDepth, board);
 }
@@ -188,8 +202,8 @@ function minimax(depth, maxDepth, board){
 function maxValue(depth, board, maxDepth, prevPlay){
     var actVal = [];
     actVal.length = 2;
-    if(cutoffTest(depth, maxDepth)){
-        const eval = eval();
+    if(cutoffTest(board, depth, maxDepth)){
+        const eval = evaluate(board);
         actVal[0] = prevPlay;
         actVal[1] = eval;
         return actVal;
@@ -221,8 +235,8 @@ function maxValue(depth, board, maxDepth, prevPlay){
 function minValue(depth, board, maxDepth, prevPlay){
     var actVal = [];
     actVal.length = 2;
-    if(cutoffTest(depth, maxDepth)){
-        const eval = eval();
+    if(cutoffTest(board, depth, maxDepth)){
+        const eval = evaluate(board);
         actVal[0] = prevPlay;
         actVal[1] = eval;
         return actVal;
@@ -272,8 +286,8 @@ function undoResult(column, board){
     return board;
 }
 
-function cutoffTest(depth, maxDepth){
-    return depth===maxDepth || mmWinCheck();
+function cutoffTest(board, depth, maxDepth){
+    return depth===maxDepth || mmWinCheck(board);
 }
 
 function action(board){
@@ -286,9 +300,346 @@ function action(board){
     return validActs;
 }
 
-function mmWinCheck(){
-    return true;
+/*
+* The following are the evaluation functions that minimax uses to evaluate the score for a board.
+* A board's score is based on how many opportunities there are for a player to have a run of four,
+* and how close that player currently is to having a run of four.
+*/
+
+
+
+function evaluate(board){
+    var eval = 0;
+    eval = eval - (vertical(board, -1) + horizontal(board,-1)+ ascend(board,-1)+descend(board,-1));
+    eval = eval + (vertical(board,1) + horizontal(board,1)+ ascend(board,1)+descend(board,1));
+    return eval;
 }
+
+function vertical(board,player){
+    //for each column on the board, calculate 
+    //the vertical score of that column
+    var vertScore = 0;
+    for(let col = 0; col < 7; col++){
+        //count the number of blank tiles at the top of the column
+        blank = 0;
+        var row;
+        for(row = 0; row < board.length; row++){
+            if(board[row][col]===0){
+                blank++;
+            }
+            else{
+                break;
+            }
+        }
+
+        //count the number of the player's tiles at the top
+        playerCount = 0;
+        for(row = row; row < board.length; row++){
+            if(board[row][col] !== player){
+                break;
+            }
+            else{
+                playerCount++;
+            }
+        }
+
+        //calculate the potential score for this column
+        if(playerCount+blank < 4){
+            vertScore +=0;
+        }
+        else{
+            vertScore += calcHeuristic(playerCount);
+        }
+    }
+    return vertScore;
+}
+
+function horizontal(board, player){
+    let horizScore = 0;
+    var row;
+    var blankCount;
+    var playerCount;
+    
+    //calculate the potential score for every row in the board
+    for(row = 0; row < board.length; row++){
+        for(let col = 0; col < 7; col++){
+            //if you come across a blank slot, count the blank tiles
+            if(board[row][col]==0){
+                blankCount += blankTileRow(board,row,col)[0];
+                col = blankTileRow(board,row,col)[1];
+            }
+
+            //if you come across a tile of your own, increment
+            if(board[row][col] == player){
+                playerCount++;
+            }
+
+            //if you come across opponent's tile, check for points
+            //and continue the search
+            if(board[row][col]== -1*player){
+                //if there is no room for a run of four, continue
+                if(blankCount + playerCount <4){
+                    blankCount = 0 ;
+                    playerCount = 0;
+                    continue;
+                }
+                else{
+                    horizScore += calcHeuristic(playerCount);
+                }
+            }
+        }
+        //check for a run at the end of the row
+        //ensure you don't double count if the last tile was opponent
+        if(board[row][6] != (-1*player) && (blankCount+playerCount >=4)){
+            horizScore +=calcHeuristic(playerCount);
+        }
+    }
+    return horizScore;
+}
+
+function blankTileRow(board, row, startCol){
+    let ret = [];
+    ret.length = 2;
+    count = 0;
+    var col;
+    for(col = startCol; col<7; col++){
+        if(board[row][col]!=0){
+            break;
+        }
+        count++;
+    }
+    ret[0] = count;
+    ret[1] = col;
+    return ret;
+}
+
+function ascend(board,player){
+    let ascendScore = 0;
+    //for each row with enough space for a run of four, evaluate score
+    for(let row = 3; row < board.length; row++){
+        //cut off the columns when there is no longer room for a run
+        for(let col = 0; col < board[row].length-3; col++){
+            //if the starting position is a valid start for a run of four,
+            //check for room and add to the score
+            if(board[row][col]!=(-1*player)){
+                ascendScore += ascendRun(board,player,row,col);
+            }
+
+        }
+    }
+    return ascendScore;
+}
+
+function ascendRun(board,player,startRow,startCol){
+    let blankCount = 0;
+    let playerCount = 0;
+    let col = startCol;
+    for(let row = startRow; row>(startRow-4); row--){
+        //if you come across a blank spot in the run, count the blank tiles
+        if(board[row][col]==0){
+            blankCount = blankTileAscend(board,row,col)[0];
+            row = blankTileAscend(board,row,col)[1];
+            col = blankTileAscend(board,row,col)[2];
+        }
+        if(col==board[row].length){
+            break;
+        }
+
+        //if you come across your own player, increment
+        if(board[row][col]==player){
+            playerCount++;
+        }
+
+        //if you come across the opponent, then since we are only checking
+        //for this specific slot of four, we know that there is no room to score
+        //and so we return 0
+        if(board[row][col]==(-1*player)){
+            return 0;
+        }
+        col++;
+    }
+    //if there is room for a run, return the heuristic score
+    if(blankCount + playerCount >=4){
+        return calcHeuristic(playerCount);
+    }
+    else{
+        return 0;
+    }
+}
+
+function blankTileAscend(board, startRow, startCol){
+    let ret = [];
+    ret.length = 3;
+    count = 0;
+    var row;
+    var col = startCol;
+    for(row = startRow; row > 0; row--){
+         if(board[row][col]!=0){
+            break;
+        }
+        count++;
+        col++;
+    }
+    ret[0] = count;
+    ret[1] = row;
+    ret[2] = col;
+    return ret;
+}
+
+function descend(board,player){
+    let descendScore = 0;
+    //for each row with enough space for a run of four, evaluate score
+    for(let row = 0; row < board.length-3; row++){
+        //cut off the columns when there is no longer room for a run
+        for(let col = 0; col < board[row].length-3; col++){
+            //if the starting position is a valid start for a run of four,
+            //check for room and add to the score
+            if(board[row][col]!=(-1*player)){
+                descendScore += descendRun(board,player,row,col);
+            }
+
+        }
+    }
+    return descendScore;
+}
+
+function descendRun(board,player,startRow,startCol){
+    let blankCount = 0;
+    let playerCount = 0;
+    let col = startCol;
+    for(let row = startRow; row<board.length; row++){
+        //if you come across a blank spot in the run, count the blank tiles
+        if(board[row][col]==0){
+            blankCount = blankTileDescend(board,row,col)[0];
+            row = blankTileDescend(board,row,col)[1];
+            col = blankTileDescend(board,row,col)[2];
+        }
+        if(row==board.length){
+            break;
+        }
+
+        //if you come across your own player, increment
+        if(board[row][col]==player){
+            playerCount++;
+        }
+
+        //if you come across the opponent, then since we are only checking
+        //for this specific slot of four, we know that there is no room to score
+        //and so we return 0
+        if(board[row][col]==(-1*player)){
+            return 0;
+        }
+        col++;
+    }
+    //if there is room for a run, return the heuristic score
+    if(blankCount + playerCount >=4){
+        return calcHeuristic(playerCount);
+    }
+    else{
+        return 0;
+    }
+}
+
+function blankTileDescend(board, startRow, startCol){
+    let ret = [];
+    ret.length = 3;
+    count = 0;
+    var row;
+    var col = startCol;
+    for(row = startRow; row < board.length; row++){
+        if(board[row][col]!=0){
+            break;
+        }
+        count++;
+        
+        col++;
+    }
+    ret[0] = count;
+    ret[1] = row;
+    ret[2] = col;
+    return ret;
+}
+
+function calcHeuristic(counter){
+    if (counter === 0){
+        return counter;
+    }
+    else if(counter ===1){
+        return 1;
+    }
+    else if(counter ===2){
+        return 10;
+    }
+    else if(counter ===3){
+        return 100;
+    }
+    else{
+        return 10000;
+    }
+}
+
+function mmWinCheck(board){
+    return mmHorizontalCheck(board) || mmVerticalCheck(board) || mmDiagLRCheck(board) || mmDiagRLCheck(board);
+}
+
+function mmMatchCheck(one, two, three, four){
+    return one == two && one == three && one == four;
+}
+
+function mmHorizontalCheck(board){
+    for(let row = 0; row < board.length; row++){
+        for(let col = 0; col < 4; col++){
+            if(mmMatchCheck(board[row][col],
+                board[row][col+1],
+                board[row][col+2],
+                board[row][col+3])){
+                    return true;
+                }
+        }
+    }
+}
+
+function mmVerticalCheck(board){
+    for(let col = 0; col < 7; col ++){
+        for(let row = 0; row < 3; row ++){
+            if(mmMatchCheck(board[row][col],
+                board[row+1][col],
+                board[row+2][col],
+                board[row+3][col])){
+                    return true;
+                }
+        }
+    }  
+}
+
+
+function mmDiagLRCheck(board){
+    for(let col = 0; col < 4; col ++){
+        for(let row = 0; row < 3; row ++){
+            if(mmMatchCheck(board[row][col],
+                board[row+1][col+1],
+                board[row+2][col+2],
+                board[row+3][col+3])){
+                    return true;
+                }
+        }
+    }
+}
+
+function mmDiagRLCheck(board){
+    for(let col = 0; col < 4; col ++){
+        for(let row = 5; row >2; row --){
+            if(colorMatchCheck(board[row][col],
+                board[row-1][col+1],
+                board[row-2][col+2],
+                board[row-3][col+3])){
+                    return true;
+                }
+        }
+    }
+}
+
+
 
 //fill in minimax win checks
 
