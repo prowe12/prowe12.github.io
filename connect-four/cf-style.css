@@ -29,6 +29,7 @@ h3{
     background:rgb(200, 225, 250);
     border: 1px solid black;
     border-radius: 50%;
+    cursor: grab;
 }
 
 .reset{
@@ -39,6 +40,19 @@ h3{
     border: 1px solid black;
     width: 5rem;
     text-align: center;
+    background: red;
+}
+
+.next-move{
+    position: relative;
+    top: 10vh;
+    left: 50%; 
+    transform: translate(-50%);
+    border: 1px solid black;
+    width: 5rem;
+    text-align: center;
+    background: white;
+    cursor: grab;
 }
 
 .footer{

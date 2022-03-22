@@ -4,6 +4,7 @@ var tableCell = document.getElementsByTagName('td');
 var tableSlot = document.querySelectorAll('.slot');
 const playerTurn = document.querySelector('.player-turn');
 const reset = document.querySelector('.reset');
+const nextMove = document.querySelector('.next-move');
 
 /*
 for(let i = 0; i < tableCell.length; i++){
@@ -20,16 +21,24 @@ player1Color = 'red';
 
 player2Color = 'yellow';
 
+
+
 var board = [];
+var playBoard = [];
 board.length = 6;
+playBoard.length = 6;
 for(let i = 0; i<6; i++){
     board[i] = [];
     board[i].length = 7;
+    playBoard[i] = [];
+    playBoard.length = 7;
     for(let j = 0; j<7; j++){
         board[i][j] = 0;
+        playBoard[i][j] = 0;
     }
 
 }
+
 
 //want current player to start as 1
 var currentPlayer = 1;
@@ -38,7 +47,12 @@ playerTurn.textContent = `Your turn!`;
 //go through the cells and show that we know they all have white background
 Array.prototype.forEach.call(tableCell, (cell)=>{
     cell.style.backgroundColor = 'rgb(200, 225, 250)';
-    cell.addEventListener('click',playerMove);
+    cell.addEventListener('click',(cell)=>{
+        if(currentPlayer ===1){
+            playerMove(cell);
+        }
+    });
+    
 })
 
 function playerMove(e){
@@ -51,29 +65,37 @@ function playerMove(e){
             //empty slot you come across with a tile from the player
         if(tableRow[i].children[column].style.backgroundColor == 'rgb(200, 225, 250)'){
             row.push(tableRow[i].children[column]);
-            board[i][column] = 1
+            playBoard[i][column] = 1
             row[0].style.backgroundColor = player1Color;
             if(winCheck()){
-                console.log(board);
                 playerTurn.textContent = `You won!`;
                 playerTurn.style.color = player1Color;
-                }
-                else if(drawCheck()){
-                    playerTurn.textContent = 'game is a draw';
-                }
-                else{
-                    playerTurn.textContent = `Computer's turn!`;
-                    currentPlayer = 2;
-                    return computerMove(board);
-                }
+                reset.textContent = 'Play Again';
+            }  
+            else if(drawCheck()){
+                playerTurn.textContent = 'game is a draw';
+            }
+            else{
+                 playerTurn.textContent = `Computer's turn!`;
+                currentPlayer = 2;
+                //return computerMove(board);               
+            }
+            return;
         }
+        
     }
 }
 
-function computerMove(board){
+ function computerMove(board){
     var depth = 0;
-    var maxDepth = 5;
-    var column = getNextPlay(depth, maxDepth, board);
+    var maxDepth = 6;
+    board = copyBoard(playBoard,board);
+    console.log("computerMove");
+    console.log("playBoard: ");
+    console.log(playBoard);
+    console.log("board:");
+    console.log(board);
+    var column =  getNextPlay(depth, maxDepth, board);
     console.log(column);
     console.log(typeof column);
     let row = [];
@@ -83,23 +105,33 @@ function computerMove(board){
             //empty slot you come across with a tile from the player
         if(tableRow[i].children[column].style.backgroundColor == 'rgb(200, 225, 250)'){
             row.push(tableRow[i].children[column]);
-            board[i][column] = -1
+            playBoard[i][column] = -1
             row[0].style.backgroundColor = player2Color;
             if(winCheck()){
                 console.log(board);
                 playerTurn.textContent = "Computer won!";
+                reset.textContent = 'Play Again';
                 }
                 else if(drawCheck()){
                     playerTurn.textContent = 'game is a draw';
                 }
                 else{
                     playerTurn.textContent = `your turn!`;
-                    return  currentPlayer = 1;
+                    //return  currentPlayer = 1;
 
                 }
-            
+            return;
         }
     }
+}
+
+function copyBoard(playBoard,board){
+    for(let i = 0; i<board.length; i++){
+        for(let j = 0; j<board[i].length; j++){
+            board[i][j] = playBoard[i][j];
+        }
+    }
+    return board;
 }
 
 
@@ -182,19 +214,37 @@ reset.addEventListener('click',()=>{
     tableSlot.forEach(slot=>{
         slot.style.backgroundColor = 'rgb(200, 225, 250)';
     });
-    playerTurn.style.backgroundColor = 'black';
-    return(currentPlayer ===1 ? playerTurn.textContent = `Your turn` : playerTurn.textContent = `Computer's turn!`);
-})
+    for(let i = 0; i<6; i++){
+        playBoard[i] = [];
+        playBoard[i].length = 7;
+        for(let j = 0; j<7; j++){
+            playBoard[i][j] = 0;
+        }
+    
+    }
+    board = copyBoard(playBoard,board);
+    //return(currentPlayer ===1 ? playerTurn.textContent = `Your turn` : playerTurn.textContent = `Computer's turn!`);
+    return playerTurn.textContent = 'Your turn!';
+});
 
-//keep 2d array going of the rack the whole time,
-    //and use this to calculate the next moves for the computer
+nextMove.addEventListener('click', ()=>{
+    if(currentPlayer !==1){
+        console.log("INSIDE NEXT MOVE. current player = ",currentPlayer);
+        computerMove(board);
+        currentPlayer = 1;
+    }
+});
 
 
-function getNextPlay(depth, maxDepth, board){
-    return minimax(depth, maxDepth, board);
+
+ function getNextPlay(depth, maxDepth, board){
+   // console.log("board before minimax:");
+   // console.log(board);
+    var res =  minimax(depth, maxDepth, board);
+    return res;
 }
 
-function minimax(depth, maxDepth, board){
+ function minimax(depth, maxDepth, board){
     var actVal = maxValue(depth, board, maxDepth, -1);
     return actVal[0];
 }
@@ -202,10 +252,8 @@ function minimax(depth, maxDepth, board){
 function maxValue(depth, board, maxDepth, prevPlay){
     var actVal = [];
     actVal.length = 2;
-    console.log("depth: ",depth);
     if(cutoffTest(board, depth, maxDepth)){
-        console.log("depth: ",depth);
-        const eval = evaluate(board);
+        const eval = evaluate(1,board);
         actVal[0] = prevPlay;
         actVal[1] = eval;
         return actVal;
@@ -221,7 +269,7 @@ function maxValue(depth, board, maxDepth, prevPlay){
             continue;
         }
 
-        let minA = minValue(depth, result(a, board, -1),maxDepth, a)[1];
+        let minA = minValue(depth, result(a, board, 1),maxDepth, a)[1];
         if(minA >=value){
             value = minA;
             action = a;
@@ -238,14 +286,14 @@ function minValue(depth, board, maxDepth, prevPlay){
     var actVal = [];
     actVal.length = 2;
     if(cutoffTest(board, depth, maxDepth)){
-        const eval = evaluate(board);
+        const eval = evaluate(-1,board);
         actVal[0] = prevPlay;
         actVal[1] = eval;
         return actVal;
     }
 
     var value = 10000;
-    var action = -1;
+    var action;
     depth++;
     var validActs = getAction(board);
     for(let i = 0; i<validActs.length; i++){
@@ -253,7 +301,7 @@ function minValue(depth, board, maxDepth, prevPlay){
         if(a===-1){
             continue;
         }
-        let maxA = maxValue(depth, result(a,board, 1),a)[1];
+        let maxA = maxValue(depth, result(a,board, -1),maxDepth, a)[1];
         if(maxA <= value){
             action = a;
             value = maxA;
@@ -289,7 +337,7 @@ function undoResult(column, board){
 }
 
 function cutoffTest(board, depth, maxDepth){
-    return depth >= maxDepth || winCheck();
+    return depth >= maxDepth || mmWinCheck(board);
 }
 
 function getAction(board){
@@ -310,10 +358,10 @@ function getAction(board){
 
 
 
-function evaluate(board){
+function evaluate(player, board){
     var eval = 0;
-    eval = eval - (vertical(board, -1) + horizontal(board,-1)+ ascend(board,-1)+descend(board,-1));
-    eval = eval + (vertical(board,1) + horizontal(board,1)+ ascend(board,1)+descend(board,1));
+    eval = eval - (vertical(board, -1*player) + horizontal(board,-1*player)+ ascend(board,-1*player)+descend(board,-1*player));
+    eval = eval + (vertical(board,player) + horizontal(board,player)+ ascend(board,player)+descend(board,player));
     return eval;
 }
 
@@ -585,7 +633,7 @@ function mmWinCheck(board){
 }
 
 function mmMatchCheck(one, two, three, four){
-    return one == two && one == three && one == four;
+    return one == two && one == three && one == four && one !=0;
 }
 
 function mmHorizontalCheck(board){
@@ -631,7 +679,7 @@ function mmDiagLRCheck(board){
 function mmDiagRLCheck(board){
     for(let col = 0; col < 4; col ++){
         for(let row = 5; row >2; row --){
-            if(colorMatchCheck(board[row][col],
+            if(mmMatchCheck(board[row][col],
                 board[row-1][col+1],
                 board[row-2][col+2],
                 board[row-3][col+3])){
