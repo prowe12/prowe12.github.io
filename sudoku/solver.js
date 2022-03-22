@@ -245,7 +245,7 @@ function arcConsistency3(assignment, constraints) {   //, boardPlot) {
     // it from the constraints
     console.log(xi);
     if (xi.fixed) {
-        alert("Adan,l whhhhy?");
+        alert("Adan, whhhhy?");
         //continue;
     }
 

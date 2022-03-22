@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="utf-8" />
+        <title>GameSolver Home Page</title>
+        
+        <!-- Code to include nav bar-->
+        <div id="nav">
+            <a href="nav.html">Navigation Page</a>
+        </div>
+        <link rel="stylesheet" href="styles.css">
+        <link rel = "stylesheet" href = "connect-four/cf-style.css">
+        <style>
+            @keyframes fallingPiece {
+                from { top: -1vh; }
+                to   { top: 0;    }
+            }
+
+            .piece {
+                animation-name: fallingPiece;
+                animation-duration: 1s;
+            }
+
+        </style>
+    </head>
+
+    
+    <!-- Leave some room for the nav bar -->
+    <h1>Game Solver Hub</h1>
+
+    <body>
+        
+        <div class = "game">
+            <table>
+                <tr>
+                    <td></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                </tr>
+                <tr>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                </tr>
+                <tr>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                </tr>
+                <tr>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                </tr>
+                <tr>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                </tr>
+                <tr>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                    <td class = "slot"></td>
+                </tr>
+
+            </table>
+        </div>
+
+
+        <script>
+            document.body.addEventListener("click", function() {
+                let cell = document.querySelector("tr td.slot");
+                let token = document.createElement("div");
+                
+            });
+        </script>
+
+    </body>
+    <footer>Website created by Anna Van Boven and Penny Rowe</footer>
+</html>
+ 
