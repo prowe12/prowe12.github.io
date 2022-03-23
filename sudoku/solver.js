@@ -1,26 +1,24 @@
-/*
- From python code with header:
- #!/usr/bin/env python3
- # -*- coding: utf-8 -*-
- 
- Created on Wed Mar 10 12:05:35 2021
-
- @author: prowe
-
- Purpose:
-     Solve a Sudoku puzzle as a Constraint Satisfaction Problem (CSP), using
-     Arc Consistency 3 (AC-3) and Backtracking
-
- By Penny Rowe
- 2021/03/10
- AI with Prof. America Chambers, Spring 2021
- 
- Converted to JavaScript
- By Penny M. Rowe
- March 14, 2021
-*/
-
-
+/**
+ * From python code with header:
+ * #!/usr/bin/env python3
+ * # -*- coding: utf-8 -*-
+ * 
+ * Created on Wed Mar 10 12:05:35 2021
+ *
+ * @author: prowe
+ *
+ * Purpose:
+ *     Solve a Sudoku puzzle as a Constraint Satisfaction Problem (CSP), using
+ *     Arc Consistency 3 (AC-3) and Backtracking
+ *
+ * By Penny Rowe
+ * 2021/03/10
+ * AI with Prof. America Chambers, Spring 2021
+ * 
+ * Converted to JavaScript
+ * By Penny M. Rowe
+ * March 14, 2021
+ */
 
 // from copy import deepcopy
 
@@ -154,15 +152,14 @@ function solve(original) { //, boardPlot):
 
     // Get the starting constraints
     console.log(`board[0][0].maxDomainVal: ${board[0][0].maxDomainVal}`);
-    constraints = getAllConstraints(board[0][0].maxDomainVal);
+    constraints = getConstraints(board);
 
-    // TODO: Complete this
-    // Check if the fixed values are inconsistent and remove them from the board
-    // constraints, success = qc_board_and_constraints(board, constraints)
-    // if (!(success)) {
-    //     boardPlot.message('Starting board is not valid.')
-    //     return get_grid(board), False
-    // }
+    // QC board
+    constraints, success = qcBoardAndConstraints(board, constraints)
+    if (!(success)) {
+        boardPlot.message('Starting board is not valid.')
+        return get_grid(board), False
+    }
 
     // Try AC-3 alone first
     board = arcConsistency3(board, constraints); //, boardPlot)
@@ -174,7 +171,7 @@ function solve(original) { //, boardPlot):
 
     // Final check: check all constraints again, even the fixed ones
     // constraints = get_all_constraints(max_domain_val)
-    // constraints, success = qc_board_and_constraints(board, constraints)
+    // constraints, success = qcBoardAndConstraints(board, constraints)
     // if not success:
     //     print('Something went wrong')
     // if not final_constraints(board, constraints):

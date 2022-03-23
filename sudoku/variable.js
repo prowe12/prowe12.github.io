@@ -123,6 +123,7 @@ function Variable(row, col, nside, domainVals, fix=false) {
 //         return next(iter(self.domain))
 
 
+// TODO: Is isfixed even used? Or do we just used fixed? And in the python version?
 //     #def isfixed(self):
 //     #    """
 //     #    Returns true if domain is fixed
