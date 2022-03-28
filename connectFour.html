@@ -26,9 +26,22 @@
         <h3 class = "player-turn"></h3>
 
 
+
         <div class = "game">
             <table>
                 <tr>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                    <canvas class="aboveTable" width = "90" height = "90"></canvas>
+                </tr>
+               </table>
+            <table id = "board">
+
+                <tr class = "row">
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                     <td class = "slot"></td>
@@ -37,7 +50,7 @@
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                 </tr>
-                <tr>
+                <tr class = "row">
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                     <td class = "slot"></td>
@@ -46,7 +59,7 @@
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                 </tr>
-                <tr>
+                <tr class = "row">
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                     <td class = "slot"></td>
@@ -55,7 +68,7 @@
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                 </tr>
-                <tr>
+                <tr class = "row">
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                     <td class = "slot"></td>
@@ -64,7 +77,7 @@
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                 </tr>
-                <tr>
+                <tr class = "row">
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                     <td class = "slot"></td>
@@ -73,7 +86,7 @@
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                 </tr>
-                <tr>
+                <tr class = "row">
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                     <td class = "slot"></td>
@@ -82,12 +95,22 @@
                     <td class = "slot"></td>
                     <td class = "slot"></td>
                 </tr>
+                <tfoot>
+                    <tr>
+                       <td valign = "bottom">
+                            <div class="reset">Reset</div>
+                       </td>
+                       <!-- <td valign = "bottom">
+                        <div class = "next-move">Next Move</div>
+                        </td> -->
+                    </tr>
+                 </tfoot>
 
             </table>
         </div>
 
-        <div class="reset">Reset</div>
-        <div class = "next-move">Next Move</div>
+        <!-- <div class="reset">Reset</div> -->
+        <!-- <div class = "next-move">Next Move</div> -->
 
 
         <script src = "connect-four/connectFour.js"></script>

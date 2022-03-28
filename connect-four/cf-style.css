@@ -12,18 +12,34 @@ h3{
     text-align: center;
 }
 
+.aboveTable{
+    position: relative;
+    /* top: 10px; */
+    /* left: 50%; */
+    /* transform: translate(-50%); */
+    /* width: 90px; */
+    /* height: 90px; */
+    border: 2px solid rgb(200, 225, 250);
+    /* background:rgb(200, 225, 250); */
+    /* background: rgb(200, 225, 250); */
+}
+
 .game{
     position: relative;
-    top: 4rem;
+    top: 10px;
     left: 50%;
     transform: translate(-50%);
-    width: 650px;
-    height: 600px;
+    width: 659px;
+    height: 620px;
+    /* border: 1px solid black; */
+}
+
+#board{
     background: rgb(1, 1, 255);
-    border: 1px solid black;
 }
 
 .slot{
+    position: relative;
     width: 90px;
     height: 90px;
     background:rgb(200, 225, 250);
@@ -33,23 +49,25 @@ h3{
 }
 
 .reset{
-    position: relative;
-    top: 10vh;
-    left: 50%; 
+    position: absolute;
+    /* top: 10px; */
+    /* left: 50%;  */
+    left: 50%;
     transform: translate(-50%);
     border: 1px solid black;
-    width: 5rem;
+    width: 100px;
     text-align: center;
     background: red;
 }
 
 .next-move{
-    position: relative;
-    top: 10vh;
-    left: 50%; 
+    position: absolute;
+    /* top: 10px; */
+    /* left: 50%;  */
+    left: 160px;
     transform: translate(-50%);
     border: 1px solid black;
-    width: 5rem;
+    width: 100px;
     text-align: center;
     background: white;
     cursor: grab;

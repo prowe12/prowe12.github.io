@@ -1,28 +1,94 @@
-//selectors
-var tableRow = document.getElementsByTagName('tr');
+/**
+ * Grab the selectors from the html page
+ */
+
+//get an array of the table rows 
+var tableRow = document.querySelectorAll('.row');
+
+
+//array of all the cells in the table
 var tableCell = document.getElementsByTagName('td');
+
+//array of all the slots in the table(each cell has one slot)
 var tableSlot = document.querySelectorAll('.slot');
+
+//this variable will update whose turn it is
 const playerTurn = document.querySelector('.player-turn');
+
+//reset button
 const reset = document.querySelector('.reset');
+
+//nextMove button
 const nextMove = document.querySelector('.next-move');
 
-/*
-for(let i = 0; i < tableCell.length; i++){
-    tableCell[i].addEventListener('click',(e)=>{
-        console.log(`${e.target.parentElement.rowIndex}, ${e.target.cellIndex}`);
+//array of canvases (one for each column)
+let canvas = document.querySelectorAll('.aboveTable');
+let context = null;
 
+
+
+
+/**
+ * Mouseover events that display a game tile above whatever column the
+ * human player is hovering over
+ */
+for(let i = 0; i < tableCell.length; i++){
+    //when the player hovers over a cell, place a red tile above that column
+    tableCell[i].addEventListener('mouseenter',(e)=>{
+        displayMove(e.target.cellIndex);
+    })
+
+    //when a player stops hovering over a cell, remove the tile above that column
+    tableCell[i].addEventListener('mouseleave',(e)=>{
+        clearDisplayMove(e.target.cellIndex);
     })
 }
-*/
 
-//have players state their name
 
+
+//state player colors
 player1Color = 'red';
-
 player2Color = 'yellow';
 
+//animation variables
+let animationColumn = 0;
+let animationStartPix = 0;
+let animationEndPix = 0;
+let animationColor = player1Color;
+let dropID;
+
+/**
+ * displayMove displays a game tile over the column that the user is hovering on.
+ * @param {*} col the inputted column
+ */
+function displayMove(col){
+    let canv = canvas[col];
+    let context = canv.getContext('2d');
+    context.beginPath();
+    context.arc(canv.width/2,canv.height/2,canv.width/2,0,2*Math.PI);
+    context.fillStyle = animationColor;
+    context.fill();
+    context.restore()
+}
+
+/**
+ * ClearDisplayMove clears the game tile from the column
+ * @param {*} col 
+ */
+function clearDisplayMove(col){
+    let canv = canvas[col];
+    let context = canv.getContext('2d');
+    context.clearRect(0,0,canv.width, canv.height);
+}
 
 
+/**
+ * Create array boards that the minimax functions will use to play the game.
+ * Gameboard stays updated with the current state of the real game.
+ * Board copies the values in gameboard, then is used in minimax to
+ * simulate longer connectfour games to then determine which move the computer
+ * will make.
+ */
 var board = [];
 var playBoard = [];
 board.length = 6;
@@ -40,7 +106,7 @@ for(let i = 0; i<6; i++){
 }
 
 
-//want current player to start as 1
+//want current player to start the game
 var currentPlayer = 1;
 playerTurn.textContent = `Your turn!`;
 
@@ -55,18 +121,32 @@ Array.prototype.forEach.call(tableCell, (cell)=>{
     
 })
 
+/**
+ * playerMove makes one move for the player, then sets it to the computer's turn to make a move.
+ * @param {*} e the column the human player wants to place their tile in
+ * @returns 
+ */
 function playerMove(e){
+    console.log(playBoard);
+    console.log(tableRow[0].children);
     let column = e.target.cellIndex;
-    console.log(typeof column);
     let row = [];
 
+    //dropTile(0,column);
     for(let i = 5; i >=0; i --){
         //work up from the bottom of the column and fill the first
             //empty slot you come across with a tile from the player
-        if(tableRow[i].children[column].style.backgroundColor == 'rgb(200, 225, 250)'){
+        if(playBoard[i][column]==0){
             row.push(tableRow[i].children[column]);
-            playBoard[i][column] = 1
+            console.log(i);
+            animationColor = player1Color;
+            //animationColumn = 90*(column+1);
+            animationStartPix = 0;
+            //animationEndPix = 90*(i+1);
+            //window.requestAnimationFrame(dropTile);
             row[0].style.backgroundColor = player1Color;
+
+            playBoard[i][column] = 1
             if(winCheck()){
                 playerTurn.textContent = `You won!`;
                 playerTurn.style.color = player1Color;
@@ -78,7 +158,8 @@ function playerMove(e){
             else{
                  playerTurn.textContent = `Computer's turn!`;
                 currentPlayer = 2;
-                //return computerMove(board);               
+                animationColor = player2Color;
+                return computerMove(board);               
             }
             return;
         }
@@ -86,9 +167,21 @@ function playerMove(e){
     }
 }
 
+function testAnimation(){
+    context = canvas[0].getContext("2d");
+    console.log("click!");
+    animationColumn = 90*(1+1);
+    animationStartPix = 0;
+    animationEndPix = 90*(1);
+    animationColor = player1Color;
+    window.requestAnimationFrame(dropTile); 
+}
+
+
+
  function computerMove(board){
     var depth = 0;
-    var maxDepth = 6;
+    var maxDepth = 4;
     board = copyBoard(playBoard,board);
     console.log("computerMove");
     console.log("playBoard: ");
@@ -100,10 +193,11 @@ function playerMove(e){
     console.log(typeof column);
     let row = [];
 
+    //dropTile(0,column);
     for(let i = 5; i >=0; i --){
         //work up from the bottom of the column and fill the first
             //empty slot you come across with a tile from the player
-        if(tableRow[i].children[column].style.backgroundColor == 'rgb(200, 225, 250)'){
+        if(playBoard[i][column]==0){
             row.push(tableRow[i].children[column]);
             playBoard[i][column] = -1
             row[0].style.backgroundColor = player2Color;
@@ -117,12 +211,28 @@ function playerMove(e){
                 }
                 else{
                     playerTurn.textContent = `your turn!`;
-                    //return  currentPlayer = 1;
+                    animationColor = player1Color;
+                    return  currentPlayer = 1;
 
                 }
             return;
         }
     }
+}
+
+
+
+function dropTile(row, col){
+    dropID = setTimeout(changeTileColor(row,col,animationColor),10000);
+    row++;
+    if(playBoard[row][col]==0){
+        dropTile(row,col);
+    }
+    return;
+}
+
+function changeTileColor(row,col,color){
+    tableRow[row].children[col].style.backgroundColor = color;
 }
 
 function copyBoard(playBoard,board){
@@ -227,13 +337,13 @@ reset.addEventListener('click',()=>{
     return playerTurn.textContent = 'Your turn!';
 });
 
-nextMove.addEventListener('click', ()=>{
-    if(currentPlayer !==1){
-        console.log("INSIDE NEXT MOVE. current player = ",currentPlayer);
-        computerMove(board);
-        currentPlayer = 1;
-    }
-});
+// nextMove.addEventListener('click', ()=>{
+//     if(currentPlayer !==1){
+//         console.log("INSIDE NEXT MOVE. current player = ",currentPlayer);
+//         computerMove(board);
+//         currentPlayer = 1;
+//     }
+// });
 
 
 
@@ -250,6 +360,11 @@ nextMove.addEventListener('click', ()=>{
 }
 
 function maxValue(depth, board, maxDepth, prevPlay){
+   // console.log("min value");
+    //console.log("depth: ",depth);
+    //console.log("prev play: ",prevPlay);
+    //console.log("board: ");
+    //console.log(board);
     var actVal = [];
     actVal.length = 2;
     if(cutoffTest(board, depth, maxDepth)){
@@ -265,7 +380,7 @@ function maxValue(depth, board, maxDepth, prevPlay){
     var validActs = getAction(board);
     for(let i = 0; i< validActs.length; i++){
         let a = validActs[i];
-        if(a === -1){
+        if(a == -1){
             continue;
         }
 
@@ -279,10 +394,17 @@ function maxValue(depth, board, maxDepth, prevPlay){
 
         undoResult(a, board);
     }
+    console.log("taking action ",actVal);
     return actVal;
 }
 
 function minValue(depth, board, maxDepth, prevPlay){
+    //console.log("min value");
+    //console.log("depth: ",depth);
+    //console.log("prev play: ",prevPlay);
+   // console.log("board: ");
+    //console.log(board);
+
     var actVal = [];
     actVal.length = 2;
     if(cutoffTest(board, depth, maxDepth)){
@@ -298,7 +420,7 @@ function minValue(depth, board, maxDepth, prevPlay){
     var validActs = getAction(board);
     for(let i = 0; i<validActs.length; i++){
         let a = validActs[i];
-        if(a===-1){
+        if(a==-1){
             continue;
         }
         let maxA = maxValue(depth, result(a,board, -1),maxDepth, a)[1];
@@ -308,7 +430,9 @@ function minValue(depth, board, maxDepth, prevPlay){
             actVal[0] = a;
             actVal[1] = value;
         }
+        undoResult(a, board);
     }
+    //console.log("taking action ",actVal);
     return actVal;
 }
 
@@ -322,6 +446,10 @@ function result(column, board, player){
             board[i][column] = player;
             break;
         }
+    }
+
+    if(column===0){
+        console.log(board);
     }
     return board;
 }
