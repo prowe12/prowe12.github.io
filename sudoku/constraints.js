@@ -1,34 +1,56 @@
-// #!/usr/bin/env python3
-// # -*- coding: utf-8 -*-
-// """
-// Created on Thu Mar 11 07:01:49 2021
+/**
+ * #!/usr/bin/env python3
+ * # -*- coding: utf-8 -*-
+ * 
+ * Created on Thu Mar 11 07:01:49 2021
+ *
+ * @author: prowe
+ */
 
-// @author: prowe
-// """
 
-// def qc_board_and_constraints(board, constraints):
-//     """
-//     Purpose: When the board first comes in, do a check to see if any of the
-//     fixed values are duplicates
-//     @param board  The Sudoku board: A list of lists of variable class instances
-//     @param constraints  The unallowed values for each cell, list of tuples
-//     """
-//     i = 0
-//     while i < len(constraints):
-//         ([irow, icol], [jrow, jcol]) = constraints[i]
-//         xi = board[irow][icol]
-//         xj = board[jrow][jcol]
-//         if xi.fixed and xj.fixed and xi.get_only_value() == xj.get_only_value():
-//             return constraints, False
 
-//         if xi.fixed:
-//             # Remove this constraint; don't update i
-//             constraints.pop(i)
-//         elif not xi.fixed:
-//             # update i
-//             i += 1
 
-//     return constraints, True
+function qcBoardAndConstraints(board, constraints) {
+    /**
+     * Purpose: When the board first comes in, do a check to see if any of the
+     * fixed values are duplicates
+     * @param board  The Sudoku board: A list of lists of variable class instances
+     * @param constraints  The unallowed values for each cell, list of tuples
+     */
+
+    console.log("I am in qcBoardAndConstraints");
+
+    let xi;
+    let xj;
+    let irow;
+    let icol;
+    let jrow;
+    let jcol;
+    let i = 0;
+    while (i < len(constraints)) {
+        //([irow, icol], [jrow, jcol]) = constraints[i];
+        irow = constraints[i][0][0];
+        icol = constraints[i][0][1];
+        jrow = constraints[i][1][0];
+        jcol = constraints[i][0][1];
+        xi = board[irow][icol]
+        xj = board[jrow][jcol]
+        if (xi.fixed && xj.fixed && xi.get_only_value() == xj.get_only_value()) {
+            return constraints, false
+        }
+
+        if (xi.fixed) {
+            // Remove this constraint; don't update i
+            constraints.pop(i);
+        }
+        else if (!(xi.fixed)) {
+            // update i
+            i += 1;
+        }
+    }
+
+    return constraints, true
+}
 
 
 
@@ -51,6 +73,82 @@
 //     return True
 
 
+
+
+/**
+ * 
+ * Purpose: For all Sudoku boxes that do not have fixed values in them, 
+ * get all binary constraints of the form xi,xj and put them their
+ * row and column indices into a list.
+ * @param {int} maxDomainVal  int, The dimensions of each side of the square board
+ * @returns constraints  list of arrays containing 2 arrays with 2 elements each:
+ *                        [[[xi_row, xi_col],[xj_row,xj_col]], ... ]
+ *
+ * A Sudoku board has 9 rows and 9 columns, and is divided into 3x3 boxes.
+ * For each cell/box (row & column), there are therefore:
+ *     Constraints per cell:
+ *         8 for the row (9-1)
+ *         8 for the column (9-1)
+ *         4 for the box (9-1-4 duplicates)
+ *         ---------------
+ *         20 constraints / cell
+ *
+ *     There are 81 cells, so 81*20 = 1620 constraints total. Note that we
+ *     only include 4 constraints for the box because we have already
+ *     counted the other 4: 2 in the row and 2 in the column.
+ *
+ *     We can also exclude any fixed cells from the list of constraints,
+ *     since (1) we pre-check for consistency, ans (2) they cannot change.
+ *     But we do that in another function, just to keep things simple.
+ *
+ * Notes:
+ *     1) There are a lot of nested loops here. However, this code is only
+ *        run once and it has to cover all squares. 
+ */
+
+function getConstraints(board) {
+    maxDomainVal = board[0][0].maxDomainVal;
+    console.log(`I am in in getConstraints, with maxDomainVal ${maxDomainVal}`);
+    let constraints = new Array;
+
+    for (let irow=0; irow<maxDomainVal; irow++) {   //in list_rows:
+        for (let icol=0; icol<maxDomainVal; icol++) {
+            if (board[irow][icol].fixed) {
+                continue;
+            }
+
+            // Row: For the row (irow) containing the cell at (irow, icol),
+            // add all the columns (e.g. 1-9) to the constraints, except the cell's column (icol)
+            // Format: An array containing the current cell [irow, icol], followed by the
+            // constraint row and column [irow, jol]
+            for (let jcol=0; jcol<maxDomainVal; jcol++) {
+                if (jcol !== icol) {
+                    constraints.push([[irow, icol], [irow, jcol]]);
+                }
+            }
+
+            // Column: For the column (icol) containing the cell at (irow, icol), 
+            // add all the rows (e.g. 1-9), except the cell's row (irow)
+            for (let jrow=0; jrow<maxDomainVal; jrow++) {
+                if (jrow !== irow) {
+                    constraints.push([[irow, icol], [jrow, icol]]);
+                }
+            }
+
+            // Box: For the (e.g. 3x3) box containing the cell at (irow, icol),
+            // add all row,column sets that share the box, except the cell's 
+            // (irow, icol) and the constraint cells that have already been added
+            let boxRow = Math.floor(irow/3) * 3;
+            let boxCol = Math.floor(icol/3) * 3;
+            for (jrow=boxRow; jrow<boxRow+3; jrow++) {
+                for (jcol=boxCol; jcol<boxCol+3; jcol++) {
+                    constraints.push([[irow, icol], [jrow, jcol]]);
+                }
+            }
+        }
+    }
+    return constraints;
+}
 
 /**
  * 
@@ -80,9 +178,7 @@
  *
  * Notes:
  *     1) There are a lot of nested loops here. However, this code is only
- *        run once and it has to cover all squares. We could flatten the
- *        Sudoku board to a 1x81 array (instead of 9x9) but it's probably not
- *        worth the trouble.
+ *        run once and it has to cover all squares. 
  */
 
 function getAllConstraints(maxDomainVal) {

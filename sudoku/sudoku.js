@@ -184,7 +184,6 @@ function load_starting_vals(puzzle='easy'){
  * @param {number} value 
  */
 function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='black', numberFontWeight='', borderColor=''){
-    
 
     // Allowed values for modifiable cell properties
     // let allowedNumberColors = ['black', 'red', 'orange', 'green', 'blue'];
@@ -329,10 +328,10 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // TODO: allow user to choose between solve and bactrack below, via a controller
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
-    solve(originalgrid);  //, boardPlot)
+    //solve(originalgrid);  //, boardPlot)
 
     // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    //backtracker(originalgrid, populateSquare);  //, boardPlot)
+    backtracker(originalgrid, populateSquare);  //, boardPlot)
 
 });
 
