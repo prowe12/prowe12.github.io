@@ -103,24 +103,33 @@ function Variable(row, col, nside, domainVals, fix=false) {
 //         return self.domain
 
 
-//     def get_domain_size(self):
-//         """
-//         Returns the size of the variable's domain
-//         @return The size of the variable's domain
-//         """
-//         return len(self.domain)
+/**
+ * Returns the number of items in the domain
+ * @return The number of items in the domain
+ */
+// def getDomainSize(self):
+Variable.prototype.getDomainSize = function() {
+    return this.domain.size;
+}
 
 
-//     def get_only_value(self):
-//         """
-//         	Returns the only value in the variable's domain
-//         @throws IllegalStateException The domain has more than 1 value or is empty
-//         @return The only value in the variable's domain
-//         """
-//         if self.get_domain_size() != 1:
-//             raise ValueError('Domain of one expected, but was 0 or > 1')
+/**
+ * Returns the only value in the variable's domain
+ * @throws IllegalStateException The domain has more than 1 value or is empty
+ * @return The only value in the variable's domain
+ */
+Variable.prototype.getOnlyValue = function() {
+    if (this.getDomainSize() !== 1) {
+        throw "Domain of one expected, but was 0 or > 1";
+    }
+    return this.domain[Symbol.iterator]().next().value;
+}
 
-//         return next(iter(self.domain))
+
+    // another method
+    //this.replace = function(this, value) {
+    //    
+    //}
 
 
 // TODO: Is isfixed even used? Or do we just used fixed? And in the python version?

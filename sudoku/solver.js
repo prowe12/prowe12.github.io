@@ -42,9 +42,7 @@
  * @returns 
  */
 function getBoard(grid) {
-    console.log("In getBoard");
     let nside = grid.length;
-    console.log(grid);
 
     var board = new Array();
 
@@ -63,20 +61,16 @@ function getBoard(grid) {
         boardRow = new Array();
         for (j=0; j<nside; j++) {
             value = grid[i][j];
-            console.log(`value: ${value}`);
             if (value == 0) {
                 allVals = new Set();
-                for (k=0; k<nside; k++) {
+                for (k=1; k<=nside; k++) {
                     allVals.add(k);
                 }            
-                console.log(`allVals: ${allVals}`);
-                console.log(allVals);
                 boardRow.push(new Variable(i, j, nside, allVals));
             }
             else {
                 allVals = new Set();
                 allVals.add(value);
-                console.log(`allVals (1 value): ${allVals}`);
                 boardRow.push(new Variable(i, j, nside, allVals, true));
             }
         }
@@ -87,45 +81,76 @@ function getBoard(grid) {
 
 
 
-// def get_grid(board):
-//     """
-//     Get the grid for the board
-//     @param board ???
-//     """
-//     if board == -1:
-//         return None
-//     nrows = len(board)
-//     ncols = len(board[0])
+/**
+ * Get the grid for the board
+ * @param board
+ * @return grid
+*/
+function getGrid(board) {
+    let gridrow;
 
-//     grid = [[0 for i in range(ncols)] for j in range(nrows)]
-//     for i in range(nrows):
-//         for j in range(ncols):
-//             if board[i][j].get_domain_size() == 1:
-//                 grid[i][j] = board[i][j].get_only_value()
-//             elif board[i][j].get_domain_size() == 0:
-//                 grid[i][j] = -1
-//             else:
-//                 grid[i][j] = 0
+    if (board === -1) {
+        return None;
+    }
+    let nrows = board.length;
+    let ncols = board[0].length;
 
-//     return grid
+    //grid = [[0 for i in range(ncols)] for j in range(nrows)]
+    let grid = new Array(nrows);
+    for (let i=0; i<nrows; i++) {
+        gridrow = new Array(ncols);
+        for (let j=0; j<ncols; j++) {
+            if (board[i][j].getDomainSize() === 1) {
+                //grid[i][j] = board[i][j].get_only_value();
+                gridrow[j] = board[i][j].getOnlyValue();
+            }
+            else if (board[i][j].getDomainSize() === 0){
+                //grid[i][j] = -1;
+                gridrow[j] = -1;
+            }
+            else{
+                //grid[i][j] = 0;
+                gridrow[j] = 0;
+            }
+        }
+        grid[i] = gridrow;
+    }
+    return grid;
+}
 
 
 
 
-// def is_complete(board):
-//     """
-//     Check if the board is complete, where complete means each cell has
-//     only one value. Note that checking for consistency is not done here.
-//     @param board: List of lists of class instance for cell of Sudoku board
-//     @return True if the board is complete, False otherwise
-//     """
-//     if board == -1:
-//         return False
-//     for row in board:
-//         for var in row:
-//             if var.get_domain_size() > 1:
-//                 return False
-//     return True
+/**
+ * Check if the board is complete, where complete means each cell has
+ * only one value. Note that checking for consistency is not done here.
+ * @param board  List of lists of class instances for cell of Sudoku board
+ * @return true if the board is complete, false otherwise
+*/
+//TODO why would board be -1?  Why would it be undefined? Throw error instead?
+function isComplete(board) {
+    let row;
+    let box;
+
+    if (board === -1 | board === undefined) {
+        return false;
+    }
+    
+    let nrows = board.length;
+    let ncols = board[0].length;
+
+    for (let i=0; i<nrows; i++) {
+        for (let j=0; j<ncols; j++) {
+            box = board[i][j];
+            if (box.getDomainSize() > 1) {
+                console.log(`domain size: ${box.getDomainSize()}`);
+                console.log(box);
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 
 
@@ -135,36 +160,54 @@ function getBoard(grid) {
                 llist of lists of integers
  @param boardPlot Class for plotting the board
  @return  The solved Sudoku grid
+ @throws  Error if the board is not valid
 */
 function solve(original) { //, boardPlot):
     console.log("I am in solve, in solver.js");
 
+    let grid;
     //let maxDomainVal = original.length;
 
     // Get the board as an array of arrays of Variables
     let board = getBoard(original);
-    console.log("Check out board:");
-    console.log(board);
-    console.log(board[0][0]);
-    console.log(board[0][1]);
-    console.log(board[1][0]);
-    console.log(board[1][1]);
+    console.log("Back in solve, in solver.js");
+
+    // Quality control the starting board
+    let boardValid = qcBoard(board);
+    if (!(boardValid)) {
+        throw "Board is not valid!";
+    }
 
     // Get the starting constraints
-    console.log(`board[0][0].maxDomainVal: ${board[0][0].maxDomainVal}`);
     constraints = getConstraints(board);
 
     // QC board
-    constraints, success = qcBoardAndConstraints(board, constraints)
-    if (!(success)) {
-        boardPlot.message('Starting board is not valid.')
-        return get_grid(board), False
-    }
+    // constraints, success = qcBoardAndConstraints(board, constraints)
+    // if (!(success)) {
+    //     boardPlot.message('Starting board is not valid.')
+    //     return get_grid(board), False
+    // }
+    // console.log("Done with qcBoardAndConstraints");
 
     // Try AC-3 alone first
     board = arcConsistency3(board, constraints); //, boardPlot)
-    // if is_complete(board):
-    //     return get_grid(board), True
+
+    console.log(`Is the board complete? ${isComplete(board)}`);
+    if (isComplete(board)) {
+        alert("pause");
+        grid = getGrid(board);
+        populateBoard(grid);
+        return grid //, true
+    }
+
+    // console.log("Done with arcConsistency3, Back in solve.");
+
+
+    // // Update the board image
+    // console.log("Temporary code: show the board");
+    // let final = getGrid(board);
+
+
 
     // If it isn't solved, using backtracking with AC-3
     // board = backtrack(deepcopy(board), constraints, original, boardPlot)
@@ -178,7 +221,7 @@ function solve(original) { //, boardPlot):
     //     success = False
     //     print('Something is wrong with your board!')
 
-    // return get_grid(board), success
+    return grid //, success
 }
 
 
@@ -228,85 +271,147 @@ function solve(original) { //, boardPlot):
  * @param {*} constraints 
  * @param {*} boardPlot 
  * @returns 
+ * @throws  Error if constraint exists for fixed values
  */
 function arcConsistency3(assignment, constraints) {   //, boardPlot) {
-    let constraint = constraints[0];
-    console.log(`constraint[1][0] ${constraint[1][0]}`);
-    console.log(`constraint[1][1] ${constraint[1][1]}`);
-    xi = assignment[constraint[0][0]][constraint[0][1]];
-    xj = assignment[constraint[1][0]][constraint[1][1]];
-    console.log(`xi: ${xi}`);
-    console.log(`xj: ${xj}`);
 
-    // Check if xi is fixed. It shouldn't be because we already removed
-    // it from the constraints
-    console.log(xi);
-    if (xi.fixed) {
-        alert("Adan, whhhhy?");
-        //continue;
+    function constraintChecker(assignment, constraints) {
+        // Array for any new constraints we need to add on
+        let newConstraints = [];
+        let anyremoved;
+        let constraint;
+
+        // Loop over all the constraints
+        console.log(`Number of constraints: ${constraints.length}`);
+        for (let i=0; i<constraints.length; i++){
+            constraint = constraints[i];
+            xi = assignment[constraint[0][0]][constraint[0][1]];
+            xj = assignment[constraint[1][0]][constraint[1][1]];
+        
+            // Check if xi is fixed. It shouldn't be because we already removed
+            // it from the constraints
+            if (xi.fixed) {
+                throw "The value in this box is fixed; should not have a constraint.";
+            }
+
+            // [irow, icol], [jrow, jcol] = constraints[i];
+            // xi = assignment[irow][icol]
+            // xj = assignment[jrow][jcol]
+
+            // // Check if xi is fixed. It shouldn't be because we already removed
+            // // it from the constraints
+            // if (xi.fixed) {
+            //     continue;
+            // }
+            // console.log(`${constraint[0][0]}, ${constraint[0][1]}`);
+            // console.log("Remove constraint due to");
+            // console.log(`${constraint[1][0]}, ${constraint[1][1]}`);
+            // console.log(`domain before removing values`);
+            // console.log(xi.domain);
+            // console.log(`value:`);
+            // console.log(xj.domain);
+            anyremoved = removeValues(xi, xj, getGrid(assignment));
+            // console.log(`domain after removing values`);
+            // console.log(xi.domain);
+            // console.log(assignment[constraint[0][0]][constraint[0][1]]);
+            // console.log(assignment[constraint[1][0]][constraint[1][1]]);
+
+            // alert("pause");
+            //xi.getDomainSize()===1 | 
+            if (anyremoved) { //}, boardPlot)) {
+                // If there is only one option left in the domain of xi, or if 
+                // we removed a value from domain of xi based on constraint with xj:
+                //
+                // Return FAIL if nothing is left in the domain of xi.
+                // Then check every variable that xi has a constraint
+                // with, to see if those constraints are still satisfied or if
+                // we can simplifiy their domains based on the new domain of xi.
+                // Example: If xi has a constraint with some xk:
+                //    - If the domain of xi is now {3}, and the domain of xk is
+                //       also {3}, then return FAIL so we can back up.
+                //    - If the domain of xi is now {3}, and the domain of xk is
+                //      {1,3}, we will be able to reduce the domain of xk to {1}
+                // But note that those may already be on the queue, so now
+                // they'll be looped over twice.
+                // Those will be done in another loop around. For now, just
+                // add them to the queue
+                if (xi.getDomainSize() === 0) {
+                    // CSP cannot be solved
+                    return -1;
+                }
+                console.log(`Something removed from domain for (${constraint[0][0]}, ${constraint[0][1]}) so we need to look at reverse constraints`);
+                newConstraints = reverseConstraints(xi.row, xi.col, xi.maxDomainVal, newConstraints, assignment);
+            }
+        }
+        return newConstraints;
     }
 
-//     while constraints:
-//         [irow, icol], [jrow, jcol] = constraints.pop(0)
-//         xi = assignment[irow][icol]
-//         xj = assignment[jrow][jcol]
 
-//         # .. Check if xi is fixed. It shouldn't be because we already removed
-//         #    it from the constraints
-//         if xi.fixed:
-//             continue
+    console.log("In arcConsistency3");
+    newConstraints = constraints;
 
-//         if remove_values(xi, xj, get_grid(assignment), boardPlot):
-//             # .. Removed a value from domain of xi based on constraint with xj.
-//             #    Return FAIL if nothing is left in the domain of x.
-//             #    Then we need to check every variable that xi has a constraint
-//             #    with, to see if those constraints are still satisfied or if
-//             #    we can simplifiy their domains based on the new domain of xi.
-//             #    Example: If xi has a constraint with some xk:
-//             #       - If the domain of xi is now {3}, and the domain of xk is
-//             #         also {3}, then return FAIL so we can back up.
-//             #       - If the domain of xi is now {3}, and the domain of xk is
-//             #         {1,3}, we will be able to reduce the domain of xk to {1}
-//             #    But note that those may already be on the queue, so now
-//             #    they'll be looped over twice.
-//             #    Those will be done in another loop around. For now, just
-//             #    add them to the queue
-//             if xi.get_domain_size() == 0:
-//                 # CSP cannot be solved
-//                 return -1
-//             new_constraints = reverse_constraints(xi.row, xi.col, xi.max_domain_val)
-//             constraints += new_constraints
+    count = 0;  // make sure the while loop cannot go on forever
+    // Go through all of the constraints, adding any new constraints to a new array,
+    // which is then returned and gone through next time around, until there are
+    // no new constraints
+    while (newConstraints.length > 0 & count < 100) {
+        newConstraints = constraintChecker(assignment, newConstraints);
+        console.log(`Number of new constraints: ${newConstraints.length}`);
+        console.log(newConstraints[0]);
+        count ++;
+    }
+    console.log(`Took ${count} loops to go through all constraints`);
+    return assignment;
+}      
 
-    return assignment
+
+
+/**
+ * Remove values from the domain
+ * @param xi
+ * @param xj
+ * @param tempgrid
+ * @param boardPlot
+*/
+function removeValues(xi, xj, tempgrid) { //}, boardPlot) {
+    let modified = false;
+    let value;
+
+    // We can only remove values if the domain of y has only one value
+    // and the domain of x is not fixed.
+    // (If x and y are both fixed and equal, that should have been caught
+    // previously)
+    if (xj.getDomainSize() == 1) {
+        let q = xj.getOnlyValue();
+        if (xi.domain.has(q)) {
+            // Remove p from Dx.
+            // Note: xi points to an element of assignment, so this will also
+            // remove p from xi in assignment.
+            xi.domain.delete(q);
+
+            // Update graphics
+            if (xi.getDomainSize() == 1) {
+                value = xi.getOnlyValue();
+                console.log(`Populating (${xi.row}, ${xi.col}) with ${value}`);
+                tempgrid[xi.row][xi.col] = value;
+                populateSquare(xi.row, xi.col, value, boxStyle='final'); 
+                //boardPlot.update(tempgrid);
+            }
+            modified = true;
+        }
+    }
+    return modified;
 }
 
+function printBoard(board) {
+    console.log("Current board:");
+    let nrows = board.length;
+    let ncols = board[0].length;
 
-
-// def remove_values(xi, xj, tempgrid, boardPlot):
-//     """
-//     Remove values from the domain
-//     @param xi
-//     @param xj
-//     @param tempgrid
-//     @param boardPlot
-//     """
-//     modified = False
-
-//     # We can only remove values if the domain of y has only one value
-//     # and the domain of x is not fixed.
-//     # (If x and y are both fixed and equal, that should have been caught
-//     # previously)
-//     if xj.get_domain_size() == 1:
-//         q = xj.get_only_value()
-//         if q in xi.domain:
-//             # Remove p from Dx.
-//             # Note: xi points to an element of assignment, so this will also
-//             # remove p from xi in assignment.
-//             xi.remove(q)
-
-//             # Update graphics
-//             if xi.get_domain_size() == 1:
-//                 tempgrid[xi.row][xi.col] = xi.get_only_value()
-//                 boardPlot.update(tempgrid)
-//             modified = True
-//     return modified
+    for (let i=0; i<nrows; i++) {
+        for (let j=0; j<ncols; j++) {
+            box = board[i][j];
+            console.log(box);
+        }
+    }
+}

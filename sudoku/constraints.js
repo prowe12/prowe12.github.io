@@ -10,13 +10,14 @@
 
 
 
+/**
+ * Purpose: When the board first comes in, do a check to see if any of the
+ * fixed values are duplicates
+ * @param board  The Sudoku board: A list of lists of variable class instances
+ * @param constraints  The unallowed values for each cell, list of tuples
+ * @return  True if QC based, else False
+ */
 function qcBoardAndConstraints(board, constraints) {
-    /**
-     * Purpose: When the board first comes in, do a check to see if any of the
-     * fixed values are duplicates
-     * @param board  The Sudoku board: A list of lists of variable class instances
-     * @param constraints  The unallowed values for each cell, list of tuples
-     */
 
     console.log("I am in qcBoardAndConstraints");
 
@@ -27,7 +28,7 @@ function qcBoardAndConstraints(board, constraints) {
     let jrow;
     let jcol;
     let i = 0;
-    while (i < len(constraints)) {
+    while (i < constraints.length) {
         //([irow, icol], [jrow, jcol]) = constraints[i];
         irow = constraints[i][0][0];
         icol = constraints[i][0][1];
@@ -35,6 +36,7 @@ function qcBoardAndConstraints(board, constraints) {
         jcol = constraints[i][0][1];
         xi = board[irow][icol]
         xj = board[jrow][jcol]
+
         if (xi.fixed && xj.fixed && xi.get_only_value() == xj.get_only_value()) {
             return constraints, false
         }
@@ -52,6 +54,55 @@ function qcBoardAndConstraints(board, constraints) {
     return constraints, true
 }
 
+
+function qcBoard(board) {
+    maxDomainVal = board[0][0].maxDomainVal;
+    console.log(`In qcBoard, with maxDomainVal ${maxDomainVal}`);
+
+    for (let irow=0; irow<maxDomainVal; irow++) {  
+        for (let icol=0; icol<maxDomainVal; icol++) {
+
+            // If the value in this box is not fixed, move on
+            if (!(board[irow][icol].fixed)) {
+                continue;
+            }
+
+            boxval = board[irow][icol].getOnlyValue();
+
+            // Row: For the row (irow) containing the cell at (irow, icol),
+            // add all the columns (e.g. 1-9) to the constraints, except the cell's column (icol)
+            // Format: An array containing the current cell [irow, icol], followed by the
+            // constraint row and column [irow, jol]
+            for (let jcol=0; jcol<maxDomainVal; jcol++) {
+                if (jcol !== icol && boxval === board[irow][jcol].value) {
+                    return false;
+                }
+            }
+
+            // Column: For the column (icol) containing the cell at (irow, icol), 
+            // check all the rows (e.g. 1-9), except the cell's row (irow)
+            for (let jrow=0; jrow<maxDomainVal; jrow++) {
+                if (jrow !== irow && boxval === board[jrow, icol].value) {
+                    return false;
+                }
+            }
+
+            // Box: For the (e.g. 3x3) box containing the cell at (irow, icol),
+            // check all row,column sets that share the box, except the cell's 
+            // (irow, icol) and the cells that have already been checked
+            let boxRow = Math.floor(irow/3) * 3;
+            let boxCol = Math.floor(icol/3) * 3;
+            for (jrow=boxRow; jrow<boxRow+3; jrow++) {
+                for (jcol=boxCol; jcol<boxCol+3; jcol++) {
+                    if (boxval === board[jrow][jcol]) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
 
 
 // def final_constraints(board, constraints):
@@ -97,22 +148,23 @@ function qcBoardAndConstraints(board, constraints) {
  *     only include 4 constraints for the box because we have already
  *     counted the other 4: 2 in the row and 2 in the column.
  *
- *     We can also exclude any fixed cells from the list of constraints,
- *     since (1) we pre-check for consistency, ans (2) they cannot change.
- *     But we do that in another function, just to keep things simple.
+ *     We do not need constraints for boxes with fixed values, so they will
+ *     not be added to the list of constraints,
  *
  * Notes:
  *     1) There are a lot of nested loops here. However, this code is only
  *        run once and it has to cover all squares. 
  */
-
 function getConstraints(board) {
     maxDomainVal = board[0][0].maxDomainVal;
-    console.log(`I am in in getConstraints, with maxDomainVal ${maxDomainVal}`);
+    console.log("In getConstraints");
     let constraints = new Array;
 
     for (let irow=0; irow<maxDomainVal; irow++) {   //in list_rows:
         for (let icol=0; icol<maxDomainVal; icol++) {
+
+            // Do not get constraints for the boxes with fixed values, since
+            // they will never change
             if (board[irow][icol].fixed) {
                 continue;
             }
@@ -142,11 +194,15 @@ function getConstraints(board) {
             let boxCol = Math.floor(icol/3) * 3;
             for (jrow=boxRow; jrow<boxRow+3; jrow++) {
                 for (jcol=boxCol; jcol<boxCol+3; jcol++) {
-                    constraints.push([[irow, icol], [jrow, jcol]]);
+                    if (jrow != irow & jcol != icol) {
+                        constraints.push([[irow, icol], [jrow, jcol]]);
+                    }
                 }
             }
         }
     }
+    //console.log(constraints);
+    //alert("constraints!");
     return constraints;
 }
 
@@ -183,9 +239,8 @@ function getConstraints(board) {
 
 function getAllConstraints(maxDomainVal) {
     console.log(`I am in in getAllConstraints, with maxDomainVal ${maxDomainVal}`);
-    let constraints = new Array;
+    let constraints = [];
 
-    console.log(maxDomainVal);
     for (let irow=0; irow<maxDomainVal; irow++) {   //in list_rows:
         for (let icol=0; icol<maxDomainVal; icol++) {
             // Row: For the row (irow) containing the cell at (irow, icol),
@@ -258,40 +313,54 @@ function getAllConstraints(maxDomainVal) {
 
 
 
-// def reverse_constraints(irow, icol, max_domain_val):
-//     """
-//     Get the reverse contraints
-//     @param irow  Index to row
-//     @param icol  Index to column
-//     @param max_domain_val  The dimensions of each side of the square board, int
-//     """
-//     xj_constraints = []
+/**
+ * Get the reverse contraints
+ * @param irow  Index to row
+ * @param icol  Index to column
+ * @param maxDomainVal The maximum value allowed in the domain
+ * @param xjConstraints  The previous constraints, so new can be added
+ * @param board  The board, to check for fixed values and exclude them
+ * @param max_domain_val  The dimensions of each side of the square board, int
+*/
+function reverseConstraints(irow, icol, maxDomainVal, xjConstraints, board){
+    let jcol;
+    let jrow;
+    //let xjConstraints = [];
 
+    // Row: Add all column indices to row, except the variable's
+    // also do not add any that are fixed
+    for (jcol=0; jcol<maxDomainVal; jcol++) {
+        if (jcol !== icol & !(board[irow][jcol].fixed) ) {
+            xjConstraints.push([[irow, jcol], [irow, icol]]);
+        }
+    }
 
-//     # .. Row: Add all column indices to row, except the variable's
-//     for jcol in range(max_domain_val):
-//         if jcol != icol:
-//             xj_constraints.append(([irow, jcol], [irow, icol]))
+    // Column
+    for (jrow=0; jrow<maxDomainVal; jrow++) {
+        // Add all rows of this column, except the variable's column
+        if (!(jrow === irow) & !(board[jrow][icol].fixed) ) {
+            xjConstraints.push([[jrow, icol], [irow, icol]]);
+        }
+    }
 
-//     # .. Column
-//     for jrow in range(max_domain_val):
-//         # Add all rows of this column, except the variable's column
-//         if jrow != irow:
-//             xj_constraints.append(([jrow, icol], [irow, icol]))
+    // Box
+    //  Add all row,column sets that share the box,
+    //  except the variable's row, column
+    //  and the ones that have already been one
+    ibox_row = Math.floor(irow/3) * 3;
+    ibox_col = Math.floor(icol/3) * 3;
 
-//     # .. Box
-//     #    Add all row,column sets that share the box,
-//     #    except the variable's row, column
-//     #    and the ones that have already been one
-//     ibox_row = int(irow/3) * 3
-//     ibox_col = int(icol/3) * 3
+    //irows = list(range(ibox_row, irow)) + list(range(irow, ibox_row+3));
+    //icols = list(range(ibox_col, icol)) + list(range(icol, ibox_col+3));
 
-//     irows = list(range(ibox_row, irow)) + list(range(irow, ibox_row+3))
-//     icols = list(range(ibox_col, icol)) + list(range(icol, ibox_col+3))
+    for (jrow=ibox_row; jrow<ibox_row+3; jrow++) {
+        for (jcol=ibox_col; jcol<ibox_col+3; jcol++) {
+            if (!(jrow === irow) & !(jcol === icol) & !(board[jrow][jcol].fixed) ) {
+                xjConstraints.push([[jrow, jcol], [irow, icol]]);
+            }
+        }
+    }
 
-//     for jrow in irows:
-//         for jcol in icols:
-//             if jrow != irow and jcol != icol:
-//                 xj_constraints.append(([jrow, jcol], [irow, icol]))
-
-//     return xj_constraints
+    console.log(`xjConstraints.length: ${xjConstraints.length}`);
+    return xjConstraints;
+}
