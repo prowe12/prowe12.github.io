@@ -7,7 +7,6 @@
  * @param {array} grid 
  */
  function populateBoard(grid){
-    //TODO: dimensions right?
     nrows = grid.length;
     ncols = grid[0].length;
 
@@ -22,6 +21,28 @@
 
 }
 
+/**
+ * Populate the Sudoku board graphic with the values from grid
+ * This should only be done when a new puzzle is selected, not during
+ * game play or when the solver is working.
+ * @param {array} grid 
+ */
+ function updateBoard(board){
+    nrows = board.length;
+    ncols = board[0].length;
+
+    grid = getGrid(board);
+
+    // Put all non-zero values into the grid
+    for (i=0; i<nrows; i++){
+        for (j=0; j<ncols; j++){
+            if (!(board[i][j].fixed)) {
+                populateSquare(i, j, grid[i][j], 'backtrack');    //'black', 'bold');
+            }
+        }
+    }
+
+}
 
 
 /**
@@ -29,6 +50,7 @@
  * @param {number} row 
  * @param {number} col 
  * @param {number} value 
+ * @throws error if bad value given for style of sudoku box
  */
  function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='black', numberFontWeight='', borderColor=''){
 
@@ -36,7 +58,7 @@
     // let allowedNumberColors = ['black', 'red', 'orange', 'green', 'blue'];
     // let allowedBorderColors = ['black', 'red', 'orange', 'green', 'blue'];
     // let allowedNumberFontWeights = ['bold', 'normal'];
-    let allowedBoxStyles = ['empty', 'fixed', 'final', 'backtrack'];
+    let allowedBoxStyles = ['empty', 'fixed', 'final', 'backtrack', 'ac3'];
     let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     // If the value is outside the range, throw error
@@ -49,7 +71,6 @@
 
     // If this box has already been set to fixed, we should not be changing it
     if (box.className.indexOf("fixed") !== -1) {
-        console.log(`Skipping fixed square at ${irow}, ${icol}.`);
         return;
     }
 
@@ -64,7 +85,7 @@
             box.classList.add(boxStyle);
     }
     else {
-        alert("Bad value for style of Sudoku box");
+        throw "Bad value for style of Sudoku box";
     }    
 
     // Put the number in the box, unless it is zero, then keep empty
@@ -95,5 +116,6 @@
     //    box.style.borderColor = borderColor; //("borderColor", "green");
     //}
     return;
+
 }
 

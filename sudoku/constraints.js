@@ -19,8 +19,6 @@
  */
 function qcBoardAndConstraints(board, constraints) {
 
-    console.log("I am in qcBoardAndConstraints");
-
     let xi;
     let xj;
     let irow;
@@ -57,7 +55,6 @@ function qcBoardAndConstraints(board, constraints) {
 
 function qcBoard(board) {
     maxDomainVal = board[0][0].maxDomainVal;
-    console.log(`In qcBoard, with maxDomainVal ${maxDomainVal}`);
 
     for (let irow=0; irow<maxDomainVal; irow++) {  
         for (let icol=0; icol<maxDomainVal; icol++) {
@@ -157,7 +154,6 @@ function qcBoard(board) {
  */
 function getConstraints(board) {
     maxDomainVal = board[0][0].maxDomainVal;
-    console.log("In getConstraints");
     let constraints = new Array;
 
     for (let irow=0; irow<maxDomainVal; irow++) {   //in list_rows:
@@ -201,8 +197,6 @@ function getConstraints(board) {
             }
         }
     }
-    //console.log(constraints);
-    //alert("constraints!");
     return constraints;
 }
 
@@ -238,7 +232,6 @@ function getConstraints(board) {
  */
 
 function getAllConstraints(maxDomainVal) {
-    console.log(`I am in in getAllConstraints, with maxDomainVal ${maxDomainVal}`);
     let constraints = [];
 
     for (let irow=0; irow<maxDomainVal; irow++) {   //in list_rows:
@@ -361,6 +354,5 @@ function reverseConstraints(irow, icol, maxDomainVal, xjConstraints, board){
         }
     }
 
-    console.log(`xjConstraints.length: ${xjConstraints.length}`);
     return xjConstraints;
 }

@@ -52,7 +52,7 @@ function fileExists(urlToFile) {
  * @return  The grid of numbers; list of lists
  * @raises  NameError  If filename is not '' and does not exist
  */
-function load_starting_vals(puzzle='easy'){
+function loadStartingValues(puzzle='easy'){
     let grid;
 
     if (puzzle === 'random') {
@@ -63,6 +63,15 @@ function load_starting_vals(puzzle='easy'){
 
     //TODO: Add all the puzzles here
     if (puzzle === 'easy') {
+        grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0], 
+                [6, 0, 0, 1, 9, 5, 0, 0, 0], 
+                [0, 9, 8, 0, 0, 0, 0, 6, 0], 
+                [8, 0, 0, 0, 6, 0, 0, 0, 3], 
+                [4, 0, 0, 8, 0, 3, 0, 0, 1], 
+                [7, 0, 0, 0, 2, 0, 0, 0, 6], 
+                [0, 6, 0, 0, 0, 0, 2, 8, 0], 
+                [0, 0, 0, 4, 1, 9, 0, 0, 5], 
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]];
         // grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0], 
         //         [6, 0, 0, 1, 9, 5, 0, 0, 0], 
         //         [0, 9, 8, 0, 0, 0, 0, 6, 0], 
@@ -70,17 +79,8 @@ function load_starting_vals(puzzle='easy'){
         //         [4, 0, 0, 8, 0, 3, 0, 0, 1], 
         //         [7, 0, 0, 0, 2, 0, 0, 0, 6], 
         //         [0, 6, 0, 0, 0, 0, 2, 8, 0], 
-        //         [0, 0, 0, 4, 1, 9, 0, 0, 5], 
-        //         [0, 0, 0, 0, 8, 0, 0, 7, 9]];
-        grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0], 
-                [6, 7, 0, 1, 9, 5, 3, 4, 8], 
-                [1, 9, 8, 3, 4, 2, 5, 6, 7], 
-                [8, 5, 9, 7, 6, 1, 4, 2, 3], 
-                [4, 2, 6, 8, 5, 3, 7, 9, 1], 
-                [7, 1, 3, 9, 2, 4, 8, 5, 6], 
-                [9, 6, 1, 5, 3, 7, 2, 8, 4], 
-                [2, 8, 7, 4, 1, 9, 6, 3, 5], 
-                [3, 4, 5, 2, 8, 6, 1, 7, 9]];
+        //         [0, 0, 0, 4, 1, 9, 6, 3, 5], 
+        //         [0, 0, 0, 2, 8, 6, 1, 7, 9]];
         return grid;
      }
 
@@ -207,7 +207,7 @@ function load_starting_vals(puzzle='easy'){
 
 // Global variables
 var puzzleType = document.getElementById("dropdownpuzzle").value;
-var originalgrid = load_starting_vals(puzzleType);
+var originalgrid = loadStartingValues(puzzleType);
 var speed = 1000;   // Speed of displaying results
 var wait;
 
@@ -229,7 +229,7 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
     puzzleType = document.getElementById("dropdownpuzzle").value;
 
     // The original grid will be in the global scope
-    originalgrid = load_starting_vals(puzzleType);
+    originalgrid = loadStartingValues(puzzleType);
 
     // Clear the Sudoku board and populate with the values from the selected puzzle
     makeEmptyGrid(9, 9);
@@ -242,13 +242,11 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // TODO: allow user to choose between solve and bactrack below, via a controller
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
-    makeEmptyGrid(9, 9);
     let grid = solve(originalgrid);  //, boardPlot)
 
     // Solve the board using backtracking alone, using backtrack, in backtrack.js
     //backtracker(originalgrid, populateSquare);  //, boardPlot)
 
-    console.log('success');
     // Clear the Sudoku board and populate with the values from the completed puzzle
     //populateBoard(grid);
 

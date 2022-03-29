@@ -14,15 +14,35 @@
 }
 
 
+table {
+   border-collapse: collapse;
+   border: solid 2px black;
+}
+
+td:nth-child(3), th:nth-child(3) {
+   border-right: solid 2px black;
+}
+td:nth-child(6), th:nth-child(6) {
+   border-right: solid 2px black;
+}
+tr:nth-child(3) {
+   border-bottom: solid 2px black;
+}
+tr:nth-child(6) {
+   border-bottom: solid 2px black;
+}
+
 td {
-   width: 20px;
-   height: 20px;
-   border: 1px solid black; 
+   width: 28px;
+   height: 28px;
+   border: 1px solid gray; 
+   text-align: center;
 }
 
 /* Default Sudoku box styling */
 .sudokubox {
    color: gray;
+   font-size:x-large;
 }
 
 /* styling for fixed numbers (original grid) */
@@ -31,11 +51,16 @@ td {
    font-weight: bold;
 }
 
+/* styling for numbers determined with AC-3 */
+.sudokubox.ac3 {
+   color: blue;
+}
+
 .sudokubox.backtrack {
    color: green;
 }
 
 .sudokubox.final {
-   color: blue;
+   color: red;
 }
 
