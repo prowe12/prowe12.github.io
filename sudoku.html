@@ -24,6 +24,7 @@
     
         <!-- Print the Sudoku board to the screen -->
         <table id="sudokuGraphic"> </table>
+        <br>
 
         <!-- Put the fieldset in a div so we can center it -->
         <div id="sudokuControls">
@@ -55,12 +56,21 @@
         </div>
 
         <!-- Code for playing Sudoku, in reverse order of dependency -->
+        <script src="sudoku/boardPlot.js"></script>
+        <script src="sudoku/getUnassignedVariable.js"></script>
         <script src="sudoku/variable.js"></script>
         <script src="sudoku/constraints.js"></script>
         <script src="sudoku/backtrack.js"></script>
         <script src="sudoku/solver.js"></script>
         <script src="sudoku/sudoku.js"></script>   <!-- Calls code in solver.js -->
 
+
+        <br>
+        <br>
+        Read about <a href="solvingSudoku.html">how the solver works</a>.
+        <br>
+        <br>
+        <br>
     </main>
     
     <footer>Page made by Penny Rowe.</footer>

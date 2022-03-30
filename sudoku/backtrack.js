@@ -106,22 +106,6 @@ var delay = 1000;
  */
 function backtrack(grid, putSquare, row, col){
 
-    //console.log("In backtrack, of backtrack.js");
-
-    // while (grid[row][col] > 0){
-    //     if (row < 8){
-    //         row += 1;
-    //     }
-    //     else if (row == 8 && col < 8){
-    //         row = 0;
-    //         col += 1;
-    //     }
-    //     else if (row == 8 && col == 8){
-    //         // Exit condition;
-    //         return grid, true;
-    //     }
-    // }
-
     // Find the row, col of the first empty box (i.e. contains 0), 
     // going through columns, then rows
     while (grid[row][col] > 0){

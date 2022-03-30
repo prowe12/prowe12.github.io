@@ -40,7 +40,7 @@ function fileExists(urlToFile) {
     xhr.open('HEAD', urlToFile, false);
     xhr.send();
     if (xhr.status === 404) {
-        console.log(`File ${urlToFile} not found.`)
+        throw `File ${urlToFile} not found.`;
     }
          
     return xhr.status !== 404;
@@ -52,7 +52,7 @@ function fileExists(urlToFile) {
  * @return  The grid of numbers; list of lists
  * @raises  NameError  If filename is not '' and does not exist
  */
-function load_starting_vals(puzzle='easy'){
+function loadStartingValues(puzzle='easy'){
     let grid;
 
     if (puzzle === 'random') {
@@ -72,6 +72,15 @@ function load_starting_vals(puzzle='easy'){
                 [0, 6, 0, 0, 0, 0, 2, 8, 0], 
                 [0, 0, 0, 4, 1, 9, 0, 0, 5], 
                 [0, 0, 0, 0, 8, 0, 0, 7, 9]];
+        // grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0], 
+        //         [6, 0, 0, 1, 9, 5, 0, 0, 0], 
+        //         [0, 9, 8, 0, 0, 0, 0, 6, 0], 
+        //         [8, 0, 0, 0, 6, 0, 0, 0, 3], 
+        //         [4, 0, 0, 8, 0, 3, 0, 0, 1], 
+        //         [7, 0, 0, 0, 2, 0, 0, 0, 6], 
+        //         [0, 6, 0, 0, 0, 0, 2, 8, 0], 
+        //         [0, 0, 0, 4, 1, 9, 6, 3, 5], 
+        //         [0, 0, 0, 2, 8, 6, 1, 7, 9]];
         return grid;
      }
 
@@ -177,80 +186,6 @@ function load_starting_vals(puzzle='easy'){
 }
 
 
-/**
- * Populate a Sudoku board graphic square based on given row and col
- * @param {number} row 
- * @param {number} col 
- * @param {number} value 
- */
-function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='black', numberFontWeight='', borderColor=''){
-
-    // Allowed values for modifiable cell properties
-    // let allowedNumberColors = ['black', 'red', 'orange', 'green', 'blue'];
-    // let allowedBorderColors = ['black', 'red', 'orange', 'green', 'blue'];
-    // let allowedNumberFontWeights = ['bold', 'normal'];
-    let allowedBoxStyles = ['empty', 'fixed', 'final', 'backtrack'];
-    let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    // If the value is outside the range, throw error
-    if (!(value in allowedValues)) {
-        console.log("Bad value for Sudoku square");
-        return;
-    } 
-    
-    // The Sudoku cell at irow, icol
-    let box = document.querySelector(`.row-${irow} .col-${icol}`);
-
-    // If this box has already been set to fixed, we should not be changing it
-    if (box.className.indexOf("fixed") !== -1) {
-        alert(`Error: trying to change fixed square at ${irow}, ${icol}.`);
-    }
-
-    // Clear out all box style classes
-    for (let thisStyle of allowedBoxStyles) {
-        box.classList.remove(thisStyle);
-    }
-
-    // Add the input box style class
-    //if (allowedBoxStyles.includes(boxStyle)) {
-    if (allowedBoxStyles.indexOf(boxStyle) !== -1) {
-            box.classList.add(boxStyle);
-    }
-    else {
-        alert("Bad value for style of Sudoku box");
-    }    
-
-    // Put the number in the box, unless it is zero, then keep empty
-    if (value === 0) {
-        box.innerHTML = '';
-    }
-    else  {
-        box.innerHTML = value;
-    }
-
-    // Set the color of the number in the cell, if color specified is allowed.
-    // Otherwise, throw an error
-    // if (allowedNumberColors.indexOf(numberColor) !== -1){
-    //     box.style.setProperty("color", numberColor);
-    // }
-    // else {
-    //     // TODO: throw an exception
-    //     console.log("Bad color choice!");
-    // }
-
-    // Set the style of the number in the cell, if it is allowed.
-    //if (allowedNumberFontWeights.includes(numberFontWeight)) {
-    //    box.style.setProperty("fontWeight", numberFontWeight);
-    //}
-
-    // Add a border, if color specified is allowed
-    //if (allowedBorderColors.indexOf(borderColor) !== -1) {
-    //    box.style.borderColor = borderColor; //("borderColor", "green");
-    //}
-    return;
-}
-
-
 //TODO: Make the original squares permanently black and bold
 // Make sure the permanent squares can't be changed during game
 // play or when the solver runs
@@ -263,27 +198,6 @@ function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='bl
 //TODO: Add button for backtracking & AC-3
 
 
-/**
- * Populate the Sudoku board graphic with the values from grid
- * This should only be done when a new puzzle is selected, not during
- * game play or when the solver is working.
- * @param {array} grid 
- */
-function populateBoard(grid){
-    //TODO: dimensions right?
-    nrows = grid.length;
-    ncols = grid[0].length;
-
-    // Put all non-zero values into the grid
-    for (i=0; i<nrows; i++){
-        for (j=0; j<ncols; j++){
-            if (grid[i][j] > 0) {
-                populateSquare(i, j, grid[i][j], 'fixed');    //'black', 'bold');
-            }
-        }
-    }
-
-}
 
 
 
@@ -293,7 +207,7 @@ function populateBoard(grid){
 
 // Global variables
 var puzzleType = document.getElementById("dropdownpuzzle").value;
-var originalgrid = load_starting_vals(puzzleType);
+var originalgrid = loadStartingValues(puzzleType);
 var speed = 1000;   // Speed of displaying results
 var wait;
 
@@ -315,7 +229,7 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
     puzzleType = document.getElementById("dropdownpuzzle").value;
 
     // The original grid will be in the global scope
-    originalgrid = load_starting_vals(puzzleType);
+    originalgrid = loadStartingValues(puzzleType);
 
     // Clear the Sudoku board and populate with the values from the selected puzzle
     makeEmptyGrid(9, 9);
@@ -328,10 +242,19 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // TODO: allow user to choose between solve and bactrack below, via a controller
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
-    //solve(originalgrid);  //, boardPlot)
+    // return an array with the moves taken and whether it was successful
+    // The moves array has an array for each move, containing the:
+    // row, column, value, and method used to get the value
+    let result = solve(originalgrid);
 
     // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    backtracker(originalgrid, populateSquare);  //, boardPlot)
+    //let result = backtracker(originalgrid, populateSquare);  //, boardPlot)
+
+    let success = result[0];
+    let moves = result[1];
+
+    // Clear the Sudoku board and populate with the values from the completed puzzle
+    //populateBoard(grid);
 
 });
 
