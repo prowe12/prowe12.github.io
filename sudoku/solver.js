@@ -170,7 +170,7 @@ function solve(original) {
     // Quality control the starting board
     let boardValid = qcBoard(board);
     if (!(boardValid)) {
-        throw "Board is not valid!";
+        return ["Puzzle is not valid!", board];
     }
 
     // Get the starting constraints
@@ -186,15 +186,15 @@ function solve(original) {
     // Final check: check all constraints again    
     boardValid = qcBoard(board);
     if (!(boardValid)) {
-        throw "Board is not valid!";
+        return ["Solved puzzle is not valid!", board];
     }
 
     if (isComplete(board)) {
         grid = getGrid(board);
-        return grid //, true
+        return ["success", grid];
     }
 
-    return grid //, success
+    return ["success", grid];
 }
 
 
