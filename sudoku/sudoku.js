@@ -242,10 +242,16 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // TODO: allow user to choose between solve and bactrack below, via a controller
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
-    let grid = solve(originalgrid);  //, boardPlot)
+    // return an array with the moves taken and whether it was successful
+    // The moves array has an array for each move, containing the:
+    // row, column, value, and method used to get the value
+    let result = solve(originalgrid);
 
     // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    //backtracker(originalgrid, populateSquare);  //, boardPlot)
+    //let result = backtracker(originalgrid, populateSquare);  //, boardPlot)
+
+    let success = result[0];
+    let moves = result[1];
 
     // Clear the Sudoku board and populate with the values from the completed puzzle
     //populateBoard(grid);
