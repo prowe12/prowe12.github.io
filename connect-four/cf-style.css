@@ -14,18 +14,21 @@ h3{
 
 .aboveTable{
     position: relative;
+    display: block;
+    font-size:0;
     /* top: 10px; */
     /* left: 50%; */
     /* transform: translate(-50%); */
     /* width: 90px; */
     /* height: 90px; */
-    border: 2px solid rgb(200, 225, 250);
-    /* background:rgb(200, 225, 250); */
+    /* border: 2px solid rgb(200, 225, 250); */
+    /* background:rgb(1, 1, 255); */
     /* background: rgb(200, 225, 250); */
 }
 
 .game{
     position: relative;
+    border-collapse:collapse;
     top: 10px;
     left: 50%;
     transform: translate(-50%);
@@ -34,8 +37,13 @@ h3{
     /* border: 1px solid black; */
 }
 
+.row{
+    background-color: blue;
+}
+
 #board{
-    background: rgb(1, 1, 255);
+    /* background: rgb(1, 1, 255); */
+    border-collapse: collapse;
 }
 
 .slot{
@@ -45,6 +53,18 @@ h3{
     background:rgb(200, 225, 250);
     border: 1px solid black;
     border-radius: 50%;
+    cursor: grab;
+}
+
+.slot1{
+    position: relative;
+    width: 90px;
+    height: 90px;
+    background:blue;
+    display: block;
+    font-size: 0;
+    /* border: 1px solid black; */
+    /* border-radius: 50%; */
     cursor: grab;
 }
 

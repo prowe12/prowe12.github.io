@@ -5,27 +5,44 @@
 //get an array of the table rows 
 var tableRow = document.querySelectorAll('.row');
 
-
 //array of all the cells in the table
 var tableCell = document.getElementsByTagName('td');
-
 //array of all the slots in the table(each cell has one slot)
 var tableSlot = document.querySelectorAll('.slot');
-
 //this variable will update whose turn it is
 const playerTurn = document.querySelector('.player-turn');
-
 //reset button
 const reset = document.querySelector('.reset');
-
 //nextMove button
 const nextMove = document.querySelector('.next-move');
-
 //array of canvases (one for each column)
 let canvas = document.querySelectorAll('.aboveTable');
 let context = null;
 
+let testRow = document.querySelectorAll('.slot1');
 
+/**
+ * Create array boards that the minimax functions will use to play the game.
+ * Gameboard stays updated with the current state of the real game.
+ * Board copies the values in gameboard, then is used in minimax to
+ * simulate longer connectfour games to then determine which move the computer
+ * will make.
+ */
+ var board = [];
+ var playBoard = [];
+ board.length = 6;
+ playBoard.length = 6;
+ for(let i = 0; i<6; i++){
+     board[i] = [];
+     board[i].length = 7;
+     playBoard[i] = [];
+     playBoard.length = 7;
+     for(let j = 0; j<7; j++){
+         board[i][j] = 0;
+         playBoard[i][j] = 0;
+     }
+ 
+ }
 
 
 /**
@@ -49,13 +66,19 @@ for(let i = 0; i < tableCell.length; i++){
 //state player colors
 player1Color = 'red';
 player2Color = 'yellow';
+background = "rgb(200, 225, 250)";
+
+
 
 //animation variables
+let animationCell;
 let animationColumn = 0;
 let animationStartPix = 0;
 let animationEndPix = 0;
 let animationColor = player1Color;
 let dropID;
+
+setCanvasBoard();
 
 /**
  * displayMove displays a game tile over the column that the user is hovering on.
@@ -65,10 +88,99 @@ function displayMove(col){
     let canv = canvas[col];
     let context = canv.getContext('2d');
     context.beginPath();
-    context.arc(canv.width/2,canv.height/2,canv.width/2,0,2*Math.PI);
+    context.arc(canv.width/2,canv.height/2,canv.width/2-2,0,2*Math.PI);
+    context.fillStyle = animationColor;
+    context.strokeStyle = "black";
+    context.fill();
+    context.restore();
+    fallingTile(col);
+}
+function changeCellColor(cell){
+    let can = cell.children[0];
+    let context = can.getContext("2d");
+    console.log(context);
+    let xcoord = can.width/2;
+    let ycoord = can.height/2;
+    console.log(xcoord);
+    console.log(ycoord);
+    let rad = can.width/2-2;
+    console.log(rad);
+
+    context.beginPath();
+    context.fillStyle = animationColor;
+    context.strokeStyle = "black";
+    context.arc(xcoord,ycoord,rad,0,2*Math.PI);
+    context.fill();
+    context.restore();
+    console.log("finished circle");
+
+    return;
+}
+
+async function fallingTile(col){
+    for(let i = 0; i<playBoard.length && playBoard[i][col]==0;i++){
+        console.log(tableRow[i].children[col]);
+        if(i==0){
+            animationCell = tableRow[i].children[col];
+            animationStartPix = 0;
+            animationEndPix = cell.height+cell.height/2;
+            console.log("calling animation");
+            let animate = await callAnimation();
+        }
+    }
+    return;
+
+}
+
+async function callAnimation(){
+    window.requestAnimationFrame(fallingTileAnimation);
+}
+
+function fallingTileAnimation(){
+    let cell = animationCell.children[0];
+    console.log(cell);
+    let context = cell.getContext("2d");
+
+    context.clearRect(0,0,cell.width,cell.height);
+    context.save();
+
+    context.beginPath();
+    context.arc(cell.width/2,animationStartPix,cell.width/2-2,0,2*Math.PI);
     context.fillStyle = animationColor;
     context.fill();
-    context.restore()
+    context.restore();
+    animationStartPix++;
+
+    if(animationStartPix <= animationEndPix){
+        window.requestAnimationFrame(fallingTileAnimation);
+    }
+    else{
+        animationStartPix=0;
+        return;
+    }
+}
+
+function clearCell(cell){
+    console.log("change color");
+    console.log(cell.children[0]);
+    let context = cell.children[0].getContext("2d");
+    console.log(context);
+    context.clearRect(0,0,cell.children[0].width, cell.children[0].height);
+    context.restore();
+}
+
+function setCanvasBoard(){
+    console.log("in testCanv");
+    for(let i = 0; i < testRow.length; i++){
+        let testr = testRow[i];
+        let context = testr.getContext("2d");
+        context.beginPath();
+        context.arc(testr.width/2,testr.height/2,testr.width/2-2,0,2*Math.PI);
+        context.fillStyle = background;
+        context.strokeStyle = "black";
+        context.fill();
+        context.restore();
+    }
 }
 
 /**
@@ -82,28 +194,7 @@ function clearDisplayMove(col){
 }
 
 
-/**
- * Create array boards that the minimax functions will use to play the game.
- * Gameboard stays updated with the current state of the real game.
- * Board copies the values in gameboard, then is used in minimax to
- * simulate longer connectfour games to then determine which move the computer
- * will make.
- */
-var board = [];
-var playBoard = [];
-board.length = 6;
-playBoard.length = 6;
-for(let i = 0; i<6; i++){
-    board[i] = [];
-    board[i].length = 7;
-    playBoard[i] = [];
-    playBoard.length = 7;
-    for(let j = 0; j<7; j++){
-        board[i][j] = 0;
-        playBoard[i][j] = 0;
-    }
 
-}
 
 
 //want current player to start the game
@@ -111,42 +202,64 @@ var currentPlayer = 1;
 playerTurn.textContent = `Your turn!`;
 
 //go through the cells and show that we know they all have white background
-Array.prototype.forEach.call(tableCell, (cell)=>{
-    cell.style.backgroundColor = 'rgb(200, 225, 250)';
-    cell.addEventListener('click',(cell)=>{
-        if(currentPlayer ===1){
-            playerMove(cell);
-        }
-    });
+// Array.prototype.forEach.call(tableCell, (cell)=>{
+//     cell.style.backgroundColor = 'rgb(200, 225, 250)';
+//     cell.addEventListener('click',(cell)=>{
+//         if(currentPlayer ===1){
+//             playerMove(cell);
+//         }
+//     });
     
-})
+// })
+
+for(let i = 0; i<tableRow.length; i++){
+    console.log(tableRow[i]);
+    for(let j = 0; j<tableRow[i].children.length; j++){
+        cell = tableRow[i].children[j];
+        cell.addEventListener('click',(cell)=>{
+            if(currentPlayer ===1){
+                console.log(j);
+                playerMove(cell,j);
+            }
+        });
+    }
+}
 
 /**
  * playerMove makes one move for the player, then sets it to the computer's turn to make a move.
  * @param {*} e the column the human player wants to place their tile in
  * @returns 
  */
-function playerMove(e){
-    console.log(playBoard);
-    console.log(tableRow[0].children);
-    let column = e.target.cellIndex;
+async function playerMove(e,col){
+    console.log("event");
+    console.log(e);
+    console.log("column");
+    console.log(col);
+    //console.log(tableRow[0].children);
+    //let column = e.target.className.split(" ")[1];
+    let column = col;
+    console.log("column");
+    console.log(column);
     let row = [];
 
     //dropTile(0,column);
     for(let i = 5; i >=0; i --){
         //work up from the bottom of the column and fill the first
             //empty slot you come across with a tile from the player
+            console.log(i);
+
         if(playBoard[i][column]==0){
-            row.push(tableRow[i].children[column]);
+            //row.push(tableRow[i].children[column]);
             console.log(i);
             animationColor = player1Color;
-            //animationColumn = 90*(column+1);
-            animationStartPix = 0;
-            //animationEndPix = 90*(i+1);
-            //window.requestAnimationFrame(dropTile);
-            row[0].style.backgroundColor = player1Color;
+            console.log(tableRow[i].children[column]);
 
             playBoard[i][column] = 1
+            let letItFall = await fallingTile(column);
+            //console.log(tableRow[i].children[column]);
+            changeCellColor(tableRow[i].children[column]);
+            //row[0].style.backgroundColor = player1Color;
+
             if(winCheck()){
                 playerTurn.textContent = `You won!`;
                 playerTurn.style.color = player1Color;
@@ -159,7 +272,7 @@ function playerMove(e){
                  playerTurn.textContent = `Computer's turn!`;
                 currentPlayer = 2;
                 animationColor = player2Color;
-                return computerMove(board);               
+                //return computerMove(board);               
             }
             return;
         }
@@ -200,7 +313,9 @@ function testAnimation(){
         if(playBoard[i][column]==0){
             row.push(tableRow[i].children[column]);
             playBoard[i][column] = -1
-            row[0].style.backgroundColor = player2Color;
+            animationColor = player2Color;
+            fallingTile(column);
+            changeCellColor(tableRow[i].children[column]);
             if(winCheck()){
                 console.log(board);
                 playerTurn.textContent = "Computer won!";
@@ -248,16 +363,16 @@ function copyBoard(playBoard,board){
 
 //win checks
 function colorMatchCheck(one,two, three, four){
-    return (one ===two && one === three && one === four && one !== 'rgb(200, 225, 250)');
+    return (one ===two && one === three && one === four && one !== 0);
 }
 
 function horizontalCheck(){
     for(let row = 0; row < tableRow.length; row ++){
         for(let col = 0; col < 4; col++){
-            if(colorMatchCheck(tableRow[row].children[col].style.backgroundColor,
-                tableRow[row].children[col+1].style.backgroundColor,
-                tableRow[row].children[col+2].style.backgroundColor,
-                tableRow[row].children[col+3].style.backgroundColor)){
+            if(colorMatchCheck(playBoard[row][col],
+                playBoard[row][col+1],
+                playBoard[row][col+2],
+                playBoard[row][col+3])){
                     return true;
                 }
         }
@@ -267,10 +382,10 @@ function horizontalCheck(){
 function verticalCheck(){
     for(let col = 0; col < 7; col ++){
         for(let row = 0; row < 3; row ++){
-            if(colorMatchCheck(tableRow[row].children[col].style.backgroundColor,
-                tableRow[row+1].children[col].style.backgroundColor,
-                tableRow[row+2].children[col].style.backgroundColor,
-                tableRow[row+3].children[col].style.backgroundColor)){
+            if(colorMatchCheck(playBoard[row][col],
+                playBoard[row+1][col],
+                playBoard[row+2][col],
+                playBoard[row+3][col])){
                     return true;
                 }
         }
@@ -280,10 +395,10 @@ function verticalCheck(){
 function diagCheckLR(){
     for(let col = 0; col < 4; col ++){
         for(let row = 0; row < 3; row ++){
-            if(colorMatchCheck(tableRow[row].children[col].style.backgroundColor,
-                tableRow[row+1].children[col+1].style.backgroundColor,
-                tableRow[row+2].children[col+2].style.backgroundColor,
-                tableRow[row+3].children[col+3].style.backgroundColor)){
+            if(colorMatchCheck(playBoard[row][col],
+                playBoard[row+1][col+1],
+                playBoard[row+2][col+2],
+                playBoard[row+3][col+3])){
                     return true;
                 }
         }
@@ -293,10 +408,10 @@ function diagCheckLR(){
 function diagCheckRL(){
     for(let col = 0; col < 4; col ++){
         for(let row = 5; row >2; row --){
-            if(colorMatchCheck(tableRow[row].children[col].style.backgroundColor,
-                tableRow[row-1].children[col+1].style.backgroundColor,
-                tableRow[row-2].children[col+2].style.backgroundColor,
-                tableRow[row-3].children[col+3].style.backgroundColor)){
+            if(colorMatchCheck(playBoard[row][col],
+                playBoard[row-1][col+1],
+                playBoard[row-2][col+2],
+                playBoard[row-3][col+3])){
                     return true;
                 }
         }
@@ -308,22 +423,27 @@ function winCheck(){
 }
 
 function drawCheck(){
-    let fullSlot = [];
-    for(let i = 0; i < tableCell.length; i++){
-        if(tableCell[i].style.backgroundColor !== 'rgb(200, 225, 250)'){
-            fullSlot.push(tableCell[i]);
+    // let fullSlot = [];
+    // for(let i = 0; i < tableCell.length; i++){
+    //     if(playBoard[i][0]!== 'rgb(200, 225, 250)'){
+    //         fullSlot.push(tableCell[i]);
+    //     }
+    // }
+    // if(fullSlot.length === tableCell.length){
+    //     return true;
+    // }
+    // return false;
+    for(let i = 0; i< playBoard[0].length; i++){
+        if(playBoard[0][i]==0){
+            return false;
         }
     }
-    if(fullSlot.length === tableCell.length){
-        return true;
-    }
-    return false;
+
+    return true;
 }
 
 reset.addEventListener('click',()=>{
-    tableSlot.forEach(slot=>{
-        slot.style.backgroundColor = 'rgb(200, 225, 250)';
-    });
+setCanvasBoard();
     for(let i = 0; i<6; i++){
         playBoard[i] = [];
         playBoard[i].length = 7;
@@ -394,7 +514,6 @@ function maxValue(depth, board, maxDepth, prevPlay){
 
         undoResult(a, board);
     }
-    console.log("taking action ",actVal);
     return actVal;
 }
 
@@ -448,9 +567,6 @@ function result(column, board, player){
         }
     }
 
-    if(column===0){
-        console.log(board);
-    }
     return board;
 }
 
