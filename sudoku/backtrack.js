@@ -92,8 +92,6 @@ function alreadythere(grid, row, col, val){
     return false;
 }
 
-var delay = 1000;
-
 
 /**
  * Solve the sudoku board using ONLY Backtracking, recursively
@@ -135,10 +133,7 @@ function backtrackOnly(grid, putSquare, row, col, moves){
             grid[row][col] = testnum;
             moves.push([row, col, testnum, "backtrack"]);
 
-            console.log(delay);
-            setTimeout(function() {
-                putSquare(row, col, testnum, 'backtrack');
-            }, delay);
+            //putSquare(row, col, testnum, 'backtrack');
 
             res = backtrackOnly(grid, putSquare, row, col, moves);
             success = res[0];
@@ -151,9 +146,7 @@ function backtrackOnly(grid, putSquare, row, col, moves){
 
             // If backtrack got to a number that is not allowed, undo it
             grid[row][col] = 0;
-            setTimeout(function() {
-                putSquare(row, col, 0);
-            }, delay);
+            //putSquare(row, col, 0);
         }
     }
         

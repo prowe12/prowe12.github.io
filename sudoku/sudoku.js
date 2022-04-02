@@ -186,20 +186,6 @@ function loadStartingValues(puzzle='easy'){
 }
 
 
-//TODO: Make the original squares permanently black and bold
-// Make sure the permanent squares can't be changed during game
-// play or when the solver runs
-
-//TODO: Add button to call solver
-
-//TODO: Add speed buttons, pause etc
-//TODO: Add button for one step at a time
-
-//TODO: Add button for backtracking & AC-3
-
-
-
-
 
 /*****************************************************
     EVENTS TRIGGERED WHEN THE DOM IS FINISHED LOADING
@@ -228,46 +214,134 @@ document.addEventListener("DOMContentLoaded", function () {
 document.querySelector("#dropdownpuzzle").addEventListener("change", function() {
     puzzleType = document.getElementById("dropdownpuzzle").value;
 
-    // The original grid will be in the global scope
+    // The original grid will be in the global scope - actually it seems it is not deepcopied
+    // and is therefore written over?
     originalgrid = loadStartingValues(puzzleType);
 
     // Clear the Sudoku board and populate with the values from the selected puzzle
+    imove = 0;
+    moves = [];
     makeEmptyGrid(9, 9);
     populateBoard(originalgrid);
 });
 
 
-// If the solve button is clicked, solve the game
+// Solver demo for backtracking
+document.querySelector("#solverDemoBacktrack").addEventListener("click", function() {
+
+    // Reset the grid and the index to moves, and the control values (all globals)
+    reset();
+
+    // Solve the board using backtracking alone, using backtrack, in backtrack.js
+    let result = backtracker(originalgrid, populateSquare);
+
+    let msg = result[0];
+    moves = result[1];
+});
+
+
+// Solver demo for backtracking + AC-3
+// TODO: The evil puzzle, and maybe all puzzles, is giving the wrong answer 
+// (e.g. there are a lot of ones). Remember this was seen before. Perhaps it was
+// fixed in the main version? Compare codes to find out. Or perhaps it was
+// correct here before making all the changes to save the moves -
+// copy this code to a temporary directory and undo all the changes in this branch
+// to find out (then copy the temp dir code back in, fix the problem, and commit)
 document.querySelector("#playSudokuSolver").addEventListener("click", function() {
-    // TODO: allow user to choose between solve and bactrack below, via a controller
+    // Reset the grid and the index to moves, and the control values (all globals)
+    reset();
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
     // return an array with a message regarding whether the solver was successful
     // as well as the moves.
     // The moves array has an array for each move, containing the:
     // row, column, value, and method used to get the value
-    //let result = solve(originalgrid);
-
-    // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    let result = backtracker(originalgrid, populateSquare);
+    let result = solve(originalgrid);
 
     let msg = result[0];
-    let moves = result[1];
-
-    // Print the results
-    // TODO: remove this
-    console.log(msg);
-    console.log(moves);
-
-    // Clear the Sudoku board and populate with the values from the completed puzzle
-    //populateBoard(grid);
-
+    moves = result[1];
+    
 });
 
-// document.querySelector("#playSudokuSolver").addEventListener("playSolver", function() {
-//     console.log("The button was pushed.")
-//     document.getElementById("#playSudokuSolver").value="ON PLAY!";
-// });
+function reset() {
+    clearInterval(timeId);
+    delay = 1000;
+    imove = 0;
+    originalgrid = loadStartingValues(puzzleType);
+    makeEmptyGrid(9, 9);
+    populateBoard(originalgrid);
+}
+
+
+// Globals
+//TODO: Do these all have to be globals?
+var rewindToBegButton = document.getElementById("rewindToBeg");
+var rewindButton = document.getElementById("rewind");
+var playButton = document.getElementById("playButton");
+var pauseButton = document.getElementById("pauseButton");
+var fastForwardButton = document.getElementById("fastForward");
+var forwardToEndButton = document.getElementById("forwardToEnd");
+let moves = [];
+let timeId;
+let pause = true;
+let imove = 0;
+let delay = 1000;
+
+
+// Event listener for the play button
+//TODO: If you click play twice, it won't pause anymore.
+playButton.addEventListener("click", function() {
+    // Start play using the current delay;
+    timeId = setInterval(populator, delay);
+});
+
+populator = function()  {
+    if (imove < moves.length) {
+        populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
+        imove++;
+    }
+    else {
+        clearInterval(setInterval);
+    };
+};
+
+// Event listener for the pause button
+pauseButton.addEventListener("click", function() {
+    // Pause   
+    clearInterval(timeId);
+});
+
+// Event listener for the fast forward button >>
+fastForwardButton.addEventListener("click", function() {
+    // Stop play, decrease the delay, and restart play
+    clearInterval(timeId);
+    delay /= 10;
+    timeId = setInterval(populator, delay);
+});
+
+// Event listener for the rewind button <<
+rewindButton.addEventListener("click", function() {
+    // Stop play, increase the delay, and restart play
+    clearInterval(timeId);
+    delay *= 10;
+    timeId = setInterval(populator, delay);
+});
+
+// Event listener for the forward to end button >>|
+forwardToEndButton.addEventListener("click", function() {
+    for (imove=imove; imove<moves.length; imove++) {
+        populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
+    }
+});
+
+// Event listener for the rewind to beginning button |<<
+rewindToBegButton.addEventListener("click", function() {
+    // Stop play
+    clearInterval(timeId);
+    // Reset the grid, the index to moves, and the control values (all globals)
+    reset();
+});
+
 
 
 // Read in the file provided by the user
