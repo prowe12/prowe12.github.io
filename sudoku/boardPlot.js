@@ -52,17 +52,15 @@
  * @param {number} value 
  * @throws error if bad value given for style of sudoku box
  */
- function populateSquare(irow, icol, value, boxStyle='empty') { //numberColor='black', numberFontWeight='', borderColor=''){
-
+ function populateSquare(irow, icol, value, boxStyle='empty') { 
+     
     // Allowed values for modifiable cell properties
-    // let allowedNumberColors = ['black', 'red', 'orange', 'green', 'blue'];
-    // let allowedBorderColors = ['black', 'red', 'orange', 'green', 'blue'];
-    // let allowedNumberFontWeights = ['bold', 'normal'];
     let allowedBoxStyles = ['empty', 'fixed', 'final', 'backtrack', 'ac3'];
     let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     // If the value is outside the range, throw error
     if (!(value in allowedValues)) {
+        console.log("Bad value in square at " + irow + ", " + icol + ": " + value);
         throw "Bad value for Sudoku square";
     } 
     

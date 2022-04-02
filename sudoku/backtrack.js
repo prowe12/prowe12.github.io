@@ -20,21 +20,9 @@
  * @return  The values in the 3x3 square
  */
 function getsquarevals(grid, row, col) {
-    //console.log("In getsquarevals");
     let result = [];
-
     let irow = Math.floor(row / 3); // row//3; 
     let icol = Math.floor(col / 3); // col//3;
-
-    // let rowmin = irow * 3;
-    // let rowmax = irow * 3 + 3;
-    // let colmin = icol * 3;
-    // let colmax = icol * 3 + 3;
-    // for (i=rowmin; i<rowmax; i++) {
-    //     for (j=colmin; j<colmax; j++) {
-    //         result.append(grid[i][j]);
-    //     }
-    // }
 
     let rowmin = irow * 3;
     let rowmax = irow * 3 + 3;
@@ -45,9 +33,6 @@ function getsquarevals(grid, row, col) {
             result.push(grid[i][j]);
         }
     }
-    // [grid[i][j] for i in range(irow * 3, irow * 3 + 3) \
-    //        for j in range(icol * 3, icol * 3 + 3)];
-
     return result
 }
 
@@ -70,16 +55,12 @@ function alreadythere(grid, row, col, val){
 
     // Is the value already in the column? We have to build up the 
     // column arrays one by one to check.
-    //
-    // colvals = [grid[i][col] for i in range(9)]
     let colvals = [];
     let item;
     for (let i=0; i<9; i++) {
-        //colvals.append(grid[i][col]);
         item = grid[i][col];
         colvals.push(item);
     }
-    //if (val in colvals){
     if (colvals.includes(val)) {
         return true;
     }
@@ -92,8 +73,6 @@ function alreadythere(grid, row, col, val){
     return false;
 }
 
-var delay = 1000;
-
 
 /**
  * Solve the sudoku board using ONLY Backtracking, recursively
@@ -101,11 +80,14 @@ var delay = 1000;
  * @param putSquare  The class for printing or plotting the board
  * @param row  Index to row
  * @param col  Index to col
+ * @param moves Array of all the moves taken, where each move is an array
  * @return grid
  * @return true or false
  */
-function backtrack(grid, putSquare, row, col){
-
+function backtrackOnly(grid, putSquare, row, col, moves){
+    let res;
+    let success;
+    
     // Find the row, col of the first empty box (i.e. contains 0), 
     // going through columns, then rows
     while (grid[row][col] > 0){
@@ -117,13 +99,11 @@ function backtrack(grid, putSquare, row, col){
             row += 1;
         }
         else if (col == 8 && row == 8){
-            // Exit condition: return success=true if at end of puzzle 
+            // Exit condition: return true and grid if at end of puzzle 
             // & puzzle is complete (has no zeros)
-            return grid, true;
+            return [true, grid, moves];
         }
     }
-
-    //console.log(`At row: ${row}, col: ${col}`);
 
     // For test numbers of 1 through nine, loop over them and check if 
     // the number is already in the row, column, or 3x3 square. Once
@@ -132,40 +112,33 @@ function backtrack(grid, putSquare, row, col){
     for (let testnum=1; testnum<10; testnum++) {   // in range(1, 10){
         if (!(alreadythere(grid, row, col, testnum))) {
             grid[row][col] = testnum;
+            moves.push([row, col, testnum, "backtrack"]);
 
-            console.log(delay);
-            setTimeout(function() {
-                putSquare(row, col, testnum, 'backtrack');
-            }, delay);
-
-            grid, success = backtrack(grid, putSquare, row, col);
-
+            res = backtrackOnly(grid, putSquare, row, col, moves);
+            success = res[0];
+            grid = res[1];
 
             if (success) {
                 // This is the exit condition
-                return grid, true;
+                return [true, grid, moves];
             }
 
             // If backtrack got to a number that is not allowed, undo it
             grid[row][col] = 0;
-            setTimeout(function() {
-                putSquare(row, col, 0);
-            }, delay);
-
-          
         }
     }
         
-    return grid, false;
+    return [false, grid, moves];
 }
 
 
 /**
  * Make sure that the board is valid
  * @param grid  The current numbers of the Sudoku board, list of lists
+ * @return True if QC passes, else false. 
+ * @return Message
  */
-function quality_check(grid){
-    //console.log("In quality_check, of backtrack.js");
+function qualityCheck(grid){
     for (row=0; row<9; row++){        //row in range(9):
         for (col=0; col<9; col++) {   //col in range(9):
             val = grid[row][col];
@@ -174,14 +147,14 @@ function quality_check(grid){
             }
             grid[row][col] = 0;
             if (alreadythere(grid, row, col, val)) {
-                //raise ValueError('Duplicate value in row:', row, ', col:', col)
-                console.log(`Duplicate value in row: ${row}, col: ${col}: ${val}`);
-                console.log("Raise an exception here!");
+                let msg = `Duplicate value in row: ${row}, col: ${col}: ${val}`;
+                //msg = "Duplicate value in row: " + row + ", " + col +"": ${col}: ${val}`;
+                return [false, msg];
             }
             grid[row][col] = val
         }
     }
-    return;
+    return [true, "success"];
 }
 
 
@@ -195,19 +168,40 @@ function quality_check(grid){
  * populateSquare(irow, icol, value, numberColor='', borderColor='')
  */
 function backtracker(grid, putSquare){
-    //console.log("In backtracker of backtrack.js");
-    //console.log(`speed=${speed}, wait=${wait}`);
+    let result;
+    let msg;
+    let qcResult;
+    let success;
+
+    // Starting moves is empty array
+    let moves = [];
 
     // Check the starting grid
-    quality_check(grid);
-    
-    grid, success = backtrack(grid, putSquare, 0, 0);
+    qcResult = qualityCheck(grid);
 
-    // Final test
-    if (success){
-        quality_check(grid);
+    // Solve the puzzle with backtracking and return a message ("success" if succesful, else other)
+    // as well as the moves to win the puzzle.
+    result = backtrackOnly(grid, putSquare, 0, 0, moves);
+    success = result[0];
+    grid = result[1];
+    moves = result[2];
+
+
+    // Get the message stating whether it was successful
+    if (success) {
+        qcResult = qualityCheck(grid);
+        let qcSuccess = qcResult[0];
+        let qcMsg = qcResult[1];
+        if (qcSuccess) {
+            msg = "success";
+        }
+        else {
+            msg = qcMsg;
+        }
     }
-    console.log("finished");
+    else {
+        msg = "failure";
+    }
 
-    return grid, success;
+    return [msg, moves];
 }
