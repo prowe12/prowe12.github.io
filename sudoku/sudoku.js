@@ -260,7 +260,6 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
 
     let msg = result[0];
     moves = result[1];
-    
 });
 
 function reset() {

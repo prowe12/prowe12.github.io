@@ -20,21 +20,9 @@
  * @return  The values in the 3x3 square
  */
 function getsquarevals(grid, row, col) {
-    //console.log("In getsquarevals");
     let result = [];
-
     let irow = Math.floor(row / 3); // row//3; 
     let icol = Math.floor(col / 3); // col//3;
-
-    // let rowmin = irow * 3;
-    // let rowmax = irow * 3 + 3;
-    // let colmin = icol * 3;
-    // let colmax = icol * 3 + 3;
-    // for (i=rowmin; i<rowmax; i++) {
-    //     for (j=colmin; j<colmax; j++) {
-    //         result.append(grid[i][j]);
-    //     }
-    // }
 
     let rowmin = irow * 3;
     let rowmax = irow * 3 + 3;
@@ -45,9 +33,6 @@ function getsquarevals(grid, row, col) {
             result.push(grid[i][j]);
         }
     }
-    // [grid[i][j] for i in range(irow * 3, irow * 3 + 3) \
-    //        for j in range(icol * 3, icol * 3 + 3)];
-
     return result
 }
 
@@ -70,16 +55,12 @@ function alreadythere(grid, row, col, val){
 
     // Is the value already in the column? We have to build up the 
     // column arrays one by one to check.
-    //
-    // colvals = [grid[i][col] for i in range(9)]
     let colvals = [];
     let item;
     for (let i=0; i<9; i++) {
-        //colvals.append(grid[i][col]);
         item = grid[i][col];
         colvals.push(item);
     }
-    //if (val in colvals){
     if (colvals.includes(val)) {
         return true;
     }
@@ -133,8 +114,6 @@ function backtrackOnly(grid, putSquare, row, col, moves){
             grid[row][col] = testnum;
             moves.push([row, col, testnum, "backtrack"]);
 
-            //putSquare(row, col, testnum, 'backtrack');
-
             res = backtrackOnly(grid, putSquare, row, col, moves);
             success = res[0];
             grid = res[1];
@@ -146,7 +125,6 @@ function backtrackOnly(grid, putSquare, row, col, moves){
 
             // If backtrack got to a number that is not allowed, undo it
             grid[row][col] = 0;
-            //putSquare(row, col, 0);
         }
     }
         

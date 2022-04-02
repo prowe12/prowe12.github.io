@@ -60,6 +60,7 @@
 
     // If the value is outside the range, throw error
     if (!(value in allowedValues)) {
+        console.log("Bad value in square at " + irow + ", " + icol + ": " + value);
         throw "Bad value for Sudoku square";
     } 
     
