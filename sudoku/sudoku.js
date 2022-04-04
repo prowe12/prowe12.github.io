@@ -30,6 +30,11 @@
 // For debugging, use this instead of the above to turn off graphics
 //from board_plotter import BoardPrint as BoardPlot      # No graphics
 
+
+/*****************************************************
+    FUNCTIONS
+******************************************************/
+
 /**
  * Check if a file exists
  * @param {String} fname
@@ -72,15 +77,6 @@ function loadStartingValues(puzzle='easy'){
                 [0, 6, 0, 0, 0, 0, 2, 8, 0], 
                 [0, 0, 0, 4, 1, 9, 0, 0, 5], 
                 [0, 0, 0, 0, 8, 0, 0, 7, 9]];
-        // grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0], 
-        //         [6, 0, 0, 1, 9, 5, 0, 0, 0], 
-        //         [0, 9, 8, 0, 0, 0, 0, 6, 0], 
-        //         [8, 0, 0, 0, 6, 0, 0, 0, 3], 
-        //         [4, 0, 0, 8, 0, 3, 0, 0, 1], 
-        //         [7, 0, 0, 0, 2, 0, 0, 0, 6], 
-        //         [0, 6, 0, 0, 0, 0, 2, 8, 0], 
-        //         [0, 0, 0, 4, 1, 9, 6, 3, 5], 
-        //         [0, 0, 0, 2, 8, 6, 1, 7, 9]];
         return grid;
      }
 
@@ -122,7 +118,6 @@ function loadStartingValues(puzzle='easy'){
                 [0, 0, 2, 5, 9, 6, 0, 0, 0]];
         return grid;
      }
-
 
     //If none of these selected, use the easy grid
     grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -185,18 +180,143 @@ function loadStartingValues(puzzle='easy'){
     }
 }
 
+/**
+ * Reset the board and the state of play (i.e. filling in the board) to the beginning
+ */
+ function playReset() {
+    // Reset the state of play
+    clearInterval(timeId);
+    delay = 1000;
+    imove = 0;
+    running = false;
+}
 
-//TODO: Make the original squares permanently black and bold
-// Make sure the permanent squares can't be changed during game
-// play or when the solver runs
+/**
+ * Reset the board, but do not clear timers or alter the state of play
+ */
+ function boardReset() {
+    originalgrid = loadStartingValues(puzzleType);
+    makeEmptyGrid(9, 9);
+    populateBoard(originalgrid);
+ }
 
-//TODO: Add button to call solver
 
-//TODO: Add speed buttons, pause etc
-//TODO: Add button for one step at a time
+ /**
+ * Populate a box of the board and move the pointer to the next box.
+ * If at the final move, quit playback
+ */
+populator = function()  {
+    if (imove < moves.length) {
+        populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
+        imove++;
+    }
+    else {
+        clearInterval(timerId);
+        //TODO ???: running = false;
+    };
+};
 
-//TODO: Add button for backtracking & AC-3
 
+
+/**
+ * Get the step size for rewinding, depending on the delay
+ * @param {*} imove 
+ * @returns 
+ */
+function stepSizeForRewind(imove, delay) {
+
+    let deltai = 1;              // slow: 1 step back
+
+    if (delay <= 0) {            // fastest: 10 steps to location
+        deltai = Math.round(imove/10);
+    }
+    else if (delay <= 10) {      // fast: 100 steps to location
+        deltai = Math.round(imove/100);
+    }
+    else if (delay <= 100) {     // medium: 1000 steps to location
+        deltai = Math.round(imove/1000);
+    }
+
+    // Do not allow deltai < 1
+    if (deltai < 1) {
+        deltai = 1;
+    }
+
+    return deltai;
+}
+
+
+/**
+ * Repopulate the board back the given location (movement number)
+ * 
+ * The play timeline, where
+ *   imove: current location
+ *   location: the final location after rewind is complete
+ *   jump:  the movement for one rewinding step, which depends on the delay 
+ *   |-------------------|--------|-----------|
+ *   0               location    imove     moves.length
+ *                          
+ * 
+ * @param location  The location to rewind back to
+ */
+rewindToMove = function(location)  {
+
+    if (location > imove) {
+        throw "Rewinding, so new location must be before current";
+    }
+    else if (location === imove) {
+        throw "Rewinding, but new location is same as current";
+    }
+
+    // Build the board at the desired location and display it
+    updateGridFromMoves(originalgrid, moves, location);
+    
+    return;
+};
+
+
+/**
+ * Increment the delay from large (slow) to 0 (no delay=>fastest possible speed)
+ * @param {*} delay The delay for filling in boxes in the puzzle
+ * @returns  The delay for filling in boxes in the puzzle
+ */
+function incrementDelay(delay, buttonType) {
+    let forwardText;
+    let rewindText;
+
+
+    // There are 4 speeds: slow (1000), medium (100), fast (10), fastest (0)
+    // bump up to the next speed (periodic boundary conditions) 
+    if (delay <= 0) {          // fastest -> slow
+        delay = 1000;
+        rewindText = '<<'
+        forwardText = '>>'
+    }
+    else if (delay <= 10) {    // fast -> fastest
+        delay = 0;
+        rewindText = '<'
+        forwardText = '>'
+    }
+    else if (delay <= 100) {   // medium -> fast
+        delay = 10;
+        rewindText = '<<<<'
+        forwardText = '>>>>'
+    }
+    else if (delay > 100) {   // slow -> medium
+        delay = 100;
+        rewindText = '<<<'
+        forwardText = '>>>'
+    }
+
+    if (buttonType === 'rewind') {
+        delayText = rewindText;
+    }
+    else {
+        delayText = forwardText;
+    };
+
+    return [delay, delayText];
+ }
 
 
 
@@ -206,15 +326,37 @@ function loadStartingValues(puzzle='easy'){
 ******************************************************/
 
 // Global variables
+//TODO: Do these all have to be globals?
 var puzzleType = document.getElementById("dropdownpuzzle").value;
 var originalgrid = loadStartingValues(puzzleType);
-var speed = 1000;   // Speed of displaying results
-var wait;
+
+var rewindToBegButton = document.getElementById("rewindToBeg");
+var rewindButton = document.getElementById("rewind");
+var playButton = document.getElementById("playPause");
+var fastForwardButton = document.getElementById("fastForward");
+var forwardToEndButton = document.getElementById("forwardToEnd");
+var stepButton = document.getElementById("step");
+//var pauseButton = document.getElementById("pauseButton");
+
+let moves = [];
+let timeId;
+let imove = 0;
+let running = false;
+let delay = 1000;           // default delay
+
 
 // Set up the default grid after the DOM content is loaded
 document.addEventListener("DOMContentLoaded", function () {
     makeEmptyGrid(9, 9);
     populateBoard(originalgrid);
+
+    // Start with controls disabled, since the user needs to choose a method
+    stepButton.disabled = true;
+    playButton.disabled = true;
+    fastForwardButton.disabled = true;
+    rewindButton.disabled = true;
+    forwardToEndButton.disabled = true;
+    rewindToBegButton.disabled = true;
 });
   
 
@@ -228,41 +370,256 @@ document.addEventListener("DOMContentLoaded", function () {
 document.querySelector("#dropdownpuzzle").addEventListener("change", function() {
     puzzleType = document.getElementById("dropdownpuzzle").value;
 
-    // The original grid will be in the global scope
+    // The original grid will be in the global scope - actually it seems it is not deepcopied
+    // and is therefore written over?
     originalgrid = loadStartingValues(puzzleType);
 
     // Clear the Sudoku board and populate with the values from the selected puzzle
+    imove = 0;
+    moves = [];
     makeEmptyGrid(9, 9);
     populateBoard(originalgrid);
+
+    // Start with controls disabled, since the user needs to choose a method
+    stepButton.disabled = true;
+    playButton.disabled = true;
+    fastForwardButton.disabled = true;
+    rewindButton.disabled = true;
+    forwardToEndButton.disabled = true;
+    rewindToBegButton.disabled = true;
+    
 });
 
 
-// If the solve button is clicked, solve the game
+// Solver demo for backtracking
+document.querySelector("#solverDemoBacktrack").addEventListener("click", function() {
+    // Reset the state of play and the board
+    playReset();
+    boardReset();   
+
+    //TODO gray out play controls
+    
+
+    // Solve the board using backtracking alone, using backtrack, in backtrack.js
+    let result = backtracker(originalgrid);
+    finalgrid = originalgrid;
+
+    let msg = result[0];
+    moves = result[1];
+
+    // We wrote over the original grid, so recreate it
+    originalgrid = loadStartingValues(puzzleType);
+
+    // Enable the controls
+    stepButton.disabled = false;
+    playButton.disabled = false;
+    fastForwardButton.disabled = false;
+    rewindButton.disabled = false;
+    forwardToEndButton.disabled = false;
+    rewindToBegButton.disabled = false;
+    
+});
+
+
+// Solver demo for backtracking + AC-3
+// TODO: The evil puzzle, and maybe all puzzles, is giving the wrong answer 
+// (e.g. there are a lot of ones). Remember this was seen before. Perhaps it was
+// fixed in the main version? Compare codes to find out. Or perhaps it was
+// correct here before making all the changes to save the moves -
+// copy this code to a temporary directory and undo all the changes in this branch
+// to find out (then copy the temp dir code back in, fix the problem, and commit)
 document.querySelector("#playSudokuSolver").addEventListener("click", function() {
-    // TODO: allow user to choose between solve and bactrack below, via a controller
+    // Reset the state of play and the board
+    playReset();
+    boardReset();   
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
-    // return an array with the moves taken and whether it was successful
+    // return an array with a message regarding whether the solver was successful
+    // as well as the moves.
     // The moves array has an array for each move, containing the:
     // row, column, value, and method used to get the value
     let result = solve(originalgrid);
 
-    // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    //let result = backtracker(originalgrid, populateSquare);  //, boardPlot)
+    let msg = result[0];
+    moves = result[1];
 
-    let success = result[0];
-    let moves = result[1];
+    // We wrote over the original grid, so recreate it
+    originalgrid = loadStartingValues(puzzleType);
 
-    // Clear the Sudoku board and populate with the values from the completed puzzle
-    //populateBoard(grid);
+    // Enable the controls
+    stepButton.disabled = false;
+    playButton.disabled = false;
+    fastForwardButton.disabled = false;
+    rewindButton.disabled = false;
+    forwardToEndButton.disabled = false;
+    rewindToBegButton.disabled = false;
+    
+});
+
+
+// Event listener for the play button
+//TODO: If you click play twice, it won't pause anymore.
+playButton.addEventListener("click", function() {
+
+    if (imove === moves.length) {
+        // Nothing to do, so return
+        return;
+    }
+
+    if (!(running)) {
+        // Start play using the current delay;
+        timeId = setInterval(populator, delay);
+        running = true;
+        // Change button text to "Pause"
+        playPause = document.getElementById("playPause");
+        playPause.innerText = "Pause";
+    }
+    else {
+        // Pause   
+        clearInterval(timeId);
+        running = false;  
+        // Change button text to "Play"
+        playPause = document.getElementById("playPause");
+        playPause.innerText = "Play";
+              
+    }
+});
+
+
+// Event listener for the step button, which fills in the next box only
+stepButton.addEventListener("click", function() {
+    running = false;
+
+    // Stop play, decrease the delay, and fill in the next box
+    clearInterval(timeId);
+    populator();
+});
+
+
+// Event listener for the fast forward button >>
+// Stop play, change the delay, and restart play
+fastForwardButton.addEventListener("click", function() {
+    running = true;
+
+    // Change play button text to "Pause"
+    playPause = document.getElementById("playPause");
+    playPause.innerText = "Pause";
+    
+    // Stop play
+    clearInterval(timeId);
+
+    // Increment the delay
+    [delay, delayText] = incrementDelay(delay, "fastforward");
+    
+    // Change button text to delayTest
+    fastForward = document.getElementById("fastForward");
+    fastForward.innerText = delayText;
+
+    // Restart play at the new speed
+    timeId = setInterval(populator, delay);
 
 });
 
-// document.querySelector("#playSudokuSolver").addEventListener("playSolver", function() {
-//     console.log("The button was pushed.")
-//     document.getElementById("#playSudokuSolver").value="ON PLAY!";
+
+// Event listener for the forward to end button >>|
+forwardToEndButton.addEventListener("click", function() {
+    running = true;
+    // Stop play if any
+    clearInterval(timeId);
+
+    // Fill in board to end;
+    running = true;
+    for (imove=imove; imove<moves.length; imove++) {
+        populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
+    }
+
+    // Set play/pause button to display "Play"
+    playPause.innerText = "Play";
+    running = false;
+});
+
+
+// Event listener for the rewind button <<
+// Rewind is tricky. We cannot undo the last move, because we don't know what was in
+// the square before the last move occurred. So instead we have to redo all moves up to
+// that point
+rewindButton.addEventListener("click", function() {
+    running = true;
+
+    // Stop play or rewind
+    clearInterval(timeId);
+
+    if (imove === 0) {
+        // Nothing to do, so return
+        return;
+    }
+
+    // While running in rewind, Pause will be enabled
+    playPause.innerText = "Pause";
+
+    //TODO: Only increment the delay if this button is active
+    // Increment the delay
+    delay = incrementDelay(delay, 'rewind');
+
+    // Set the rewind step size, because redrawing the board for all moves every step is very slow
+    let deltai = stepSizeForRewind(imove, delay);
+
+    /**
+     * Depopulate the board, replaying to imove and then moving imove back a box.
+     * Stop after the 0th move (the beginning board)
+     */
+    depopulator = function()  {
+        if (imove > 0) {
+            rewindToMove(Math.max(imove - deltai, 0));
+            imove -= deltai;
+        }
+        else {
+            clearInterval(timeId);
+            imove = 0;
+            // Since it is stopped, Play is enabled
+            running = false;
+            playPause.innerText = "Play";
+        };
+    };
+
+    // Rewind at current delay;
+    timeId = setInterval(depopulator, delay);
+    return;
+ });
+
+
+// Event listener for the rewind to beginning button |<<
+rewindToBegButton.addEventListener("click", function() {
+    running = true;
+
+    // Stop play, reset the grid, index to moves, and control values (all globals)
+    playReset();
+    boardReset();
+
+    running = false;
+});
+
+
+
+
+// Event listener for the pause button
+// pauseButton.addEventListener("click", function() {
+//     // Pause   
+//     clearInterval(timeId);
 // });
 
+
+// // Function for play/pause button
+// function playpause() {
+//     // Find out the status of the play/pause button
+//     ppbutton = getElementById("playButton");
+//     if (ppbutton.play) {
+//         // Play invoked, switch to pause option
+//     }
+//     else {
+//         // Pause invoked, switch to play option
+//     }
+// }
 
 // Read in the file provided by the user
 // document.querySelector("#read-button").addEventListener('click', function() {
