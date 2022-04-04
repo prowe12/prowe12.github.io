@@ -2,7 +2,7 @@
 
 /* Center the Sudoku board */
 #sudokuGraphic {
-   /* margin-left: auto; */
+   margin-left: auto;
    margin-right: auto;
    text-align: center;
 }
