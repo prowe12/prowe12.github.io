@@ -18,8 +18,8 @@
             }
         }
     }
-
 }
+
 
 /**
  * Populate the Sudoku board graphic with the values from grid
@@ -77,14 +77,10 @@
         box.classList.remove(thisStyle);
     }
 
-    // Add the input box style class
-    //if (allowedBoxStyles.includes(boxStyle)) {
+    // Add the input box style class. If it is not an allowed value, use default
     if (allowedBoxStyles.indexOf(boxStyle) !== -1) {
             box.classList.add(boxStyle);
     }
-    else {
-        throw "Bad value for style of Sudoku box";
-    }    
 
     // Put the number in the box, unless it is zero, then keep empty
     if (value === 0) {
@@ -117,3 +113,37 @@
 
 }
 
+
+/**
+ * Get the grid for the board from a starting grid and moves
+ * @param board
+ * @return grid
+*/
+function updateGridFromMoves(grid, moves, location) {
+
+    let nrows = grid.length;
+    let ncols = grid[0].length;
+    let newgrid = new Array(nrows); 
+
+    for (i=0; i<nrows; i++) {
+        newgrid[i] = new Array(ncols); 
+        for (j=0; j<ncols; j++) {
+            newgrid[i][j] = [0, ''];
+        }
+    };
+
+    // create grid of final moves at location
+    for (iloc=0; iloc<location; iloc++) {
+        move = moves[iloc];
+        newgrid[move[0]][move[1]] = [move[2], move[3]];
+    };
+
+    // Put all non-zero values into the grid
+    for (i=0; i<nrows; i++){
+        for (j=0; j<ncols; j++){
+            populateSquare(i, j, newgrid[i][j][0], newgrid[i][j][1]);
+        }
+    };
+
+    return;
+}

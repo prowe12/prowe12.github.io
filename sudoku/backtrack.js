@@ -77,14 +77,13 @@ function alreadythere(grid, row, col, val){
 /**
  * Solve the sudoku board using ONLY Backtracking, recursively
  * @param grid  The current numbers of the Sudoku board, list of lists
- * @param putSquare  The class for printing or plotting the board
  * @param row  Index to row
  * @param col  Index to col
  * @param moves Array of all the moves taken, where each move is an array
  * @return grid
  * @return true or false
  */
-function backtrackOnly(grid, putSquare, row, col, moves){
+function backtrackOnly(grid, row, col, moves){
     let res;
     let success;
     
@@ -105,16 +104,16 @@ function backtrackOnly(grid, putSquare, row, col, moves){
         }
     }
 
-    // For test numbers of 1 through nine, loop over them and check if 
+    // For test numbers of 1 through 9, loop over them and check if 
     // the number is already in the row, column, or 3x3 square. Once
-    // we get to a unique number, add it to the grid and continue with
+    // we get to a unique number, add it to the box and continue with
     // the next empty box, as determined in the while-loop above
     for (let testnum=1; testnum<10; testnum++) {   // in range(1, 10){
         if (!(alreadythere(grid, row, col, testnum))) {
             grid[row][col] = testnum;
             moves.push([row, col, testnum, "backtrack"]);
 
-            res = backtrackOnly(grid, putSquare, row, col, moves);
+            res = backtrackOnly(grid, row, col, moves);
             success = res[0];
             grid = res[1];
 
@@ -125,6 +124,7 @@ function backtrackOnly(grid, putSquare, row, col, moves){
 
             // If backtrack got to a number that is not allowed, undo it
             grid[row][col] = 0;
+            moves.push([row, col, 0, "backtrack"]);
         }
     }
         
@@ -161,13 +161,12 @@ function qualityCheck(grid){
 /**
  * Solve the sudoku board using ONLY Backtracking
  * @param grid  The current numbers of the Sudoku board, list of lists
- * @param putSquare  The class for printing or plotting the board
  * @return grid
  * @return success
  * Notes:
  * populateSquare(irow, icol, value, numberColor='', borderColor='')
  */
-function backtracker(grid, putSquare){
+function backtracker(grid) {
     let result;
     let msg;
     let qcResult;
@@ -181,7 +180,7 @@ function backtracker(grid, putSquare){
 
     // Solve the puzzle with backtracking and return a message ("success" if succesful, else other)
     // as well as the moves to win the puzzle.
-    result = backtrackOnly(grid, putSquare, 0, 0, moves);
+    result = backtrackOnly(grid, 0, 0, moves);
     success = result[0];
     grid = result[1];
     moves = result[2];

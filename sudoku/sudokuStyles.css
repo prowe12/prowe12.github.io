@@ -1,9 +1,8 @@
-/* Styles for Sudoku page (sudoku.html)
-*/
+/* Styles for Sudoku page (sudoku.html) */
 
 /* Center the Sudoku board */
 #sudokuGraphic {
-   margin-left: auto;
+   /* margin-left: auto; */
    margin-right: auto;
    text-align: center;
 }
@@ -12,7 +11,6 @@
 #sudokuControls {
    text-align: center;
 }
-
 
 table {
    border-collapse: collapse;
@@ -64,3 +62,13 @@ td {
    color: red;
 }
 
+/* Styling for the buttons */
+#playPause {
+   width: 50px;
+}
+#fastForward {
+   width: 50px;
+}
+#rewind {
+   width: 50px;
+}

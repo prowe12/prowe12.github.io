@@ -123,21 +123,17 @@ function getGrid(board) {
     let nrows = board.length;
     let ncols = board[0].length;
 
-    //grid = [[0 for i in range(ncols)] for j in range(nrows)]
     let grid = new Array(nrows);
     for (let i=0; i<nrows; i++) {
         gridrow = new Array(ncols);
         for (let j=0; j<ncols; j++) {
             if (board[i][j].getDomainSize() === 1) {
-                //grid[i][j] = board[i][j].get_only_value();
                 gridrow[j] = board[i][j].getOnlyValue();
             }
             else if (board[i][j].getDomainSize() === 0){
-                //grid[i][j] = -1;
                 gridrow[j] = -1;
             }
             else{
-                //grid[i][j] = 0;
                 gridrow[j] = 0;
             }
         }
