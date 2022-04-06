@@ -46,6 +46,7 @@ h1 {
 
 body {
    background-color: rgb(200, 225, 250);
+   text-align: left;
 };
 
 /* What is this for? */
@@ -66,15 +67,18 @@ h1 {
 
 /* Make a grid for the puzzles */
 #grid-container {
-   display: grid;
+   display: flex;
    grid-template-columns: 50% 50%;
+   justify-content: space-around;
+   flex-wrap: wrap;
 }
 
-/* Styles for the grid for the puzzles (div elements) in the grid */
+/* Styles for the grid for the puzzles (div elements) in the grid 
+ * and make it a flex container
+ */
 #grid-container > div {
    text-align: center;
    background-color: none;
-   padding: 20px;
    border:brown;
 }
 
