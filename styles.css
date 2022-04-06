@@ -46,6 +46,8 @@ h1 {
 
 body {
    background-color: rgb(200, 225, 250);
+   text-align: left;
+   font: 14pt "Times New Roman", Trebuchet MS, sans-serif;  /* Trebuchet MS Palatino*/
 };
 
 /* What is this for? */
@@ -66,15 +68,18 @@ h1 {
 
 /* Make a grid for the puzzles */
 #grid-container {
-   display: grid;
-   grid-template-columns: 50% 50%;
+   display: flex;
+   justify-content: space-evenly;
+   flex-wrap: wrap;
+   margin-bottom: 20px;
 }
 
-/* Styles for the grid for the puzzles (div elements) in the grid */
+/* Styles for the grid for the puzzles (div elements) in the grid 
+ * and make it a flex container
+ */
 #grid-container > div {
    text-align: center;
    background-color: none;
-   padding: 20px;
    border:brown;
 }
 
@@ -104,5 +109,23 @@ h1 {
    border-right: 1px solid #333333;
    border-bottom: 1px solid #333333;
    border-left: 1px solid #CCCCCC;
+ }
+
+ /* The footer */
+ footer {
+   background-color: #FFE1C8;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   text-align: left;
+   margin: 0px;
+   padding: 20px;
+
+
+ /*  
+   list-style-type: none;
+   background-color: rgb(48, 3, 153);
+   position: fixed;
+
  }
  

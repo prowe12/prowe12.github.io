@@ -4,12 +4,21 @@
 #sudokuGraphic {
    margin-left: auto;
    margin-right: auto;
-   text-align: center;
+}
+
+fieldset {
+   width: 500px;
+   align-items: center;
+   align-content: center;
+   padding-left: 2%;
 }
 
 /* Center the control fieldset */
 #sudokuControls {
    text-align: center;
+   width: fit-content;
+   margin-left: 30%;
+   margin-right: 30%;
 }
 
 table {
@@ -38,9 +47,13 @@ td {
 }
 
 /* Default Sudoku box styling */
+/* Ok fonts: TNR, Calibri, Courier New */
+/* not ok fonts: Helvetica, Arial */
+/*    Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
 .sudokubox {
    color: gray;
-   font-size:x-large;
+   font-size: x-large;
+   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 /* styling for fixed numbers (original grid) */
