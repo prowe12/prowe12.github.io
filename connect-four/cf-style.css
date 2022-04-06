@@ -12,6 +12,10 @@ h3{
     text-align: center;
 }
 
+.player-turn{
+    text-align: center;
+}
+
 .aboveTable{
     position: relative;
     display: block;
@@ -30,12 +34,15 @@ h3{
     position: relative;
     border-collapse:collapse;
     top: 10px;
-    left: 50%;
+    left: 30%;
     transform: translate(-50%);
-    width: 659px;
-    height: 620px;
+    width: 432px;
+    height: 432px;
+    display: inline-block;
     /* border: 1px solid black; */
 }
+
+
 
 .row{
     background-color: blue;
@@ -58,8 +65,8 @@ h3{
 
 .slot1{
     position: relative;
-    width: 90px;
-    height: 90px;
+    width: 60px;
+    height: 60px;
     background:blue;
     display: block;
     font-size: 0;
@@ -68,16 +75,54 @@ h3{
     cursor: grab;
 }
 
+.controls{
+    position: relative;
+    border-collapse: collapse;
+    /* transform: translate(-50%); */
+    top: 10px;
+    /* left: 10%; */
+    height: 420px;
+    width: 250px;
+    display: inline-block;
+}
+.space{
+    width: 100;
+    height: 2%;
+}
 .reset{
-    position: absolute;
-    /* top: 10px; */
+    /* position: absolute; */
+    display: block;
+    top: 10px;
+    margin: auto;
     /* left: 50%;  */
-    left: 50%;
-    transform: translate(-50%);
+    /* left: 50%; */
+    /* transform: translate(-50%); */
     border: 1px solid black;
-    width: 100px;
+    width: 40%;
     text-align: center;
     background: red;
+    cursor: grab;
+}
+
+.slidecontainer{
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: yellow;
+    border: 1px solid black;
+}
+
+.slider{
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    /* left: 1000px; */
+    width: 80%; /* Full-width */
+    height: 25%; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    /* opacity: 0.7; Set transparency (for mouse-over effects on hover) */
+    /* -webkit-transition: .2s; 0.2 seconds transition on hover */
+    /* transition: opacity .2s; */
 }
 
 .next-move{

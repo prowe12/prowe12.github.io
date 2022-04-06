@@ -93,7 +93,6 @@ function displayMove(col){
     context.strokeStyle = "black";
     context.fill();
     context.restore();
-    fallingTile(col);
 }
 function changeCellColor(cell){
     let can = cell.children[0];
@@ -112,33 +111,52 @@ function changeCellColor(cell){
     context.arc(xcoord,ycoord,rad,0,2*Math.PI);
     context.fill();
     context.restore();
-    console.log("finished circle");
 
     return;
 }
 
 async function fallingTile(col){
+    let animate;
     for(let i = 0; i<playBoard.length && playBoard[i][col]==0;i++){
         console.log(tableRow[i].children[col]);
+
         if(i==0){
             animationCell = tableRow[i].children[col];
             animationStartPix = 0;
-            animationEndPix = cell.height+cell.height/2;
+            animationEndPix = animationCell.children[0].height+animationCell.children[0].height/2;
+            console.log(animationEndPix);
             console.log("calling animation");
-            let animate = await callAnimation();
+            console.log(animationCell.children[0]);
+            animate = await fallingTileAnimation();
+
         }
+        
     }
     return;
 
 }
 
-async function callAnimation(){
-    window.requestAnimationFrame(fallingTileAnimation);
-}
+// async function callAnimation(start){
+//     while(animationStartPix >0 || start == 0){
+//         console.log("start = ",start);
+//         console.log(animationStartPix);
+//         start = 1;
+//         window.requestAnimationFrame(fallingTileAnimation);
+//     }
+//     console.log("start = ",start);
+//     console.log(animationStartPix);
+//     return;
+// }
 
-function fallingTileAnimation(){
+
+async function fallingTileAnimation(){
     let cell = animationCell.children[0];
-    console.log(cell);
+    if(animationStartPix==2){
+        console.log(cell);
+    }
+    //console.log(cell);
+    //console.log(animationStartPix);
+    //console.log(animationEndPix);
     let context = cell.getContext("2d");
 
     context.clearRect(0,0,cell.width,cell.height);
@@ -152,9 +170,16 @@ function fallingTileAnimation(){
     animationStartPix++;
 
     if(animationStartPix <= animationEndPix){
-        window.requestAnimationFrame(fallingTileAnimation);
+        window.requestAnimationFrame(()=>{
+            setTimeout(()=>{
+                console.log("in setTimeout");
+                fallingTileAnimation();
+            },0);
+        });
+        //return;
     }
     else{
+        console.log("setting animation back to 0");
         animationStartPix=0;
         return;
     }
@@ -283,9 +308,9 @@ async function playerMove(e,col){
 function testAnimation(){
     context = canvas[0].getContext("2d");
     console.log("click!");
-    animationColumn = 90*(1+1);
+    animationColumn = 60*(1+1);
     animationStartPix = 0;
-    animationEndPix = 90*(1);
+    animationEndPix = 60*(1);
     animationColor = player1Color;
     window.requestAnimationFrame(dropTile); 
 }
