@@ -2,7 +2,7 @@
 /* Color scheme */
 /* #150A41, #FFE1C8, #55003B */
 /* light blue: rgb(200, 225, 250) */
-
+/* rgb(25, 75, 45) */
 
 
 /* Styling of nav bar list */
@@ -13,7 +13,7 @@
    margin: 0px;
    padding: 10px;
    overflow: hidden;
-   background-color: rgb(48, 3, 153);
+   background-color: midnightblue; /* #1b4468 old color rgb(48, 3, 153); */
    position: fixed;
    top: 0;
    left: 0;
@@ -45,15 +45,17 @@ h1 {
 }
 
 body {
-   background-color: rgb(200, 225, 250);
+   background-color: rgb(242, 238, 255); /* rgb(200, 225, 250); */
    text-align: left;
-   font: 14pt "Times New Roman", Trebuchet MS, sans-serif;  /* Trebuchet MS Palatino*/
+   font-family:Verdana, Geneva, Tahoma, sans-serif;
+   font-size: 14;
 };
 
-/* What is this for? */
-div {
-    margin-bottom: 10px;
- }
+/* Fonts Anna likes */
+/* Barlow, Carla, Abel Karla */
+  /*"Rubik wet paint", Palatino, "Trebuchet MS", sans-serif; Trebuchet MS Palatino Barlow */
+
+
  
 /* What is this for? */
 label {
@@ -83,6 +85,10 @@ h1 {
    border:brown;
 }
 
+#connectFourButtonDiv {
+   margin-top: 60px;
+}
+
 /* Images */
 #sudokuImage {
    width: 400px; 
@@ -98,34 +104,57 @@ h1 {
    object-position: 90% 55%;
 }
 
- /* Links that are play buttons  */
- .button {
-   font: bold 11px Arial;
-   text-decoration: none;
-   background-color: #EEEEEE;
-   color: #333333;
-   padding: 2px 6px 2px 6px;
-   border-top: 1px solid #CCCCCC;
-   border-right: 1px solid #333333;
-   border-bottom: 1px solid #333333;
-   border-left: 1px solid #CCCCCC;
- }
+/* Links that are play buttons  */
+.button {
+   display: inline-block;
+   margin-top: 10px;
+   margin-bottom: 35px;
+   font-weight: 400;
+   text-align: center;
+   white-space: nowrap;
+   vertical-align: middle;
+   -ms-touch-action: manipulation;
+   touch-action: manipulation;
+   cursor: pointer;
+   background-image: none;
+   border: 1px solid transparent;
+   border-top-color: transparent;
+   border-right-color: transparent;
+   border-bottom-color: transparent;
+   border-left-color: transparent;
+   padding: 6px 12px;
+   font-size: 14px;
+   line-height: 1.42857143;
+   border-radius: 4px;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none; 
+   color: #fff;
+   background-color: rgb(25, 75, 45); /*rgb(48, 3, 153);*/
+   border-color: rgb(17, 49, 30);
+}
 
- /* The footer */
- footer {
-   background-color: #FFE1C8;
+
+.button:hover {
+   color: #fff;
+   background-color: rgb(17, 49, 30);
+   border-color: rgb(17, 49, 30);
+}
+
+/* Space at the bottom */
+#spacebelow {
+   margin-top: 40px;
+   margin-bottom: 40px;
+}
+
+/* The footer */
+footer {
+   padding: 14px 25px;
+   text-decoration: none;
+   background-color: rgb(235, 204, 186);
+   color: black;
    left: 0;
    bottom: 0;
-   width: 100%;
    text-align: left;
-   margin: 0px;
-   padding: 20px;
-
-
- /*  
-   list-style-type: none;
-   background-color: rgb(48, 3, 153);
-   position: fixed;
-
- }
- 
+}
