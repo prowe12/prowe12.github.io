@@ -8,12 +8,21 @@ h1{
     text-align: center;
 }
 
-h3{
+/* h3{
     text-align: center;
-}
+} */
 
 .player-turn{
     text-align: center;
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
 }
 
 .aboveTable{
@@ -34,11 +43,12 @@ h3{
     position: relative;
     border-collapse:collapse;
     top: 10px;
-    left: 30%;
-    transform: translate(-50%);
+    /* left: 30%; */
+    /* transform: translate(-50%); */
     width: 432px;
-    height: 432px;
-    display: inline-block;
+    height: 492px;
+    margin: 5px;
+    /* display: inline-block; */
     /* border: 1px solid black; */
 }
 
@@ -79,11 +89,12 @@ h3{
     position: relative;
     border-collapse: collapse;
     /* transform: translate(-50%); */
-    top: 10px;
+    top: 90px;
     /* left: 10%; */
     height: 420px;
     width: 250px;
-    display: inline-block;
+    margin: 5px;
+    /* display: inline-block; */
 }
 .space{
     width: 100;
@@ -100,15 +111,34 @@ h3{
     border: 1px solid black;
     width: 40%;
     text-align: center;
-    background: red;
+    background: rgb(255, 91, 91);
     cursor: grab;
+}
+.next-move{
+    display: block;
+    margin: auto;
+    border: 1px solid black;
+    width: 40%;
+    text-align: center;
+    background: rgb(255, 91, 91);
+    cursor: grab;
+    /* position: absolute; */
+    /* top: 10px; */
+    /* left: 50%;  */
+    /* left: 160px; */
+    /* transform: translate(-50%);
+    border: 1px solid black;
+    width: 100px;
+    text-align: center;
+    background: white;
+    cursor: grab; */
 }
 
 .slidecontainer{
     display: block;
     text-align: center;
     width: 100%;
-    background: yellow;
+    background: white;
     border: 1px solid black;
 }
 
@@ -125,18 +155,7 @@ h3{
     /* transition: opacity .2s; */
 }
 
-.next-move{
-    position: absolute;
-    /* top: 10px; */
-    /* left: 50%;  */
-    left: 160px;
-    transform: translate(-50%);
-    border: 1px solid black;
-    width: 100px;
-    text-align: center;
-    background: white;
-    cursor: grab;
-}
+
 
 .footer{
     position: fixed;

@@ -1,7 +1,6 @@
 /**
  * Grab the selectors from the html page
  */
-
 //get an array of the table rows 
 var tableRow = document.querySelectorAll('.row');
 
@@ -15,11 +14,24 @@ const playerTurn = document.querySelector('.player-turn');
 const reset = document.querySelector('.reset');
 //nextMove button
 const nextMove = document.querySelector('.next-move');
+nextMove.style.display = 'none';
 //array of canvases (one for each column)
 let canvas = document.querySelectorAll('.aboveTable');
-let context = null;
+//depth of the slider
+var depth = document.querySelector('.slider');
+var mmDepth = depth.value;
+//mode of the computer player
+let computerModes = document.getElementsByName('autoMan');
+for(let i = 0; i< computerModes.length; i++){
+    console.log(computerModes[i].value);
+}
+
+let computerMode = 'auto';
 
 let testRow = document.querySelectorAll('.slot1');
+
+
+
 
 /**
  * Create array boards that the minimax functions will use to play the game.
@@ -33,16 +45,19 @@ let testRow = document.querySelectorAll('.slot1');
  board.length = 6;
  playBoard.length = 6;
  for(let i = 0; i<6; i++){
-     board[i] = [];
-     board[i].length = 7;
-     playBoard[i] = [];
-     playBoard.length = 7;
-     for(let j = 0; j<7; j++){
-         board[i][j] = 0;
-         playBoard[i][j] = 0;
-     }
- 
+    board[i] = [];
+    board[i].length = 7;
+    playBoard[i] = [];
+    playBoard.length = 7;
+    for(let j = 0; j<7; j++){
+        board[i][j] = 0;
+        playBoard[i][j] = 0;
+    }
  }
+
+ console.log("making computer");
+ let computer = new computerPlayer(1,-1,board,mmDepth);
+ //console.log(computer.makeMove());
 
 
 /**
@@ -61,6 +76,49 @@ for(let i = 0; i < tableCell.length; i++){
     })
 }
 
+for(let i = 0; i< computerModes.length; i++){
+    computerModes[i].addEventListener('click', ()=>{
+        console.log("updating computer mode")
+        computerMode = computerModes[i].value;
+        if(computerMode == 'man'){
+            nextMove.style.display = 'block';
+        }
+        if(computerMode == 'auto'){
+            nextMove.style.display = 'none';
+        }
+        console.log(computerMode);
+    })
+}
+
+reset.addEventListener('click',()=>{
+    setCanvasBoard();
+        for(let i = 0; i<6; i++){
+            board[i] = [];
+            board[i].length = 7;
+            for(let j = 0; j<7; j++){
+                board[i][j] = 0;
+            }
+        
+        }
+        //board = copyBoard(playBoard,board);
+        //return(currentPlayer ===1 ? playerTurn.textContent = `Your turn` : playerTurn.textContent = `Computer's turn!`);
+        playerTurn.style.color = 'black';
+        return playerTurn.textContent = 'Your turn!';
+    }
+);
+
+
+depth.addEventListener('click',()=>{
+    console.log("new depth");
+    mmDepth = depth.value;
+    console.log(mmDepth);
+});
+
+nextMove.addEventListener('click',()=>{
+    if(currentPlayer ==1){
+        makeMove(1,computer.makeMove());
+    }
+})
 
 
 //state player colors
@@ -97,18 +155,20 @@ function displayMove(col){
 function changeCellColor(cell){
     let can = cell.children[0];
     let context = can.getContext("2d");
-    console.log(context);
+    //console.log(context);
     let xcoord = can.width/2;
     let ycoord = can.height/2;
-    console.log(xcoord);
-    console.log(ycoord);
+    //console.log(xcoord);
+    //console.log(ycoord);
     let rad = can.width/2-2;
-    console.log(rad);
+    //console.log(rad);
 
-    context.beginPath();
+
     context.fillStyle = animationColor;
     context.strokeStyle = "black";
+    context.beginPath();
     context.arc(xcoord,ycoord,rad,0,2*Math.PI);
+    context.stroke();
     context.fill();
     context.restore();
 
@@ -119,19 +179,14 @@ async function fallingTile(col){
     let animate;
     for(let i = 0; i<playBoard.length && playBoard[i][col]==0;i++){
         console.log(tableRow[i].children[col]);
-
-        if(i==0){
-            animationCell = tableRow[i].children[col];
-            animationStartPix = 0;
-            animationEndPix = animationCell.children[0].height+animationCell.children[0].height/2;
-            console.log(animationEndPix);
-            console.log("calling animation");
-            console.log(animationCell.children[0]);
-            animate = await fallingTileAnimation();
-
-        }
-        
+        animationCell = tableRow[i].children[col];
+        animationStartPix = 0;
+        animationEndPix = animationCell.children[0].height+animationCell.children[0].height/2;
+        console.log(animationEndPix);
+        console.log("calling animation");
+        animate = await fallingTileAnimation(); 
     }
+    console.log("returning from fallingTile");
     return;
 
 }
@@ -166,46 +221,46 @@ async function fallingTileAnimation(){
     context.arc(cell.width/2,animationStartPix,cell.width/2-2,0,2*Math.PI);
     context.fillStyle = animationColor;
     context.fill();
-    context.restore();
+    //context.restore();
     animationStartPix++;
 
     if(animationStartPix <= animationEndPix){
-        window.requestAnimationFrame(()=>{
-            setTimeout(()=>{
-                console.log("in setTimeout");
-                fallingTileAnimation();
-            },0);
-        });
+        window.requestAnimationFrame(fallingTileAnimation);
         //return;
     }
     else{
+        clearCell(cell);
         console.log("setting animation back to 0");
         animationStartPix=0;
+        console.log("returning from fallingTileAnimation");
         return;
     }
 }
 
 function clearCell(cell){
-    console.log("change color");
-    console.log(cell.children[0]);
-    let context = cell.children[0].getContext("2d");
-    console.log(context);
-    context.clearRect(0,0,cell.children[0].width, cell.children[0].height);
-    context.restore();
+  
+    let context = cell.getContext("2d");
+    context.clearRect(0,0,cell.width, cell.height);
+    context.restore(); 
+    resetSlot(cell);
 }
 
 function setCanvasBoard(){
-    console.log("in testCanv");
     for(let i = 0; i < testRow.length; i++){
         let testr = testRow[i];
-        let context = testr.getContext("2d");
-        context.beginPath();
-        context.arc(testr.width/2,testr.height/2,testr.width/2-2,0,2*Math.PI);
-        context.fillStyle = background;
-        context.strokeStyle = "black";
-        context.fill();
-        context.restore();
+        clearCell(testr);
+
     }
+}
+
+function resetSlot(cell){
+    let context = cell.getContext("2d");
+    context.beginPath();
+    context.arc(cell.width/2,cell.height/2,cell.width/2-2,0,2*Math.PI);
+    context.fillStyle = background;
+    context.strokeStyle = "black";
+    context.fill();
+    context.restore();
 }
 
 /**
@@ -223,7 +278,7 @@ function clearDisplayMove(col){
 
 
 //want current player to start the game
-var currentPlayer = 1;
+var currentPlayer = -1;
 playerTurn.textContent = `Your turn!`;
 
 //go through the cells and show that we know they all have white background
@@ -242,9 +297,12 @@ for(let i = 0; i<tableRow.length; i++){
     for(let j = 0; j<tableRow[i].children.length; j++){
         cell = tableRow[i].children[j];
         cell.addEventListener('click',(cell)=>{
-            if(currentPlayer ===1){
+            console.log("clicking ",j);
+            console.log("currentPlayer = ",currentPlayer);
+            if(currentPlayer ===-1){
                 console.log(j);
-                playerMove(cell,j);
+                // playerMove(cell,j);
+                makeMove(-1,j);
             }
         });
     }
@@ -305,6 +363,69 @@ async function playerMove(e,col){
     }
 }
 
+function makeMove(player,column){
+    let playerColor;
+    let playerNumber;
+    if(player ==-1){
+        playerColor = player1Color;
+        playerNumber = -1;
+    }
+    else{
+        playerColor = player2Color; 
+        playerNumber = 1;
+    }
+    
+
+    for(let i = 5; i >=0; i --){
+        //work up from the bottom of the column and fill the first
+            //empty slot you come across with a tile from the player
+        if(board[i][column]==0){
+            board[i][column] = playerNumber;
+            console.log("player: ",playerNumber);
+            console.log(board);
+
+            if(winCheck()){
+                console.log("winning");
+                if(player==-1){
+                    playerTurn.textContent = `You won!`;
+                    playerTurn.style.color = player1Color;
+                }
+                else{
+                    playerTurn.textContent = `Computer won!`;
+                    playerTurn.style.color = player2Color;
+                }
+                reset.textContent = 'Play Again';
+            }  
+            else if(drawCheck()){
+                playerTurn.textContent = 'Game is a Draw';
+            }
+            else{
+                if(player==-1){
+                    playerTurn.textContent = `Computer's turn!`;
+                    currentPlayer = 1;
+                    console.log(computerMode);
+                    console.log(board);
+                    if(computerMode==='auto'){
+                        return makeMove(1,computer.makeMove());
+                    }
+                }
+                else{
+                    playerTurn.textContent = 'Your turn!';
+                    currentPlayer = -1;
+
+                    console.log(board);
+                    console.log("updating currentPlayer = ",currentPlayer);
+                }          
+            }
+            return;
+        }
+        
+    }
+
+}
+
+
+
 function testAnimation(){
     context = canvas[0].getContext("2d");
     console.log("click!");
@@ -315,11 +436,92 @@ function testAnimation(){
     window.requestAnimationFrame(dropTile); 
 }
 
+//win checks
+function colorMatchCheck(one,two, three, four){
+    return (one ===two && one === three && one === four && one !== 0);
+}
+
+function horizontalCheck(){
+    for(let row = 0; row < tableRow.length; row ++){
+        for(let col = 0; col < 4; col++){
+            if(colorMatchCheck(board[row][col],
+                board[row][col+1],
+                board[row][col+2],
+                board[row][col+3])){
+                    return true;
+                }
+        }
+    }
+}
+
+function verticalCheck(){
+    for(let col = 0; col < 7; col ++){
+        for(let row = 0; row < 3; row ++){
+            if(colorMatchCheck(board[row][col],
+                board[row+1][col],
+                board[row+2][col],
+                board[row+3][col])){
+                    return true;
+                }
+        }
+    }
+}
+
+function diagCheckLR(){
+    for(let col = 0; col < 4; col ++){
+        for(let row = 0; row < 3; row ++){
+            if(colorMatchCheck(board[row][col],
+                board[row+1][col+1],
+                board[row+2][col+2],
+                board[row+3][col+3])){
+                    return true;
+                }
+        }
+    }
+}
+
+function diagCheckRL(){
+    for(let col = 0; col < 4; col ++){
+        for(let row = 5; row >2; row --){
+            if(colorMatchCheck(board[row][col],
+                board[row-1][col+1],
+                board[row-2][col+2],
+                board[row-3][col+3])){
+                    return true;
+                }
+        }
+    }
+}
+
+function winCheck(){
+    return (horizontalCheck() || verticalCheck() || diagCheckLR() || diagCheckRL());
+}
+
+function drawCheck(){
+    // let fullSlot = [];
+    // for(let i = 0; i < tableCell.length; i++){
+    //     if(playBoard[i][0]!== 'rgb(200, 225, 250)'){
+    //         fullSlot.push(tableCell[i]);
+    //     }
+    // }
+    // if(fullSlot.length === tableCell.length){
+    //     return true;
+    // }
+    // return false;
+    for(let i = 0; i< board[0].length; i++){
+        if(board[0][i]==0){
+            return false;
+        }
+    }
+
+    return true;
+}
 
 
+/* 
  function computerMove(board){
     var depth = 0;
-    var maxDepth = 4;
+    var maxDepth = mmDepth;
     board = copyBoard(playBoard,board);
     console.log("computerMove");
     console.log("playBoard: ");
@@ -358,7 +560,7 @@ function testAnimation(){
             return;
         }
     }
-}
+} */
 
 
 
@@ -374,7 +576,7 @@ function dropTile(row, col){
 function changeTileColor(row,col,color){
     tableRow[row].children[col].style.backgroundColor = color;
 }
-
+/* 
 function copyBoard(playBoard,board){
     for(let i = 0; i<board.length; i++){
         for(let j = 0; j<board[i].length; j++){
@@ -386,101 +588,9 @@ function copyBoard(playBoard,board){
 
 
 
-//win checks
-function colorMatchCheck(one,two, three, four){
-    return (one ===two && one === three && one === four && one !== 0);
-}
 
-function horizontalCheck(){
-    for(let row = 0; row < tableRow.length; row ++){
-        for(let col = 0; col < 4; col++){
-            if(colorMatchCheck(playBoard[row][col],
-                playBoard[row][col+1],
-                playBoard[row][col+2],
-                playBoard[row][col+3])){
-                    return true;
-                }
-        }
-    }
-}
 
-function verticalCheck(){
-    for(let col = 0; col < 7; col ++){
-        for(let row = 0; row < 3; row ++){
-            if(colorMatchCheck(playBoard[row][col],
-                playBoard[row+1][col],
-                playBoard[row+2][col],
-                playBoard[row+3][col])){
-                    return true;
-                }
-        }
-    }
-}
 
-function diagCheckLR(){
-    for(let col = 0; col < 4; col ++){
-        for(let row = 0; row < 3; row ++){
-            if(colorMatchCheck(playBoard[row][col],
-                playBoard[row+1][col+1],
-                playBoard[row+2][col+2],
-                playBoard[row+3][col+3])){
-                    return true;
-                }
-        }
-    }
-}
-
-function diagCheckRL(){
-    for(let col = 0; col < 4; col ++){
-        for(let row = 5; row >2; row --){
-            if(colorMatchCheck(playBoard[row][col],
-                playBoard[row-1][col+1],
-                playBoard[row-2][col+2],
-                playBoard[row-3][col+3])){
-                    return true;
-                }
-        }
-    }
-}
-
-function winCheck(){
-    return (horizontalCheck() || verticalCheck() || diagCheckLR() || diagCheckRL());
-}
-
-function drawCheck(){
-    // let fullSlot = [];
-    // for(let i = 0; i < tableCell.length; i++){
-    //     if(playBoard[i][0]!== 'rgb(200, 225, 250)'){
-    //         fullSlot.push(tableCell[i]);
-    //     }
-    // }
-    // if(fullSlot.length === tableCell.length){
-    //     return true;
-    // }
-    // return false;
-    for(let i = 0; i< playBoard[0].length; i++){
-        if(playBoard[0][i]==0){
-            return false;
-        }
-    }
-
-    return true;
-}
-
-reset.addEventListener('click',()=>{
-setCanvasBoard();
-    for(let i = 0; i<6; i++){
-        playBoard[i] = [];
-        playBoard[i].length = 7;
-        for(let j = 0; j<7; j++){
-            playBoard[i][j] = 0;
-        }
-    
-    }
-    board = copyBoard(playBoard,board);
-    //return(currentPlayer ===1 ? playerTurn.textContent = `Your turn` : playerTurn.textContent = `Computer's turn!`);
-    return playerTurn.textContent = 'Your turn!';
-});
 
 // nextMove.addEventListener('click', ()=>{
 //     if(currentPlayer !==1){
@@ -619,11 +729,11 @@ function getAction(board){
     return validActs;
 }
 
-/*
+
 * The following are the evaluation functions that minimax uses to evaluate the score for a board.
 * A board's score is based on how many opportunities there are for a player to have a run of four,
 * and how close that player currently is to having a run of four.
-*/
+
 
 
 
@@ -958,7 +1068,7 @@ function mmDiagRLCheck(board){
     }
 }
 
-
+ */
 
 //fill in minimax win checks
 
