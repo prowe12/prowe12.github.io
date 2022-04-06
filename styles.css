@@ -68,9 +68,9 @@ h1 {
 /* Make a grid for the puzzles */
 #grid-container {
    display: flex;
-   grid-template-columns: 50% 50%;
-   justify-content: space-around;
+   justify-content: space-evenly;
    flex-wrap: wrap;
+   margin-bottom: 20px;
 }
 
 /* Styles for the grid for the puzzles (div elements) in the grid 
@@ -108,5 +108,14 @@ h1 {
    border-right: 1px solid #333333;
    border-bottom: 1px solid #333333;
    border-left: 1px solid #CCCCCC;
+ }
+
+ /* The footer */
+ footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   text-align: left;
  }
  
