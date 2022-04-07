@@ -45,6 +45,8 @@ h1 {
 }
 
 body {
+   display: flex;
+   flex-direction: column;
    background-color: rgb(242, 238, 255); /* rgb(200, 225, 250); */
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
@@ -143,15 +145,15 @@ h1 {
 }
 
 /* Space at the bottom */
-#spacebelow {
-   margin-top: 40px;
+.spacebelow {
    margin-bottom: 40px;
 }
 
+
 /* The footer */
 footer {
-   padding: 14px 25px;
-   text-decoration: none;
+   margin: -8px;
+   padding: 8px 10px;
    background-color: rgb(235, 204, 186);
    color: black;
    left: 0;

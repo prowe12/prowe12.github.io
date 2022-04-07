@@ -15,80 +15,103 @@
 
     <!--Styles specific to this page-->
     <link rel="stylesheet" href="sudoku/sudokuStyles.css">
-
 </head>
 
 <body>
-    <header> <h1>Sudoku</h1> </header>    
+    <header> <h1>Sudoku</h1> </header> 
     <main>
-    
-        <!-- Print the Sudoku board to the screen -->
-        <table id="sudokuGraphic"> </table>
-        <br>
+    <div id="grid-container-puzzle">
 
-        <!-- Put the fieldset in a div so we can center it -->
-        <div id="sudokuControls">
-        <fieldset>
-            <legend>Controls</legend>
-          
-            <!-- Choose a puzzle from a drop-down list -->
-            Choose Puzzle
-            <select name="puzzle" id="dropdownpuzzle">
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-                <option value="evil">Evil</option>
-                <option value="random">Random</option>
-            </select>
+        <!-- Row 1, column 1 -->
+        <div>
+            <fieldset id="selections">
+                <legend>Selections</legend>
+              
+                <!-- Choose a puzzle from a drop-down list -->
+                Choose Puzzle<br>
+                <select name="puzzle" id="dropdownpuzzle">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                    <option value="evil">Evil</option>
+                    <option value="random">Random</option>
+                </select>
+                <br>    
+                <br>
 
-            <br>
+                Choose Solver <br>
+                <button name="solverDemoBacktrack" id="solverDemoBacktrack">Backtracking</button>
+                <br>
+                <button name="playSudokuSolver" id="playSudokuSolver">AC-3 and Backtracking</button>
+                <br>
 
-            <!-- Choose a solver method -->
-            <button name="solverDemoBacktrack" id="solverDemoBacktrack">Solve with Backtracking</button>
-            <br>
-            <button name="playSudokuSolver" id="playSudokuSolver">Solve with AC-3 and Backtracking</button>
-            <br>
+                 <!-- Add later  -->
+                <!-- Read in your own Sudoku file  -->
+                <!-- <input type="file" id="file-input">
+                <button id="read-button">Load File</button>
+                <pre id="file-contents"></pre>  -->
 
-
-            <!-- Play Controls -->
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <button type="button" id="rewindToBeg">|<<</button>
-            <button type="button" id="rewind"><<</button>
-            <button type="button" id="playPause">Play</button>
-            <button type="button" id="fastForward">>></button>
-            <button type="button" id="forwardToEnd">>>|</button>
-            &nbsp; &nbsp;
-            <button type="button" id="step">step</button>
-            <!--<button type="button" id="pauseButton">||</button> -->
-
-             
-            <!-- Add later  -->
-            <!-- Read in your own Sudoku file  -->
-            <!-- <input type="file" id="file-input">
-            <button id="read-button">Load File</button>
-            <pre id="file-contents"></pre>  -->
-
-        </fieldset>
+            </fieldset>
         </div>
 
-        <!-- Code for playing Sudoku, in reverse order of dependency -->
-        <script src="sudoku/boardPlot.js"></script>
-        <script src="sudoku/getUnassignedVariable.js"></script>
-        <script src="sudoku/variable.js"></script>
-        <script src="sudoku/constraints.js"></script>
-        <script src="sudoku/backtrack.js"></script>
-        <script src="sudoku/solver.js"></script>
-        <script src="sudoku/sudoku.js"></script>   <!-- Calls code in solver.js -->
+        <!-- Row 1, column 2 -->
+        <div>
+            <!-- Print the Sudoku board to the screen -->
+            <table id="sudokuGraphic"> </table>
+
+            <!-- Put the fieldset in a div so we can center it -->
+            <div id="sudokuControls">
+                <fieldset id="controls">
+                    <legend>Controls</legend>
+                
+                    <!-- Play Controls -->
+                    <button type="button" id="rewindToBeg" class="button">|<<</button>
+                    <button type="button" id="rewind" class="button"><<</button>
+                    <button type="button" id="playPause" class="button">Play</button>
+                    <button type="button" id="fastForward" class="button">>></button>
+                    <button type="button" id="forwardToEnd" class="button">>>|</button>
+                    &nbsp;
+                    <button type="button" id="step" class="button">step</button>
+
+                </fieldset>
+            </div>
+
+        </div>
+
+        <!-- Row 1, column 3 -->
+        <div class="explanation">
+            <p></p>
+        </div>
+    </div>
 
 
-        <br>
-        <br>
-        Read about <a href="solvingSudoku.html">how the solver works</a>.
-        <br>
-        <br>
-        <br>
+
+
+    <!-- Code for playing Sudoku, in reverse order of dependency -->
+    <script src="sudoku/boardPlot.js"></script>
+    <script src="sudoku/getUnassignedVariable.js"></script>
+    <script src="sudoku/variable.js"></script>
+    <script src="sudoku/constraints.js"></script>
+    <script src="sudoku/backtrack.js"></script>
+    <script src="sudoku/solver.js"></script>
+    <script src="sudoku/sudoku.js"></script>   <!-- Calls code in solver.js -->
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="spacebelow">
+        <p>Read about <a href="solvingSudoku.html">how the solver works</a>.</p>
+    </div>
+
     </main>
+
+    <footer>
+        <p>Page created by Penny Rowe.</p>
+    </footer>
     
-    <footer>Page made by Penny Rowe.</footer>
 </body>
 </html>
