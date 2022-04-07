@@ -22,24 +22,24 @@
    margin-right: auto;
 }
 
-/* fieldset > #selections {
-   width: 500px;
+fieldset > #selections {
+   width: 380px;
    align-items: center;
    align-content: center;
    padding-left: 2%;
-} */
+}
 
-/* fieldset #controls {
-   width: 200px;
+fieldset #controls {
+   width: 380px;
    align-items: center;
    align-content: center;
    padding-left: 2%;
-} */
+}
 
 /* Center the control fieldset */
 #sudokuControls {
    text-align: center;
-   width: fit-content;
+   width: 380px;
    padding-top: 20px;
 }
 
