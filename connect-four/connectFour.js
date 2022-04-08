@@ -16,7 +16,7 @@ const reset = document.querySelector('.reset');
 const nextMove = document.querySelector('.next-move');
 nextMove.style.display = 'none';
 //array of canvases (one for each column)
-let canvas = document.querySelectorAll('.aboveTable');
+let aboveTable = document.querySelectorAll('.aboveTable');
 //depth of the slider
 var depth = document.querySelector('.slider');
 var mmDepth = depth.value;
@@ -28,9 +28,20 @@ for(let i = 0; i< computerModes.length; i++){
 
 let computerMode = 'auto';
 
-let testRow = document.querySelectorAll('.slot1');
+let table = document.querySelectorAll('.slot1');
 
+//state player colors
+player1Color = 'red';
+player2Color = 'yellow';
+background = "rgb(200, 225, 250)";
 
+//animation variables
+let animationCell;
+let animationColumn = 0;
+let animationStartPix = 0;
+let animationEndPix = 0;
+let animationColor = player1Color;
+let dropID;
 
 
 /**
@@ -57,6 +68,12 @@ let testRow = document.querySelectorAll('.slot1');
 
  console.log("making computer");
  let computer = new computerPlayer(1,-1,board,mmDepth);
+
+ //let background = "rgb(200, 225, 250)";
+ console.log("making graphics");
+ let graphic = new graphics(background);
+
+ graphic.resetTable(table);
  //console.log(computer.makeMove());
 
 
@@ -67,12 +84,13 @@ let testRow = document.querySelectorAll('.slot1');
 for(let i = 0; i < tableCell.length; i++){
     //when the player hovers over a cell, place a red tile above that column
     tableCell[i].addEventListener('mouseenter',(e)=>{
-        displayMove(e.target.cellIndex);
+        graphic.displayAboveTable(aboveTable[e.target.cellIndex],animationColor);
     })
 
     //when a player stops hovering over a cell, remove the tile above that column
     tableCell[i].addEventListener('mouseleave',(e)=>{
-        clearDisplayMove(e.target.cellIndex);
+        graphic.clearAboveTable(aboveTable[e.target.cellIndex]);
+        //clearDisplayMove(e.target.cellIndex);
     })
 }
 
@@ -91,7 +109,8 @@ for(let i = 0; i< computerModes.length; i++){
 }
 
 reset.addEventListener('click',()=>{
-    setCanvasBoard();
+    graphic.resetTable(table);
+    //setCanvasBoard();
         for(let i = 0; i<6; i++){
             board[i] = [];
             board[i].length = 7;
@@ -121,59 +140,16 @@ nextMove.addEventListener('click',()=>{
 })
 
 
-//state player colors
-player1Color = 'red';
-player2Color = 'yellow';
-background = "rgb(200, 225, 250)";
 
 
 
-//animation variables
-let animationCell;
-let animationColumn = 0;
-let animationStartPix = 0;
-let animationEndPix = 0;
-let animationColor = player1Color;
-let dropID;
-
-setCanvasBoard();
-
-/**
- * displayMove displays a game tile over the column that the user is hovering on.
- * @param {*} col the inputted column
- */
-function displayMove(col){
-    let canv = canvas[col];
-    let context = canv.getContext('2d');
-    context.beginPath();
-    context.arc(canv.width/2,canv.height/2,canv.width/2-2,0,2*Math.PI);
-    context.fillStyle = animationColor;
-    context.strokeStyle = "black";
-    context.fill();
-    context.restore();
-}
-function changeCellColor(cell){
-    let can = cell.children[0];
-    let context = can.getContext("2d");
-    //console.log(context);
-    let xcoord = can.width/2;
-    let ycoord = can.height/2;
-    //console.log(xcoord);
-    //console.log(ycoord);
-    let rad = can.width/2-2;
-    //console.log(rad);
 
 
-    context.fillStyle = animationColor;
-    context.strokeStyle = "black";
-    context.beginPath();
-    context.arc(xcoord,ycoord,rad,0,2*Math.PI);
-    context.stroke();
-    context.fill();
-    context.restore();
 
-    return;
-}
+//setCanvasBoard();
+
+
+
 
 async function fallingTile(col){
     let animate;
@@ -191,17 +167,7 @@ async function fallingTile(col){
 
 }
 
-// async function callAnimation(start){
-//     while(animationStartPix >0 || start == 0){
-//         console.log("start = ",start);
-//         console.log(animationStartPix);
-//         start = 1;
-//         window.requestAnimationFrame(fallingTileAnimation);
-//     }
-//     console.log("start = ",start);
-//     console.log(animationStartPix);
-//     return;
-// }
+
 
 
 async function fallingTileAnimation(){
@@ -237,41 +203,9 @@ async function fallingTileAnimation(){
     }
 }
 
-function clearCell(cell){
-  
-    let context = cell.getContext("2d");
-    context.clearRect(0,0,cell.width, cell.height);
-    context.restore(); 
-    resetSlot(cell);
-}
 
-function setCanvasBoard(){
-    for(let i = 0; i < testRow.length; i++){
-        let testr = testRow[i];
-        clearCell(testr);
 
-    }
-}
 
-function resetSlot(cell){
-    let context = cell.getContext("2d");
-    context.beginPath();
-    context.arc(cell.width/2,cell.height/2,cell.width/2-2,0,2*Math.PI);
-    context.fillStyle = background;
-    context.strokeStyle = "black";
-    context.fill();
-    context.restore();
-}
-
-/**
- * ClearDisplayMove clears the game tile from the column
- * @param {*} col 
- */
-function clearDisplayMove(col){
-    let canv = canvas[col];
-    let context = canv.getContext('2d');
-    context.clearRect(0,0,canv.width, canv.height);
-}
 
 
 
@@ -282,23 +216,13 @@ var currentPlayer = -1;
 playerTurn.textContent = `Your turn!`;
 
 //go through the cells and show that we know they all have white background
-// Array.prototype.forEach.call(tableCell, (cell)=>{
-//     cell.style.backgroundColor = 'rgb(200, 225, 250)';
-//     cell.addEventListener('click',(cell)=>{
-//         if(currentPlayer ===1){
-//             playerMove(cell);
-//         }
-//     });
-    
-// })
+
 
 for(let i = 0; i<tableRow.length; i++){
     console.log(tableRow[i]);
     for(let j = 0; j<tableRow[i].children.length; j++){
         cell = tableRow[i].children[j];
         cell.addEventListener('click',(cell)=>{
-            console.log("clicking ",j);
-            console.log("currentPlayer = ",currentPlayer);
             if(currentPlayer ===-1){
                 console.log(j);
                 // playerMove(cell,j);
@@ -308,60 +232,7 @@ for(let i = 0; i<tableRow.length; i++){
     }
 }
 
-/**
- * playerMove makes one move for the player, then sets it to the computer's turn to make a move.
- * @param {*} e the column the human player wants to place their tile in
- * @returns 
- */
-async function playerMove(e,col){
-    console.log("event");
-    console.log(e);
-    console.log("column");
-    console.log(col);
-    //console.log(tableRow[0].children);
-    //let column = e.target.className.split(" ")[1];
-    let column = col;
-    console.log("column");
-    console.log(column);
-    let row = [];
 
-    //dropTile(0,column);
-    for(let i = 5; i >=0; i --){
-        //work up from the bottom of the column and fill the first
-            //empty slot you come across with a tile from the player
-            console.log(i);
-
-        if(playBoard[i][column]==0){
-            //row.push(tableRow[i].children[column]);
-            console.log(i);
-            animationColor = player1Color;
-            console.log(tableRow[i].children[column]);
-
-            playBoard[i][column] = 1
-            let letItFall = await fallingTile(column);
-            //console.log(tableRow[i].children[column]);
-            changeCellColor(tableRow[i].children[column]);
-            //row[0].style.backgroundColor = player1Color;
-
-            if(winCheck()){
-                playerTurn.textContent = `You won!`;
-                playerTurn.style.color = player1Color;
-                reset.textContent = 'Play Again';
-            }  
-            else if(drawCheck()){
-                playerTurn.textContent = 'game is a draw';
-            }
-            else{
-                 playerTurn.textContent = `Computer's turn!`;
-                currentPlayer = 2;
-                animationColor = player2Color;
-                //return computerMove(board);               
-            }
-            return;
-        }
-        
-    }
-}
 
 function makeMove(player,column){
     let playerColor;
@@ -383,7 +254,7 @@ function makeMove(player,column){
             board[i][column] = playerNumber;
             console.log("player: ",playerNumber);
             console.log(board);
-
+            graphic.drawTile(tableRow[i].children[column].children[0], playerColor);
             if(winCheck()){
                 console.log("winning");
                 if(player==-1){
@@ -426,15 +297,6 @@ function makeMove(player,column){
 
 
 
-function testAnimation(){
-    context = canvas[0].getContext("2d");
-    console.log("click!");
-    animationColumn = 60*(1+1);
-    animationStartPix = 0;
-    animationEndPix = 60*(1);
-    animationColor = player1Color;
-    window.requestAnimationFrame(dropTile); 
-}
 
 //win checks
 function colorMatchCheck(one,two, three, four){
