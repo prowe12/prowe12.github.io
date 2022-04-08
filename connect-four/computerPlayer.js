@@ -29,7 +29,7 @@ class computerPlayer{
     makeMove(){     
         // console.log("computer make move");  
         // console.log("real board",this.realBoard);
-        // console.log("depth ",this.maxDepth);
+        console.log("depth ",this.maxDepth);
         var depth = 0;
         this.playBoard = this.copyBoard(this.playBoard, this.realBoard);
         // console.log("playboard ",this.playBoard);
