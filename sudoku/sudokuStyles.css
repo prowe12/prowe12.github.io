@@ -1,13 +1,36 @@
 /* Styles for Sudoku page (sudoku.html) */
 
+
+/* A container for all the solver elements */
+#grid-container-puzzle {
+   display: grid;
+   justify-content: space-evenly;
+   /* grid-template-columns: 33% 33% 33%; */
+   grid-template-columns: repeat(auto-fill, 380px);
+   grid-template-rows: auto;
+   max-width: 1200px;
+}
+
+/* Each solver element is in a div */
+#grid-container-puzzle > div {
+   text-align: center;
+}
+
 /* Center the Sudoku board */
 #sudokuGraphic {
    margin-left: auto;
    margin-right: auto;
 }
 
-fieldset {
-   width: 500px;
+fieldset > #selections {
+   width: 380px;
+   align-items: center;
+   align-content: center;
+   padding-left: 2%;
+}
+
+fieldset #controls {
+   width: 380px;
    align-items: center;
    align-content: center;
    padding-left: 2%;
@@ -16,9 +39,8 @@ fieldset {
 /* Center the control fieldset */
 #sudokuControls {
    text-align: center;
-   width: fit-content;
-   margin-left: 30%;
-   margin-right: 30%;
+   width: 380px;
+   padding-top: 20px;
 }
 
 table {
@@ -40,8 +62,8 @@ tr:nth-child(6) {
 }
 
 td {
-   width: 28px;
-   height: 28px;
+   width: 36px;
+   height: 36px;
    border: 1px solid gray; 
    text-align: center;
 }
@@ -85,3 +107,6 @@ td {
 #rewind {
    width: 50px;
 }
+
+
+

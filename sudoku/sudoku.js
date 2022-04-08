@@ -121,14 +121,14 @@ function loadStartingValues(puzzle='easy'){
 
     //If none of these selected, use the easy grid
     grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
-    [6, 0, 0, 1, 9, 5, 0, 0, 0],
-    [0, 9, 8, 0, 0, 0, 0, 6, 0],
-    [8, 0, 0, 0, 6, 0, 0, 0, 3],
-    [4, 0, 0, 8, 0, 3, 0, 0, 1],
-    [7, 0, 0, 0, 2, 0, 0, 0, 6],
-    [0, 6, 0, 0, 0, 0, 2, 8, 0],
-    [0, 0, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 0, 0, 8, 0, 0, 7, 9]];
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]];
     return grid;
 }
 
@@ -336,6 +336,8 @@ var playButton = document.getElementById("playPause");
 var fastForwardButton = document.getElementById("fastForward");
 var forwardToEndButton = document.getElementById("forwardToEnd");
 var stepButton = document.getElementById("step");
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
 //var pauseButton = document.getElementById("pauseButton");
 
 let moves = [];
@@ -393,13 +395,15 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
 
 // Solver demo for backtracking
 document.querySelector("#solverDemoBacktrack").addEventListener("click", function() {
+
     // Reset the state of play and the board
     playReset();
     boardReset();   
 
-    //TODO gray out play controls
+    // Print a message while we wait for the solver
+    let explanation = document.querySelector(`.explanation`);
+    explanation.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
     
-
     // Solve the board using backtracking alone, using backtrack, in backtrack.js
     let result = backtracker(originalgrid);
     finalgrid = originalgrid;
@@ -417,6 +421,10 @@ document.querySelector("#solverDemoBacktrack").addEventListener("click", functio
     rewindButton.disabled = false;
     forwardToEndButton.disabled = false;
     rewindToBegButton.disabled = false;
+
+    // Write the message saying it's been solved
+    explanation.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p>";
+
     
 });
 
@@ -432,6 +440,10 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // Reset the state of play and the board
     playReset();
     boardReset();   
+
+    // Print a message while we wait for the solver
+    let explanation = document.querySelector(`.explanation`);
+    explanation.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
     // return an array with a message regarding whether the solver was successful
@@ -454,6 +466,8 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     forwardToEndButton.disabled = false;
     rewindToBegButton.disabled = false;
     
+    // Write the message saying it's been solved
+    explanation.innerHTML = "<p>I have solved the puzzle using AC-3 and backtracking.</p><p>Use the controls to play the solution.</p>";
 });
 
 
@@ -598,7 +612,6 @@ rewindToBegButton.addEventListener("click", function() {
 
     running = false;
 });
-
 
 
 

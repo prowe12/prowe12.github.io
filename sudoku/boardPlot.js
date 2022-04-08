@@ -90,6 +90,29 @@
         box.innerHTML = value;
     }
 
+    // Also, indicate in the explanation text what is happening
+    // The explanation area
+    let explanation = document.querySelector(`.explanation`);
+    if (boxStyle === 'fixed') {
+        explanationMsg = '<p>Puzzle ready!</p><p>Choose another puzzle or choose a solver.</p>';
+    }
+    else if (boxStyle == 'backtrack') {
+        explanationMsg = '<p>Solving with backtracking.</p>';
+    }
+    else if (boxStyle == 'ac3') {
+        explanationMsg = '<p>Solving with AC-3.</p>';
+    }
+    else if (boxStyle == 'final') {
+        explanationMsg = '<p>Final possibility for square</p>';
+    }
+    else {
+        explanationMsg = '<p></p>';
+    }
+    explanation.innerHTML = explanationMsg;
+
+    
+
+
     // Set the color of the number in the cell, if color specified is allowed.
     // Otherwise, throw an error
     // if (allowedNumberColors.indexOf(numberColor) !== -1){
