@@ -345,6 +345,7 @@ let timeId;
 let imove = 0;
 let running = false;
 let delay = 1000;           // default delay
+let ANIMATION_SPEED = 10;
 
 
 // Set up the default grid after the DOM content is loaded
@@ -359,6 +360,20 @@ document.addEventListener("DOMContentLoaded", function () {
     rewindButton.disabled = true;
     forwardToEndButton.disabled = true;
     rewindToBegButton.disabled = true;
+
+    // Start the slider event listener
+    //TODO why is this here instead of below?
+    for(let obj of document.querySelectorAll(".anim-speed")) {
+        obj.addEventListener("change", function(event) {
+            ANIMATION_SPEED = obj.value;
+            for(let slider of document.querySelectorAll(".anim-speed")) {
+                if(slider.value !== obj.value) {
+                    slider.value = obj.value;
+                    console.log(ANIMATION_SPEED);
+                }
+            }       
+        });
+    }
 });
   
 
@@ -474,6 +489,8 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
 // Event listener for the play button
 //TODO: If you click play twice, it won't pause anymore.
 playButton.addEventListener("click", function() {
+
+    console.log(ANIMATION_SPEED);
 
     if (imove === moves.length) {
         // Nothing to do, so return
