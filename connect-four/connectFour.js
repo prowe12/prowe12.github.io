@@ -33,7 +33,7 @@ let table = document.querySelectorAll('.slot1');
 //state player colors
 player1Color = 'red';
 player2Color = 'yellow';
-background = "rgb(200, 225, 250)";
+background = "rgb(242, 238, 255)";
 
 //animation variables
 let animationCell;
@@ -130,7 +130,7 @@ reset.addEventListener('click',()=>{
 depth.addEventListener('click',()=>{
     console.log("new depth");
     mmDepth = depth.value;
-    console.log(mmDepth);
+    computer.updateDepth(mmDepth);
 });
 
 nextMove.addEventListener('click',()=>{
@@ -224,7 +224,7 @@ for(let i = 0; i<tableRow.length; i++){
         cell = tableRow[i].children[j];
         cell.addEventListener('click',(cell)=>{
             if(currentPlayer ===-1){
-                console.log(j);
+              //  console.log(j);
                 // playerMove(cell,j);
                 makeMove(-1,j);
             }

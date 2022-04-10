@@ -29,11 +29,11 @@ class computerPlayer{
     makeMove(){     
         // console.log("computer make move");  
         // console.log("real board",this.realBoard);
-        console.log("depth ",this.maxDepth);
-        var depth = 0;
+        //console.log("depth ",this.maxDepth);
+        let depth = 0;
         this.playBoard = this.copyBoard(this.playBoard, this.realBoard);
         // console.log("playboard ",this.playBoard);
-        var nextPlay = this.getNextPlay(depth, this.maxDepth, this.playBoard);
+        let nextPlay = this.getNextPlay(depth, this.maxDepth, this.playBoard);
         // console.log("returning ", nextPlay);
         return nextPlay;
     }
@@ -48,35 +48,35 @@ class computerPlayer{
     }
 
     getNextPlay(depth, max){
-        var res =  this.minimax(depth, max);
+        let res =  this.minimax(depth, max);
         // console.log("getNextPlay ",res);
         return res;
     }
 
     minimax(depth, maxDepth){
-        var actVal = this.maxValue(depth, maxDepth, -1);
+        let actVal = this.maxValue(depth, maxDepth, -1);
         // console.log("minimax ",actVal[0]);
         return actVal[0];
     }
 
-     maxValue(depth, maxDepth, prevPlay){
+     maxValue(depth, prevPlay){
         //  console.log("maxVal");
-        //  console.log("depth ",depth);
-         var actVal = [];
+        //console.log("max depth ",depth);
+         let actVal = [];
          actVal.length = 2;
          if(this.cutoffTest(depth)){
             //  console.log("evaluating and returning");
              const evaluateBoard= this.evaluate(this.player);
              actVal[0] = prevPlay;
-            //  console.log("prevPlay = ",prevPlay);
              actVal[1] = evaluateBoard;
+             console.log("max returning score ",evaluateBoard," for move ",prevPlay);
              return actVal;
          }
      
-         var value = -100000;
-         var action = -1;
+         let value = -100000;
+         let action = -1;
          depth++;
-         var validActs = this.getAction();
+         let validActs = this.getAction();
          for(let i = 0; i< validActs.length; i++){
              let a = validActs[i];
             //  console.log(a);
@@ -93,7 +93,7 @@ class computerPlayer{
                  actVal[0] = action;
                  actVal[1] = value;
              }
-     
+
              this.undoResult(a);
          }
          return actVal;
@@ -104,26 +104,24 @@ class computerPlayer{
         // console.log("minVal");
         // console.log("depth ",depth);
         //console.log("min value");
-        //console.log("depth: ",depth);
         //console.log("prev play: ",prevPlay);
        // console.log("board: ");
         //console.log(board);
     
-        var actVal = [];
+        let actVal = [];
         actVal.length = 2;
         if(this.cutoffTest( depth)){
             const evaluateBoard= this.evaluate(this.opponent);
             actVal[0] = prevPlay;
             actVal[1] = evaluateBoard;
-            // console.log("min returning ",prevPlay);
-            // console.log(evaluateBoard);
+             console.log("min returning score ",evaluateBoard," for move ",prevPlay);
             return actVal;
         }
     
-        var value = 10000;
-        var action;
+        let value = 10000;
+        let action;
         depth++;
-        var validActs = this.getAction();
+        let validActs = this.getAction();
         for(let i = 0; i<validActs.length; i++){
             let a = validActs[i];
             if(a==-1){
@@ -137,6 +135,7 @@ class computerPlayer{
                 actVal[0] = a;
                 actVal[1] = value;
             }
+
             this.undoResult(a);
         }
         //console.log("taking action ",actVal);
@@ -174,7 +173,7 @@ class computerPlayer{
     }
 
     getAction(){
-        var validActs = [];
+        let validActs = [];
         for(let i = 0; i<this.playBoard[0].length; i++){
             if(this.playBoard[0][i] ===0){
                 validActs.push(i);
@@ -192,7 +191,7 @@ class computerPlayer{
 
 
     evaluate(player){
-        var evaluateBoard= 0;
+        let evaluateBoard= 0;
         evaluateBoard= evaluateBoard- (this.vertical( -1*player) + this.horizontal(-1*player)+ this.ascend(-1*player)+this.descend(-1*player));
         evaluateBoard= evaluateBoard+ (this.vertical(player) + this.horizontal(player)+ this.ascend(player)+this.descend(player));
         return evaluateBoard;
@@ -201,11 +200,11 @@ class computerPlayer{
     vertical(player){
         //for each column on the board, calculate 
         //the vertical score of that column
-        var vertScore = 0;
+        let vertScore = 0;
         for(let col = 0; col < 7; col++){
             //count the number of blank tiles at the top of the column
-            var blank = 0;
-            var row;
+            let blank = 0;
+            let row;
             for(row = 0; row < this.playBoard.length; row++){
                 if(this.playBoard[row][col]===0){
                     blank++;
@@ -216,7 +215,7 @@ class computerPlayer{
             }
 
             //count the number of the player's tiles at the top
-            var playerCount = 0;
+            let playerCount = 0;
             for(row = row; row < this.playBoard.length; row++){
                 if(this.playBoard[row][col] !== player){
                     break;
@@ -239,9 +238,9 @@ class computerPlayer{
 
     horizontal(player){
         let horizScore = 0;
-        var row;
-        var blankCount;
-        var playerCount;
+        let row;
+        let blankCount;
+        let playerCount;
         
         //calculate the potential score for every row in the board
         for(row = 0; row < this.playBoard.length; row++){
@@ -283,8 +282,8 @@ class computerPlayer{
     blankTileRow(row, startCol){
         let ret = [];
         ret.length = 2;
-        var count = 0;
-        var col;
+        let count = 0;
+        let col;
         for(col = startCol; col<7; col++){
             if(this.playBoard[row][col]!=0){
                 break;
@@ -353,9 +352,9 @@ class computerPlayer{
     blankTileAscend( startRow, startCol){
         let ret = [];
         ret.length = 3;
-        var count = 0;
-        var row;
-        var col = startCol;
+        let count = 0;
+        let row;
+        let col = startCol;
         for(row = startRow; row > 0; row--){
             if(this.playBoard[row][col]!=0){
                 break;
@@ -426,9 +425,9 @@ class computerPlayer{
     blankTileDescend( startRow, startCol){
         let ret = [];
         ret.length = 3;
-        var count = 0;
-        var row;
-        var col = startCol;
+        let count = 0;
+        let row;
+        let col = startCol;
         for(row = startRow; row < this.playBoard.length; row++){
             if(this.playBoard[row][col]!=0){
                 break;
