@@ -211,8 +211,8 @@ populator = function()  {
         imove++;
     }
     else {
-        clearInterval(timerId);
-        //TODO ???: running = false;
+        clearInterval(timeId);
+        running = false;
     };
 };
 

@@ -29,7 +29,7 @@
               
                 <!-- Choose a puzzle from a drop-down list -->
                 Choose Puzzle<br>
-                <select name="puzzle" id="dropdownpuzzle">
+                <select name="puzzle" id="dropdownpuzzle" class="button">
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
@@ -40,9 +40,9 @@
                 <br>
 
                 Choose Solver <br>
-                <button name="solverDemoBacktrack" id="solverDemoBacktrack">Backtracking</button>
+                <button name="solverDemoBacktrack" id="solverDemoBacktrack" class="button">Backtracking</button>
                 <br>
-                <button name="playSudokuSolver" id="playSudokuSolver">AC-3 and Backtracking</button>
+                <button name="playSudokuSolver" id="playSudokuSolver" class="button">AC-3 and Backtracking</button>
                 <br>
 
                  <!-- Add later  -->
@@ -74,7 +74,7 @@
                     <button type="button" id="step" class="button">step</button>
 
                     <!-- Slider for controlling the speed of playback -->
-                    Speed <input type=range min=0.5 max=20 value=10 class="anim-speed"></input>
+                    Speed <input class="slider" type=range min=0.5 max=20 value=10 class="anim-speed"></input>
                 </fieldset>
             </div>
 
