@@ -15,6 +15,14 @@ const reset = document.querySelector('.reset');
 //nextMove button
 const nextMove = document.querySelector('.next-move');
 nextMove.style.display = 'none';
+
+//walkthrough_button Button
+const walkthrough_button = document.querySelector('.walkthrough');
+//const walkthrough_checkbox = document.getElementById('walkthrough-checkbox');
+walkthrough_button.style.display = 'block';
+//walkthrough div
+const walkthrough = document.querySelector('.mm-walkthrough');
+walkthrough.style.display = 'none';
 //array of canvases (one for each column)
 let aboveTable = document.querySelectorAll('.aboveTable');
 //depth of the slider
@@ -33,7 +41,7 @@ let table = document.querySelectorAll('.slot1');
 //state player colors
 player1Color = 'red';
 player2Color = 'yellow';
-background = "rgb(200, 225, 250)";
+background = "rgb(242, 238, 255)";
 
 //animation variables
 let animationCell;
@@ -76,6 +84,7 @@ let dropID;
  graphic.resetTable(table);
  //console.log(computer.makeMove());
 
+ computer.testCalc();
 
 /**
  * Mouseover events that display a game tile above whatever column the
@@ -130,8 +139,33 @@ reset.addEventListener('click',()=>{
 depth.addEventListener('click',()=>{
     console.log("new depth");
     mmDepth = depth.value;
-    console.log(mmDepth);
+    if(depth.value==1){
+        walkthrough_button.style.display = 'block';
+    }
+    if(depth.value >1){
+        console.log("should go away")
+        walkthrough_button.style.display = 'none';
+    }
+    computer.updateDepth(mmDepth);
 });
+
+walkthrough_button.addEventListener('click', ()=>{
+    // if(walkthrough_checkbox.checked){
+    //     walkthrough_checkbox.checked = false;
+    // }
+    // else{
+    //     walkthrough_checkbox.checked = true;
+    // }
+    if(walkthrough.style.display === 'none'){
+        walkthrough.style.display = 'block';
+        walkthrough_button.textContent = 'Hide Minimax Walkthrough'
+    }
+    else{
+        walkthrough.style.display = 'none';
+        walkthrough_button.textContent = 'Hide Minimax Walkthrough'
+    }
+    }
+)
 
 nextMove.addEventListener('click',()=>{
     if(currentPlayer ==1){
@@ -224,7 +258,7 @@ for(let i = 0; i<tableRow.length; i++){
         cell = tableRow[i].children[j];
         cell.addEventListener('click',(cell)=>{
             if(currentPlayer ===-1){
-                console.log(j);
+              //  console.log(j);
                 // playerMove(cell,j);
                 makeMove(-1,j);
             }
@@ -260,10 +294,12 @@ function makeMove(player,column){
                 if(player==-1){
                     playerTurn.textContent = `You won!`;
                     playerTurn.style.color = player1Color;
+                    currentPlayer = -1;
                 }
                 else{
                     playerTurn.textContent = `Computer won!`;
                     playerTurn.style.color = player2Color;
+                    currentPlayer = -1;
                 }
                 reset.textContent = 'Play Again';
             }  

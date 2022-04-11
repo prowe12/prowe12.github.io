@@ -26,6 +26,35 @@
         <!-- <h3 class = "player-turn"></h3> -->
 
         <div class = "flex-container">
+
+        <div class = "mm-walkthrough">
+            <h2 id = "walkthrough-function">MAX</h2>
+            <h3 id = "walkthrough-depth">Depth = 0, Player = Computer</h3>
+            <par id = "walkthrough-explanation">Finding <strong id = "walkthrough-function"> MAX</strong> score for playing column <strong id = "walkthrough-move">0</strong></par>
+            <table id = "walkthrough-max-table">
+                <caption>Max Values for Computer</caption>
+                <tr>
+                    <td>Column</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
         <div class = "game">
 
             <table id = "board">
@@ -159,12 +188,13 @@
         </div>
 
         <div class = "controls">
-            <div class="reset button">Reset</div>
+            <div class="reset button" class = "button">Reset</div>
+            <!-- <button type = "button" class = "button" id = "reset">Reset</button> -->
 
 
             <div class = "space"></div>
 
-            <div class = "automaticplay">
+            <div class = "automaticplay button">
                 Select how you would like to play: <br>
                   <input type="radio" id="auto" name="autoMan" value="auto" checked = "checked">
                   <label for="auto">Computer plays automatically</label><br>
@@ -174,16 +204,29 @@
 
             <div class = "space"></div>
 
-            <div class = "next-move">Next Move</div>
+            <div class = "next-move button">Next Move</div>
 
             <div class = "space"></div>
 
-            <div class = "slidecontainer">Set Minimax Depth: <br>
-                1<input type = "range" min = "1" max = "4" value = "1" class = "slider" >4
+            <div class = "slidecontainer button">Set Minimax Depth: <br>
+                1<input type = "range" min = "1" max = "4" steps = "1" value = "1" class = "slider" >4
             </div>
+
+            <div class = "space"></div>
+
+            <div class = "walkthrough button">Show Minimax Walkthrough
+                <!-- <input type = "checkbox" value = "mm" id = "walkthrough-checkbox">
+                <label for = "mm">Minimax Walkthrough</label><br> -->
+            </div>
+
         </div>
 
+
+
     </div>
+
+
+    <center><p><a href = "solvingCF.html">Read here</a> for more information on how the computer plays Connect Four.</p> </center>
 
         <!-- <div class="reset">Reset</div> -->
         <!-- <div class = "next-move">Next Move</div> -->
@@ -196,9 +239,9 @@
     <!-- A little extra space on the bottom -->
     <div class="spacebelow">
     </div>
-
+<!-- 
     <script src = "connect-four/computerPlayer.js"></script>
-    <script src = "connect-four/connectFour.js"></script>
+    <script src = "connect-four/connectFour.js"></script> -->
 
     <!-- Standardized footer so one style for all -->
     <footer>
