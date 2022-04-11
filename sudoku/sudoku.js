@@ -338,6 +338,8 @@ var forwardToEndButton = document.getElementById("forwardToEnd");
 var stepButton = document.getElementById("step");
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
+var speedSlider = document.querySelector(".slider");
+
 //var pauseButton = document.getElementById("pauseButton");
 
 let moves = [];
@@ -363,17 +365,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Start the slider event listener
     //TODO why is this here instead of below?
-    for(let obj of document.querySelectorAll(".anim-speed")) {
-        obj.addEventListener("change", function(event) {
-            ANIMATION_SPEED = obj.value;
-            for(let slider of document.querySelectorAll(".anim-speed")) {
-                if(slider.value !== obj.value) {
-                    slider.value = obj.value;
-                    console.log(ANIMATION_SPEED);
-                }
-            }       
-        });
-    }
+    // for(let obj of document.querySelectorAll(".anim-speed")) {
+    //     obj.addEventListener("change", function(event) {
+    //         ANIMATION_SPEED = obj.value;
+    //         console.log(ANIMATION_SPEED);
+    //         for(let slider of document.querySelectorAll(".anim-speed")) {
+    //             if(slider.value !== obj.value) {
+    //                 slider.value = obj.value;
+    //                 console.log(ANIMATION_SPEED);
+    //             }
+    //         }       
+    //     });
+    // }
 });
   
 
@@ -381,6 +384,23 @@ document.addEventListener("DOMContentLoaded", function () {
 /*****************************************************
     EVENT LISTENERS FOR USER GENERATED EVENTS
 ******************************************************/
+
+
+speedSlider.addEventListener('click',() => {
+
+    /* Get the new speed from the slider */
+    ANIMATION_SPEED = speedSlider.value;
+    console.log(ANIMATION_SPEED);
+
+
+    if (running) {
+        // If the solver animation is running, stop it
+        // and restart with the new speed
+        timeId = setInterval(populator, delay);
+
+    };
+
+});
 
 
 // Get the desired puzzle based on the drop-down menu value
@@ -511,8 +531,7 @@ playButton.addEventListener("click", function() {
         running = false;  
         // Change button text to "Play"
         playPause = document.getElementById("playPause");
-        playPause.innerText = "Play";
-              
+        playPause.innerText = "Play";              
     }
 });
 
