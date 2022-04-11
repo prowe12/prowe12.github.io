@@ -1,6 +1,6 @@
 class computerPlayer{
     constructor(player, opponent, board, maxDepth){
-        console.log("making player");
+        // console.log("making player");
         this.player = player;
         this.opponent = opponent;
         this.realBoard = board;
@@ -19,7 +19,12 @@ class computerPlayer{
 
     updateDepth(newDepth){
         this.maxDepth = newDepth;
-        console.log("updated depth: ",this.maxDepth);
+        // console.log("updated depth: ",this.maxDepth);
+    }
+
+    testCalc(){
+        let test = [0,-1,0,0];
+        // console.log("test = ",test," score = ",this.calculateFour(test));
     }
 
     updateBoard(newBoard){
@@ -27,14 +32,14 @@ class computerPlayer{
     }
 
     makeMove(){     
-        // console.log("computer make move");  
-        // console.log("real board",this.realBoard);
-        //console.log("depth ",this.maxDepth);
+        // // console.log("computer make move");  
+        // // console.log("real board",this.realBoard);
+        //// console.log("depth ",this.maxDepth);
         let depth = 0;
         this.playBoard = this.copyBoard(this.playBoard, this.realBoard);
-        // console.log("playboard ",this.playBoard);
+        // // console.log("playboard ",this.playBoard);
         let nextPlay = this.getNextPlay(depth, this.maxDepth, this.playBoard);
-        // console.log("returning ", nextPlay);
+        // // console.log("returning ", nextPlay);
         return nextPlay;
     }
 
@@ -49,27 +54,27 @@ class computerPlayer{
 
     getNextPlay(depth, max){
         let res =  this.minimax(depth, max);
-        // console.log("getNextPlay ",res);
+        // // console.log("getNextPlay ",res);
         return res;
     }
 
     minimax(depth, maxDepth){
         let actVal = this.maxValue(depth, maxDepth, -1);
-        // console.log("minimax ",actVal[0]);
+        // // console.log("minimax ",actVal[0]);
         return actVal[0];
     }
 
      maxValue(depth, prevPlay){
-        //  console.log("maxVal");
-        //console.log("max depth ",depth);
+        //  // console.log("maxVal");
+        //// console.log("max depth ",depth);
          let actVal = [];
          actVal.length = 2;
          if(this.cutoffTest(depth)){
-            //  console.log("evaluating and returning");
-             const evaluateBoard= this.evaluate(this.player);
+            //  // console.log("evaluating and returning");
+             const evaluateBoard= this.evaluate();
              actVal[0] = prevPlay;
              actVal[1] = evaluateBoard;
-             console.log("max returning score ",evaluateBoard," for move ",prevPlay);
+             //// console.log("max returning score ",evaluateBoard," for move ",prevPlay);
              return actVal;
          }
      
@@ -79,15 +84,15 @@ class computerPlayer{
          let validActs = this.getAction();
          for(let i = 0; i< validActs.length; i++){
              let a = validActs[i];
-            //  console.log(a);
+            // // console.log("\t \t \t COMPUTER TAKING ACTION ",a);
              if(a == -1){
                  continue;
              }
              this.playBoard = this.result(a, this.player);
              let minA = this.minValue(depth, a)[1];
-            //  console.log("minVal action = ",a," value = ",minA);
-             //console.log(this.playBoard);
-             if(minA >=value){
+            //  // console.log("minVal action = ",a," value = ",minA);
+             //// console.log(this.playBoard);
+             if(minA >= value){
                  value = minA;
                  action = a;
                  actVal[0] = action;
@@ -96,25 +101,26 @@ class computerPlayer{
 
              this.undoResult(a);
          }
+         //// console.log("(no cutoff) max returning score ",actVal[1]," for move ",actVal[0])
          return actVal;
     }
 
     minValue(depth, prevPlay){
 
-        // console.log("minVal");
-        // console.log("depth ",depth);
-        //console.log("min value");
-        //console.log("prev play: ",prevPlay);
-       // console.log("board: ");
-        //console.log(board);
+        // // console.log("minVal");
+        // // console.log("depth ",depth);
+        //// console.log("min value");
+        //// console.log("prev play: ",prevPlay);
+       // // console.log("board: ");
+        //// console.log(board);
     
         let actVal = [];
         actVal.length = 2;
         if(this.cutoffTest( depth)){
-            const evaluateBoard= this.evaluate(this.opponent);
+            const evaluateBoard= this.evaluate();
             actVal[0] = prevPlay;
             actVal[1] = evaluateBoard;
-             console.log("min returning score ",evaluateBoard," for move ",prevPlay);
+           // // console.log("min returning score ",evaluateBoard," for move ",prevPlay);
             return actVal;
         }
     
@@ -124,6 +130,7 @@ class computerPlayer{
         let validActs = this.getAction();
         for(let i = 0; i<validActs.length; i++){
             let a = validActs[i];
+            //// console.log("\t \t \t MIN TAKING ACTION ",a)
             if(a==-1){
                 continue;
             }
@@ -138,22 +145,28 @@ class computerPlayer{
 
             this.undoResult(a);
         }
-        //console.log("taking action ",actVal);
+        //// console.log("(no cutoff) min returning score ",actVal[1]," with move ",actVal[0]);
         return actVal;
     }
 
     result(column,  player){
         if(this.playBoard[0][column]!==0){
+            // console.log("board full")
             return this.playBoard;
         }
     
-        for(let i = 0; i< this.playBoard.length-1; i++){
+        for(let i = 0; i< this.playBoard.length; i++){
+            if(i===this.playBoard.length-1){
+                this.playBoard[i][column] = player;
+                break;
+            }
             if(this.playBoard[i+1][column]!==0){
                 this.playBoard[i][column] = player;
                 break;
             }
         }
-        // console.log(this.playBoard);
+        //// console.log("player ",player," making move ",column,". board after = ",this.copyBoard(this.makeNewBoard(),this.playBoard));
+        // // console.log(this.playBoard);
     
         return this.playBoard;
     }
@@ -182,265 +195,30 @@ class computerPlayer{
         return validActs;
     }
 
-    /*
+    
+/*
 * The following are the evaluation functions that minimax uses to evaluate the score for a board.
 * A board's score is based on how many opportunities there are for a player to have a run of four,
 * and how close that player currently is to having a run of four.
 */
 
+evaluate(){
+    //// console.log("evaluating board ",this.copyBoard(this.makeNewBoard(),this.playBoard),"...")
+    //// console.log("VERTICAL");
+    let vertScore = this.vertical();
+    // // console.log("HORIZONTAL");
+    let horizScore = this.horizontal();
+    // // console.log("ASCEND");
+    let ascendScore = this.ascend();
+    // // console.log("DESCEND");
+    let descendScore = this.descend();
 
+    let computerScore = vertScore[0]+horizScore[0]+ascendScore[0]+descendScore[0];
+    let humanScore = vertScore[1]+horizScore[1]+ascendScore[1]+descendScore[1];
+    // // console.log("computer score = ",computerScore," human score = ",humanScore," total = ",(computerScore+humanScore))
+    return computerScore+humanScore;
+}
 
-    evaluate(player){
-        let evaluateBoard= 0;
-        evaluateBoard= evaluateBoard- (this.vertical( -1*player) + this.horizontal(-1*player)+ this.ascend(-1*player)+this.descend(-1*player));
-        evaluateBoard= evaluateBoard+ (this.vertical(player) + this.horizontal(player)+ this.ascend(player)+this.descend(player));
-        return evaluateBoard;
-    }
-
-    vertical(player){
-        //for each column on the board, calculate 
-        //the vertical score of that column
-        let vertScore = 0;
-        for(let col = 0; col < 7; col++){
-            //count the number of blank tiles at the top of the column
-            let blank = 0;
-            let row;
-            for(row = 0; row < this.playBoard.length; row++){
-                if(this.playBoard[row][col]===0){
-                    blank++;
-                }
-                else{
-                    break;
-                }
-            }
-
-            //count the number of the player's tiles at the top
-            let playerCount = 0;
-            for(row = row; row < this.playBoard.length; row++){
-                if(this.playBoard[row][col] !== player){
-                    break;
-                }
-                else{
-                    playerCount++;
-                }
-            }
-
-            //calculate the potential score for this column
-            if(playerCount+blank < 4){
-                vertScore +=0;
-            }
-            else{
-                vertScore += this.calcHeuristic(playerCount);
-            }
-        }
-        return vertScore;
-    }
-
-    horizontal(player){
-        let horizScore = 0;
-        let row;
-        let blankCount;
-        let playerCount;
-        
-        //calculate the potential score for every row in the board
-        for(row = 0; row < this.playBoard.length; row++){
-            for(let col = 0; col < 7; col++){
-                //if you come across a blank slot, count the blank tiles
-                if(this.playBoard[row][col]==0){
-                    blankCount += this.blankTileRow(row,col)[0];
-                    col = this.blankTileRow(row,col)[1];
-                }
-
-                //if you come across a tile of your own, increment
-                if(this.playBoard[row][col] == player){
-                    playerCount++;
-                }
-
-                //if you come across opponent's tile, check for points
-                //and continue the search
-                if(this.playBoard[row][col]== -1*player){
-                    //if there is no room for a run of four, continue
-                    if(blankCount + playerCount <4){
-                        blankCount = 0 ;
-                        playerCount = 0;
-                        continue;
-                    }
-                    else{
-                        horizScore += this.calcHeuristic(playerCount);
-                    }
-                }
-            }
-            //check for a run at the end of the row
-            //ensure you don't double count if the last tile was opponent
-            if(this.playBoard[row][6] != (-1*player) && (blankCount+playerCount >=4)){
-                horizScore +=this.calcHeuristic(playerCount);
-            }
-        }
-        return horizScore;
-    }
-
-    blankTileRow(row, startCol){
-        let ret = [];
-        ret.length = 2;
-        let count = 0;
-        let col;
-        for(col = startCol; col<7; col++){
-            if(this.playBoard[row][col]!=0){
-                break;
-            }
-            count++;
-        }
-        ret[0] = count;
-        ret[1] = col;
-        return ret;
-    }
-
-    ascend(player){
-        let ascendScore = 0;
-        //for each row with enough space for a run of four, evaluate score
-        for(let row = 3; row < this.playBoard.length; row++){
-            //cut off the columns when there is no longer room for a run
-            for(let col = 0; col < this.playBoard[row].length-3; col++){
-                //if the starting position is a valid start for a run of four,
-                //check for room and add to the score
-                if(this.playBoard[row][col]!=(-1*player)){
-                    ascendScore += this.ascendRun(player,row,col);
-                }
-
-            }
-        }
-        return ascendScore;
-    }
-
-    ascendRun(player,startRow,startCol){
-        let blankCount = 0;
-        let playerCount = 0;
-        let col = startCol;
-        for(let row = startRow; row>(startRow-4); row--){
-            //if you come across a blank spot in the run, count the blank tiles
-            if(this.playBoard[row][col]==0){
-                blankCount = this.blankTileAscend(row,col)[0];
-                row = this.blankTileAscend(row,col)[1];
-                col = this.blankTileAscend(row,col)[2];
-            }
-            if(col==this.playBoard[row].length){
-                break;
-            }
-
-            //if you come across your own player, increment
-            if(this.playBoard[row][col]==player){
-                playerCount++;
-            }
-
-            //if you come across the opponent, then since we are only checking
-            //for this specific slot of four, we know that there is no room to score
-            //and so we return 0
-            if(this.playBoard[row][col]==(-1*player)){
-                return 0;
-            }
-            col++;
-        }
-        //if there is room for a run, return the heuristic score
-        if(blankCount + playerCount >=4){
-            return this.calcHeuristic(playerCount);
-        }
-        else{
-            return 0;
-        }
-    }
-
-    blankTileAscend( startRow, startCol){
-        let ret = [];
-        ret.length = 3;
-        let count = 0;
-        let row;
-        let col = startCol;
-        for(row = startRow; row > 0; row--){
-            if(this.playBoard[row][col]!=0){
-                break;
-            }
-            count++;
-            col++;
-        }
-        ret[0] = count;
-        ret[1] = row;
-        ret[2] = col;
-        return ret;
-    }
-
-    descend(player){
-        let descendScore = 0;
-        //for each row with enough space for a run of four, evaluate score
-        for(let row = 0; row < this.playBoard.length-3; row++){
-            //cut off the columns when there is no longer room for a run
-            for(let col = 0; col < this.playBoard[row].length-3; col++){
-                //if the starting position is a valid start for a run of four,
-                //check for room and add to the score
-                if(this.playBoard[row][col]!=(-1*player)){
-                    descendScore += this.descendRun(player,row,col);
-                }
-
-            }
-        }
-        return descendScore;
-    }
-
-    descendRun(player,startRow,startCol){
-        let blankCount = 0;
-        let playerCount = 0;
-        let col = startCol;
-        for(let row = startRow; row<this.playBoard.length; row++){
-            //if you come across a blank spot in the run, count the blank tiles
-            if(this.playBoard[row][col]==0){
-                blankCount = this.blankTileDescend(row,col)[0];
-                row = this.blankTileDescend(row,col)[1];
-                col = this.blankTileDescend(row,col)[2];
-            }
-            if(row==this.playBoard.length){
-                break;
-            }
-
-            //if you come across your own player, increment
-            if(this.playBoard[row][col]==player){
-                playerCount++;
-            }
-
-            //if you come across the opponent, then since we are only checking
-            //for this specific slot of four, we know that there is no room to score
-            //and so we return 0
-            if(this.playBoard[row][col]==(-1*player)){
-                return 0;
-            }
-            col++;
-        }
-        //if there is room for a run, return the heuristic score
-        if(blankCount + playerCount >=4){
-            return this.calcHeuristic(playerCount);
-        }
-        else{
-            return 0;
-        }
-    }
-
-    blankTileDescend( startRow, startCol){
-        let ret = [];
-        ret.length = 3;
-        let count = 0;
-        let row;
-        let col = startCol;
-        for(row = startRow; row < this.playBoard.length; row++){
-            if(this.playBoard[row][col]!=0){
-                break;
-            }
-            count++;
-            
-            col++;
-        }
-        ret[0] = count;
-        ret[1] = row;
-        ret[2] = col;
-        return ret;
-    }
 
     calcHeuristic(counter){
         if (counter === 0){
@@ -456,13 +234,164 @@ class computerPlayer{
             return 100;
         }
         else{
-            return 10000;
+            return 1000;
         }
     }
+
+
+
+    makeNewBoard(){
+        let board = [];
+        board.length = 6;
+        for(let i = 0; i<6; i++){
+            board[i] = [];
+            board[i].length = 7;
+        }
+        return board;
+    }
+
+    horizontal(){
+        let computerScore = 0;
+        let humanScore = 0;
+
+
+        let scores = []
+        scores.length = 2
+
+        for(let row = 0; row<=5; row++){
+            for(let col = 0; col <= 3; col++){
+                let testFour = [];
+                testFour.length = 4;
+                testFour[0] = this.playBoard[row][col]
+                testFour[1] = this.playBoard[row][col+1]
+                testFour[2] = this.playBoard[row][col+2]
+                testFour[3] = this.playBoard[row][col+3]
+
+                scores = this.calculateFour(testFour)
+                computerScore += scores[0]
+                humanScore += scores[1]
+            }
+        }
+        return [computerScore, humanScore]
+    }
+
+    vertical(){
+        let computerScore = 0;
+        let humanScore = 0;
+
+
+        let scores = []
+        scores.length = 2
+
+        for(let col = 0; col <= 3; col++){
+            for(let row = 0; row<=2; row++){
+                let testFour = []
+                testFour.length = 4
+                testFour[0] = this.playBoard[row][col]
+                testFour[1] = this.playBoard[row+1][col]
+                testFour[2] = this.playBoard[row+2][col]
+                testFour[3] = this.playBoard[row+3][col]
+
+                scores = this.calculateFour(testFour)
+                computerScore += scores[0]
+                humanScore += scores[1]
+            }
+        }
+        return [computerScore, humanScore]
+    }
+
+    ascend(){
+        let computerScore = 0;
+        let humanScore = 0;
+
+
+        let scores = []
+        scores.length = 2
+
+        for(let row = 3; row<=5; row++){
+            for(let col = 0; col <= 3; col++){
+                let testFour = []
+                testFour.length = 4
+                testFour[0] = this.playBoard[row][col]
+                testFour[1] = this.playBoard[row-1][col+1]
+                testFour[2] = this.playBoard[row-2][col+2]
+                testFour[3] = this.playBoard[row-3][col+3]
+
+                scores = this.calculateFour(testFour)
+                computerScore += scores[0]
+                humanScore += scores[1]
+            }
+        }
+        return [computerScore, humanScore]
+    }
+
+    descend(){
+        let computerScore = 0;
+        let humanScore = 0;
+
+
+        let scores = []
+        scores.length = 2
+
+        for(let row = 0; row<=2; row++){
+            for(let col = 0; col <= 3; col++){
+                let testFour = []
+                testFour.length = 4
+                testFour[0] = this.playBoard[row][col]
+                testFour[1] = this.playBoard[row+1][col+1]
+                testFour[2] = this.playBoard[row+2][col+2]
+                testFour[3] = this.playBoard[row+3][col+3]
+
+                scores = this.calculateFour(testFour)
+                computerScore += scores[0]
+                humanScore += scores[1]
+            }
+        }
+        return [computerScore, humanScore]
+    }
+
+    calculateFour(arr){
+        if(arr.includes(-1) && arr.includes(1)){
+            // // console.log("included both (returning 0) ",arr);
+            return [0,0];
+        }
+
+        if(arr.includes(1)){
+            let counter = 0;
+            for(let i = 0; i<4; i++){
+                if(arr[i]===1){
+                    counter++;
+                }
+            }
+            // console.log("included 1  ",arr);
+            return [this.calcHeuristic(counter),0];
+        }
+
+        if(arr.includes(-1)){
+            let counter = 0;
+            for(let i = 0; i< 4; i++){
+                if(arr[i]===-1){
+                    counter++;
+                }
+            }
+            // console.log("included -1  ",arr);
+            return[0,(-1*this.calcHeuristic(counter))];
+        }
+        //// console.log("included neither ",arr);
+        return [0,0];
+    }
+
+    /*
+     * The following methods check to see is there is a winning state on the board.
+     * It checks whether there is a run of four matching tiles in each row, column, ascending, and descending state.
+     * 
+     */
 
     mmWinCheck(){
         return this.mmHorizontalCheck() || this.mmVerticalCheck() || this.mmDiagLRCheck() || this.mmDiagRLCheck();
     }
+
+
 
     mmMatchCheck(one, two, three, four){
         return one == two && one == three && one == four && one !=0;
@@ -519,5 +448,5 @@ class computerPlayer{
                     }
             }
         }
-    }
+    } 
 }

@@ -8,9 +8,15 @@ h1{
     text-align: center;
 }
 
-/* h3{
+h2{
     text-align: center;
-} */
+} 
+
+h3{
+    text-align: center;
+} 
+
+
 
 .player-turn{
     text-align: center;
@@ -52,6 +58,14 @@ h1{
     /* border: 1px solid black; */
 }
 
+#walkthrough-max-table{
+    position: relative;
+    color: 'white';
+    background-color: 'white';
+    width: 80%;
+    padding: 5px;
+    border: 1px black;
+}
 
 
 .row{
@@ -133,6 +147,25 @@ h1{
     background: white;
     cursor: grab; */
 }
+
+.walkthrough{
+    display: block;
+    margin: auto;
+     border: none; 
+    background: none;
+    color: black;
+    
+    /* width: 40%; */
+    text-align: center;
+    cursor: grab;
+}
+
+.walkthrough:hover{
+    color: none;
+    background-color: none;
+    border-color: none;
+}
+
 
 .slidecontainer{
     display: block;

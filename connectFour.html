@@ -26,6 +26,35 @@
         <!-- <h3 class = "player-turn"></h3> -->
 
         <div class = "flex-container">
+
+        <div class = "mm-walkthrough">
+            <h2 id = "walkthrough-function">MAX</h2>
+            <h3 id = "walkthrough-depth">Depth = 0, Player = Computer</h3>
+            <par id = "walkthrough-explanation">Finding <strong id = "walkthrough-function"> MAX</strong> score for playing column <strong id = "walkthrough-move">0</strong></par>
+            <table id = "walkthrough-max-table">
+                <caption>Max Values for Computer</caption>
+                <tr>
+                    <td>Column</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
         <div class = "game">
 
             <table id = "board">
@@ -183,11 +212,21 @@
                 1<input type = "range" min = "1" max = "4" steps = "1" value = "1" class = "slider" >4
             </div>
 
+            <div class = "space"></div>
+
+            <div class = "walkthrough button">Show Minimax Walkthrough
+                <!-- <input type = "checkbox" value = "mm" id = "walkthrough-checkbox">
+                <label for = "mm">Minimax Walkthrough</label><br> -->
+            </div>
+
         </div>
 
-        <p><a href = "connect-four/solvingCF.html">Read here </a>for more information on how the computer plays Connect Four.</p>
+
 
     </div>
+
+
+    <center><p><a href = "solvingCF.html">Read here</a> for more information on how the computer plays Connect Four.</p> </center>
 
         <!-- <div class="reset">Reset</div> -->
         <!-- <div class = "next-move">Next Move</div> -->
