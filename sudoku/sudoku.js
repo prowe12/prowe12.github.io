@@ -245,8 +245,6 @@ function loadStartingValues(puzzle='easy'){
 populator = function()  {
     if (imove < moves.length) {
         populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
-        console.log("Running populator on move:");
-        console.log(moves[imove]);
         imove++;
     }
     else {
@@ -550,7 +548,8 @@ speedSlider.addEventListener('click',() => {
         clearInterval(timeId);
 
         // Restart play at the new speed
-        timeId = setInterval(populator, delay);
+        //TODO: I think this only plays forward!
+        timeId = setInterval(playOrRewind, delay);
     };
 });
 
@@ -582,6 +581,7 @@ playButton.addEventListener("click", function() {
 
     // Start play using the current delay;
     timeId = setInterval(populator, delay);
+    playOrRewind = populator;
 });
 
 // Event listener for the rewind button <<
@@ -636,6 +636,7 @@ rewindButton.addEventListener("click", function() {
 
     // Rewind at current delay;
     timeId = setInterval(depopulator, delay);
+    playOrRewind = depopulator;
     return;
  });
 

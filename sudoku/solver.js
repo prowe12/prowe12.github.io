@@ -182,7 +182,31 @@ function isComplete(board) {
  * game play or when the solver is working.
  * @param {array} grid 
  */
- function updateMoves(board, moves){
+//  function updateMoves(board, moves){
+//     nrows = board.length;
+//     ncols = board[0].length;
+
+//     grid = getGrid(board);
+
+//     // Put all non-zero values into the grid
+//     for (i=0; i<nrows; i++){
+//         for (j=0; j<ncols; j++){
+//             if (!(board[i][j].fixed)) {
+//                 moves.push([i, j, grid[i][j], 'backtrack']);
+//             }
+//         }
+//     }
+//     return moves;
+// }
+
+/**
+ * Populate the Sudoku board graphic with the values from grid
+ * This should only be done when a new puzzle is selected, not during
+ * game play or when the solver is working.
+ * @param board
+ * @param moves
+ */
+ function updateChangedMoves(board, moves){
     nrows = board.length;
     ncols = board[0].length;
 
@@ -200,13 +224,15 @@ function isComplete(board) {
 }
 
 
+
 /**
  * Backtracking search algorithm
  * @param assignment   The board, an array of arrays of elements of class variable.
  * @param constraints
- * @param boardPlot  Class for plotting the board
+ * @param moves
+ * @param depth  The depth of the backtracking
 */
-function backtrack(assignment, constraints, moves){
+function backtrack(assignment, constraints, moves, depth){
     let domainVals;
     let ac3result;
 
@@ -216,6 +242,7 @@ function backtrack(assignment, constraints, moves){
     let unasgn = getNextUnassigned(assignment);
 
     for (let d of unasgn.domain) {
+        console.log("On depth: " + depth + ", row,col: " + unasgn.row + ", " + unasgn.col + ", domain: " + d);
 
         // Replace the domain of x with d in the assignment
         assignment[unasgn.row][unasgn.col].replace(d);       // replace domain of x with d
@@ -223,7 +250,7 @@ function backtrack(assignment, constraints, moves){
         // Update the graphics: here is where we have to refresh a bunch of boxes that changed
         //TODO: only update the boxes that changed, and add a new style for this
         //updateBoard(assignment);
-        moves = updateMoves(assignment, moves);
+        moves = updateChangedMoves(assignment, moves);
         //moves.push([unasgn.row, unasgn.col, d, 'backtrack']);
 
         // Deep copy the board. Any fixed values (eventually "final") will never be changed,
@@ -256,8 +283,7 @@ function backtrack(assignment, constraints, moves){
         // The prefix to the method here is "backtrack"
         [ac3result, moves] = arcConsistency3(tempBoard, constraints, moves, "backtrackPlus");
         if (ac3result != -1) {
-
-            [result, moves] = backtrack(tempBoard, constraints, moves);
+            [result, moves] = backtrack(tempBoard, constraints, moves, depth++);
                                                   //   assignment is returned
             if (result !== -1) {                  //   If it worked:
                 return [result, moves];           //  unwind or return to solve
@@ -269,7 +295,6 @@ function backtrack(assignment, constraints, moves){
         // will return FAIL (-1)
         // But we do need it for the graphics
         moves.push([unasgn.row, unasgn.col, d, 'backtrack']); 
-        console.log([unasgn.row, unasgn.col, d, 'backtrack'])
         
     }
     return [-1, moves];   // Fail, but keep the moves
@@ -400,7 +425,7 @@ function solve(original) {
     [board, moves] = arcConsistency3(board, constraints, moves, "final");
 
     // If it isn't solved, using backtracking with AC-3
-    [board, moves] = backtrack(board, constraints, moves);
+    [board, moves] = backtrack(board, constraints, moves, 0);
 
     // Final check: check all constraints again    
     boardValid = qcBoard(board);

@@ -27,22 +27,22 @@
  * game play or when the solver is working.
  * @param {array} grid 
  */
- function updateBoard(board){
-    nrows = board.length;
-    ncols = board[0].length;
+//  function updateBoard(board){
+//     nrows = board.length;
+//     ncols = board[0].length;
 
-    grid = getGrid(board);
+//     grid = getGrid(board);
 
-    // Put all non-zero values into the grid
-    for (i=0; i<nrows; i++){
-        for (j=0; j<ncols; j++){
-            if (!(board[i][j].fixed)) {
-                populateSquare(i, j, grid[i][j], 'backtrack');
-            }
-        }
-    }
+//     // Put all non-zero values into the grid
+//     for (i=0; i<nrows; i++){
+//         for (j=0; j<ncols; j++){
+//             if (!(board[i][j].fixed)) {
+//                 populateSquare(i, j, grid[i][j], 'backtrack');
+//             }
+//         }
+//     }
 
-}
+// }
 
 
 /**
@@ -60,8 +60,8 @@
 
     // If the value is outside the range, throw error
     if (!(value in allowedValues)) {
-        console.log("Bad value in square at " + irow + ", " + icol + ": " + value);
-        throw "Bad value for Sudoku square";
+        msg = "Bad value in square at " + irow + ", " + icol + ": " + value;
+        throw msg;
     } 
     
     // The Sudoku cell at irow, icol
@@ -170,7 +170,6 @@ function updateGridFromMoves(grid, moves, location) {
     // Put all values into the grid
     for (i=0; i<nrows; i++){
         for (j=0; j<ncols; j++){
-            console.log("method: " + newgrid[i][j][1]);
             populateSquare(i, j, newgrid[i][j][0], newgrid[i][j][1]);
         }
     };
