@@ -87,30 +87,29 @@ td {
 }
 
 /* styling for numbers determined with AC-3 */
-.sudokubox.ac3 {
-   color: blue;
+.sudokubox.AC3 {
+   color: red;
 }
 
 .sudokubox.backtrack {
    color: green;
 }
 
-.sudokubox.final {
-   color: red;
+.sudokubox.backtrackPlusAC3 {
+   color: cyan;
 }
 
-/* Styling for the buttons */
-#playPause {
-   width: 50px;
-}
-#fastForward {
-   width: 50px;
-}
-#rewind {
-   width: 50px;
+.sudokubox.finalAC3 {
+   color: blue;
 }
 
 
+
+
+/* Control button overrides for standard button  */
+.controlButton {
+   padding: 4px 4px;
+}
 
 /* Styling for the slider needs to be done for every browser */
 /* First remove the auto-styling */

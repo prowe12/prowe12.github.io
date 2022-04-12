@@ -183,6 +183,43 @@ function loadStartingValues(puzzle='easy'){
 /**
  * Reset the board and the state of play (i.e. filling in the board) to the beginning
  */
+ function runBacktrackSolver() {
+     // Highlight the button for the selected solver, and put the other back to normal
+     let solverMethod = document.getElementById("solverDemoBacktrack"); 
+     solverMethod.style.setProperty("background-color", "rgb(17, 49, 30)"); //"rgb(17, 49, 30)");
+     solverMethod.style.setProperty("border", "4px solid yellow"); // rgb(25, 75, 45)");
+ 
+     let nonsolverMethod = document.getElementById("playSudokuSolver"); 
+     nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
+     nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)"); 
+ 
+     // Reset the state of play and the board
+     playReset();
+     boardReset();   
+ 
+     // Print a message while we wait for the solver
+     let state = document.querySelector(".state");
+     state.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
+     let explanation = document.querySelector(".explanation");
+     explanation.innerHTML = "<p></p>";
+
+     // Solve the board using backtracking alone, using backtrack, in backtrack.js
+     let result = backtracker(originalgrid);
+     finalgrid = originalgrid;
+ 
+     let msg = result[0];
+     moves = result[1]; // row, column, value, method
+ 
+     // We wrote over the original grid, so recreate it
+     originalgrid = loadStartingValues(puzzleType);
+ 
+     // Write the message saying it's been solved
+     state.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p><P>Or choose a new puzzle or solver on the left.</p>";    
+}
+
+/**
+ * Reset the board and the state of play (i.e. filling in the board) to the beginning
+ */
  function playReset() {
     // Reset the state of play
     clearInterval(timeId);
@@ -208,12 +245,19 @@ function loadStartingValues(puzzle='easy'){
 populator = function()  {
     if (imove < moves.length) {
         populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
+        console.log("Running populator on move:");
+        console.log(moves[imove]);
         imove++;
     }
     else {
         clearInterval(timeId);
+        // Finished with solution
+        let state = document.querySelector(".state");
+        state.innerHTML = "<p>Puzzle Completed!</p><p>Continue using controls or choose a different puzzle or solver.</p>";
+        let explanation = document.querySelector(".explanation");
+        explanation.innerHTML = "<p></p>";
         running = false;
-    };
+   };
 };
 
 
@@ -270,10 +314,23 @@ rewindToMove = function(location)  {
 
     // Build the board at the desired location and display it
     updateGridFromMoves(originalgrid, moves, location);
-    
+
     return;
 };
 
+
+
+/** Determine the delay for the graphics display based on the animation speed
+* @param {*} ANIMATION_SPEED The speed from the slider
+* @returns  The delay for filling in boxes in the puzzle
+*/
+function getDelayFromSpeed(ANIMATION_SPEED) {
+    delay = 10**(3-ANIMATION_SPEED/100);
+    if (delay <= 1) {
+        delay = 0;
+    }
+    return delay;
+}
 
 /**
  * Increment the delay from large (slow) to 0 (no delay=>fastest possible speed)
@@ -346,8 +403,8 @@ let moves = [];
 let timeId;
 let imove = 0;
 let running = false;
-let delay = 1000;           // default delay
-let ANIMATION_SPEED = 10;
+let ANIMATION_SPEED = speedSlider.value;
+let delay = 10**(3-ANIMATION_SPEED/100);           // default delay
 
 
 // Set up the default grid after the DOM content is loaded
@@ -355,28 +412,11 @@ document.addEventListener("DOMContentLoaded", function () {
     makeEmptyGrid(9, 9);
     populateBoard(originalgrid);
 
-    // Start with controls disabled, since the user needs to choose a method
-    stepButton.disabled = true;
-    playButton.disabled = true;
-    fastForwardButton.disabled = true;
-    rewindButton.disabled = true;
-    forwardToEndButton.disabled = true;
-    rewindToBegButton.disabled = true;
+    // Reset the state of play and the board
+    playReset();
+    boardReset();   
+    runBacktrackSolver();
 
-    // Start the slider event listener
-    //TODO why is this here instead of below?
-    // for(let obj of document.querySelectorAll(".anim-speed")) {
-    //     obj.addEventListener("change", function(event) {
-    //         ANIMATION_SPEED = obj.value;
-    //         console.log(ANIMATION_SPEED);
-    //         for(let slider of document.querySelectorAll(".anim-speed")) {
-    //             if(slider.value !== obj.value) {
-    //                 slider.value = obj.value;
-    //                 console.log(ANIMATION_SPEED);
-    //             }
-    //         }       
-    //     });
-    // }
 });
   
 
@@ -384,24 +424,6 @@ document.addEventListener("DOMContentLoaded", function () {
 /*****************************************************
     EVENT LISTENERS FOR USER GENERATED EVENTS
 ******************************************************/
-
-
-speedSlider.addEventListener('click',() => {
-
-    /* Get the new speed from the slider */
-    ANIMATION_SPEED = speedSlider.value;
-    console.log(ANIMATION_SPEED);
-
-
-    if (running) {
-        // If the solver animation is running, stop it
-        // and restart with the new speed
-        timeId = setInterval(populator, delay);
-
-    };
-
-});
-
 
 // Get the desired puzzle based on the drop-down menu value
 document.querySelector("#dropdownpuzzle").addEventListener("change", function() {
@@ -417,13 +439,9 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
     makeEmptyGrid(9, 9);
     populateBoard(originalgrid);
 
-    // Start with controls disabled, since the user needs to choose a method
-    stepButton.disabled = true;
-    playButton.disabled = true;
-    fastForwardButton.disabled = true;
-    rewindButton.disabled = true;
-    forwardToEndButton.disabled = true;
-    rewindToBegButton.disabled = true;
+    // Default is Backtracking
+    runBacktrackSolver();
+
     
 });
 
@@ -431,36 +449,37 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
 // Solver demo for backtracking
 document.querySelector("#solverDemoBacktrack").addEventListener("click", function() {
 
-    // Reset the state of play and the board
-    playReset();
-    boardReset();   
+    runBacktrackSolver();
 
-    // Print a message while we wait for the solver
-    let explanation = document.querySelector(`.explanation`);
-    explanation.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
+    // Highlight the button for the selected solver, and put the other back to normal
+    // let solverMethod = document.getElementById("solverDemoBacktrack"); 
+    // solverMethod.style.setProperty("background-color", "rgb(17, 49, 30)"); //"rgb(17, 49, 30)");
+    // solverMethod.style.setProperty("border", "4px solid yellow"); // rgb(25, 75, 45)");
+
+    // let nonsolverMethod = document.getElementById("playSudokuSolver"); 
+    // nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
+    // nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)"); 
+
+    // // Reset the state of play and the board
+    // playReset();
+    // boardReset();   
+
+    // // Print a message while we wait for the solver
+    // let explanation = document.querySelector(`.explanation`);
+    // explanation.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
     
-    // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    let result = backtracker(originalgrid);
-    finalgrid = originalgrid;
+    // // Solve the board using backtracking alone, using backtrack, in backtrack.js
+    // let result = backtracker(originalgrid);
+    // finalgrid = originalgrid;
 
-    let msg = result[0];
-    moves = result[1];
+    // let msg = result[0];
+    // moves = result[1];
 
-    // We wrote over the original grid, so recreate it
-    originalgrid = loadStartingValues(puzzleType);
+    // // We wrote over the original grid, so recreate it
+    // originalgrid = loadStartingValues(puzzleType);
 
-    // Enable the controls
-    stepButton.disabled = false;
-    playButton.disabled = false;
-    fastForwardButton.disabled = false;
-    rewindButton.disabled = false;
-    forwardToEndButton.disabled = false;
-    rewindToBegButton.disabled = false;
-
-    // Write the message saying it's been solved
-    explanation.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p>";
-
-    
+    // // Write the message saying it's been solved
+    // explanation.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p><P>Or choose a new puzzle or solver on the left.</p>";    
 });
 
 
@@ -472,13 +491,26 @@ document.querySelector("#solverDemoBacktrack").addEventListener("click", functio
 // copy this code to a temporary directory and undo all the changes in this branch
 // to find out (then copy the temp dir code back in, fix the problem, and commit)
 document.querySelector("#playSudokuSolver").addEventListener("click", function() {
+
+    // Highlight the button for the selected solver, and put the other back to normal
+    let solverMethod = document.getElementById("playSudokuSolver"); 
+    solverMethod.style.setProperty("background-color", "rgb(17, 49, 30)"); //"rgb(17, 49, 30)");
+    solverMethod.style.setProperty("border", "4px solid yellow"); // rgb(25, 75, 45)");
+
+    let nonsolverMethod = document.getElementById("solverDemoBacktrack"); 
+    nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
+    nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)"); 
+
+ 
     // Reset the state of play and the board
     playReset();
     boardReset();   
 
     // Print a message while we wait for the solver
-    let explanation = document.querySelector(`.explanation`);
-    explanation.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
 
     // Solve the board using AC-3 + backtracking, using solve, in solver.js
     // return an array with a message regarding whether the solver was successful
@@ -492,82 +524,135 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
 
     // We wrote over the original grid, so recreate it
     originalgrid = loadStartingValues(puzzleType);
-
-    // Enable the controls
-    stepButton.disabled = false;
-    playButton.disabled = false;
-    fastForwardButton.disabled = false;
-    rewindButton.disabled = false;
-    forwardToEndButton.disabled = false;
-    rewindToBegButton.disabled = false;
     
     // Write the message saying it's been solved
-    explanation.innerHTML = "<p>I have solved the puzzle using AC-3 and backtracking.</p><p>Use the controls to play the solution.</p>";
+    state.innerHTML = "<p>I have solved the puzzle using AC-3 and backtracking.</p><p>Use the controls to play the solution.</p>";
+});
+
+
+// Event listener for the slider that controls the speed of play or rewind
+speedSlider.addEventListener('click',() => {
+    // The speed varies from: slowest (delay=1000), medium (100), fast (10), fastest (0)
+    // The speed varies from: slowest (delay=1000) to fastest (delay=0)
+    // speed = 0 => delay = 1000, or 10**(3-speed) = 1000
+    // speed = 1 => delay = 100, or 10**2 = 100
+    // speed = 2 => delay = 10, or 10**1 = 10
+    // speed = 3 => delay = 1 (which is converted to 0)
+
+    /* Get the new speed from the slider */
+    ANIMATION_SPEED = speedSlider.value;
+    delay = getDelayFromSpeed(ANIMATION_SPEED);
+
+    if (running) {
+        // If the solver animation is running, stop it
+        // and restart with the new speed
+        // Stop play
+        clearInterval(timeId);
+
+        // Restart play at the new speed
+        timeId = setInterval(populator, delay);
+    };
 });
 
 
 // Event listener for the play button
-//TODO: If you click play twice, it won't pause anymore.
 playButton.addEventListener("click", function() {
 
-    console.log(ANIMATION_SPEED);
+    // Stop play or rewind
+    clearInterval(timeId);
+
+    // Set to running, with explanation
+    running = true;
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Playing Solution.</p>";
 
     if (imove === moves.length) {
-        // Nothing to do, so return
+        // Finished with solution
+        let state = document.querySelector(".state");
+        state.innerHTML = "<p>Puzzle Complete!</p><p>Continue using controls or choose a different puzzle or solver.</p>";
+        let explanation = document.querySelector(".explanation");
+        explanation.innerHTML = "<p></p>";
+        running = false;
         return;
     }
 
-    if (!(running)) {
-        // Start play using the current delay;
-        timeId = setInterval(populator, delay);
-        running = true;
-        // Change button text to "Pause"
-        playPause = document.getElementById("playPause");
-        playPause.innerText = "Pause";
-    }
-    else {
-        // Pause   
-        clearInterval(timeId);
-        running = false;  
-        // Change button text to "Play"
-        playPause = document.getElementById("playPause");
-        playPause.innerText = "Play";              
-    }
+    // Get the speed from the slider, and the delay
+    ANIMATION_SPEED = speedSlider.value;
+    delay = getDelayFromSpeed(ANIMATION_SPEED);
+
+    // Start play using the current delay;
+    timeId = setInterval(populator, delay);
 });
+
+// Event listener for the rewind button <<
+// Rewind is tricky. We cannot undo the last move, because we don't know what was in
+// the square before the last move occurred. So instead we have to redo all moves up to
+// that point
+rewindButton.addEventListener("click", function() {
+
+    // Stop play or rewind
+    clearInterval(timeId);
+
+    // We will be rewinding, so set running to true and print a message
+    running = true;
+    let state = document.querySelector(".state");
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
+
+    // Check if we are aleady at the beginning or not and display appropriate message. Return if at beginning.
+    if (imove === 0) {
+        // Already at the beginning, so print message and return
+        state.innerHTML = "<p>At the beginning.</p><p>Use controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+        return;
+    }
+    state.innerHTML = "<p>Rewinding.</p>";
+
+    /* Get the new speed from the slider */
+    ANIMATION_SPEED = speedSlider.value;
+    delay = getDelayFromSpeed(ANIMATION_SPEED);
+    
+    // Set the rewind step size, because redrawing the board for all moves every step is very slow
+    let deltai = stepSizeForRewind(imove, delay);
+
+    /**
+     * Depopulate the board, replaying to imove and then moving imove back a box.
+     * Stop after the 0th move (the beginning board)
+     */
+    depopulator = function()  {
+        if (imove > 0) {
+            rewindToMove(Math.max(imove - deltai, 0));
+            imove -= deltai;
+        }
+        else {
+            // We have rewound to the very beginning
+            clearInterval(timeId);
+            imove = 0;
+            running = false;
+            // Print a message while we wait for the solver
+            let state = document.querySelector(`.explanation`);
+            state.innerHTML = "<p>Rewound to beginning.</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+        };
+    };
+
+    // Rewind at current delay;
+    timeId = setInterval(depopulator, delay);
+    return;
+ });
 
 
 // Event listener for the step button, which fills in the next box only
 stepButton.addEventListener("click", function() {
     running = false;
 
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Taking a single step.</p>";
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
+    running = false;
+
     // Stop play, decrease the delay, and fill in the next box
     clearInterval(timeId);
     populator();
-});
-
-
-// Event listener for the fast forward button >>
-// Stop play, change the delay, and restart play
-fastForwardButton.addEventListener("click", function() {
-    running = true;
-
-    // Change play button text to "Pause"
-    playPause = document.getElementById("playPause");
-    playPause.innerText = "Pause";
-    
-    // Stop play
-    clearInterval(timeId);
-
-    // Increment the delay
-    [delay, delayText] = incrementDelay(delay, "fastforward");
-    
-    // Change button text to delayTest
-    fastForward = document.getElementById("fastForward");
-    fastForward.innerText = delayText;
-
-    // Restart play at the new speed
-    timeId = setInterval(populator, delay);
-
 });
 
 
@@ -583,59 +668,15 @@ forwardToEndButton.addEventListener("click", function() {
         populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
     }
 
-    // Set play/pause button to display "Play"
-    playPause.innerText = "Play";
+    // Finished with solution
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Puzzle Completed!</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
     running = false;
 });
 
 
-// Event listener for the rewind button <<
-// Rewind is tricky. We cannot undo the last move, because we don't know what was in
-// the square before the last move occurred. So instead we have to redo all moves up to
-// that point
-rewindButton.addEventListener("click", function() {
-    running = true;
-
-    // Stop play or rewind
-    clearInterval(timeId);
-
-    if (imove === 0) {
-        // Nothing to do, so return
-        return;
-    }
-
-    // While running in rewind, Pause will be enabled
-    playPause.innerText = "Pause";
-
-    //TODO: Only increment the delay if this button is active
-    // Increment the delay
-    delay = incrementDelay(delay, 'rewind');
-
-    // Set the rewind step size, because redrawing the board for all moves every step is very slow
-    let deltai = stepSizeForRewind(imove, delay);
-
-    /**
-     * Depopulate the board, replaying to imove and then moving imove back a box.
-     * Stop after the 0th move (the beginning board)
-     */
-    depopulator = function()  {
-        if (imove > 0) {
-            rewindToMove(Math.max(imove - deltai, 0));
-            imove -= deltai;
-        }
-        else {
-            clearInterval(timeId);
-            imove = 0;
-            // Since it is stopped, Play is enabled
-            running = false;
-            playPause.innerText = "Play";
-        };
-    };
-
-    // Rewind at current delay;
-    timeId = setInterval(depopulator, delay);
-    return;
- });
 
 
 // Event listener for the rewind to beginning button |<<
@@ -646,16 +687,25 @@ rewindToBegButton.addEventListener("click", function() {
     playReset();
     boardReset();
 
+    // Back at beginning
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
     running = false;
 });
 
 
 
 // Event listener for the pause button
-// pauseButton.addEventListener("click", function() {
-//     // Pause   
-//     clearInterval(timeId);
-// });
+pauseButton.addEventListener("click", function() {
+    // Pause   
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Paused.</p>"
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
+    clearInterval(timeId);
+});
 
 
 // // Function for play/pause button

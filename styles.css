@@ -138,7 +138,13 @@ h1 {
    border-color: rgb(17, 49, 30);
 }
 
+.button:disabled {
+   color: #fff;
+   background-color: rgba(25, 75, 45, 0.693);
+   border-color: rgb(34, 47, 39);
+}
 
+/*TODO: Disable hover if the button is not active */
 .button:hover {
    color: #fff;
    background-color: rgb(17, 49, 30);
