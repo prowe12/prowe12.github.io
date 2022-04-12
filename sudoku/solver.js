@@ -230,34 +230,23 @@ function isComplete(board) {
  * @param assignment   The board, an array of arrays of elements of class variable.
  * @param constraints
  * @param moves
- * @param depth  The depth of the backtracking
 */
-function backtrack(assignment, constraints, moves, depth){
+function backtrack(assignment, constraints, moves) {
     let domainVals;
     let ac3result;
 
     if (isComplete(assignment)) {                // Exit condition: board done!
-        return [assignment, moves];         // This returns to the last call to backtrack
+        return [assignment, moves];              // This returns to the last call to backtrack
     }
     let unasgn = getNextUnassigned(assignment);
 
     for (let d of unasgn.domain) {
-        console.log("On depth: " + depth + ", row,col: " + unasgn.row + ", " + unasgn.col + ", domain: " + d);
-
-        // Replace the domain of x with d in the assignment
-        assignment[unasgn.row][unasgn.col].replace(d);       // replace domain of x with d
-
-        // Update the graphics: here is where we have to refresh a bunch of boxes that changed
-        //TODO: only update the boxes that changed, and add a new style for this
-        //updateBoard(assignment);
-        moves = updateChangedMoves(assignment, moves);
-        //moves.push([unasgn.row, unasgn.col, d, 'backtrack']);
 
         // Deep copy the board. Any fixed values (eventually "final") will never be changed,
         // so they can be references. Everything else must be new so we can revert
         // back if needed.
         let nside = assignment.length;
-        let tempBoard = new Array(nside); //assignment;
+        let tempBoard = new Array(nside);
         for (let irow=0; irow<nside; irow++) {
             tempBoard[irow] = new Array(nside);
             for (let icol=0; icol<nside; icol++) {
@@ -274,6 +263,16 @@ function backtrack(assignment, constraints, moves, depth){
             }
         }
 
+        // Replace the domain of x with d in the assignment
+        tempBoard[unasgn.row][unasgn.col].replace(d);       // replace domain of x with d
+
+        // Update the graphics: here is where we have to refresh a bunch of boxes that changed
+        //TODO: only update the boxes that changed, and add a new style for this
+        //updateBoard(assignment);
+        //moves = updateChangedMoves(assignment, moves);
+        moves.push([unasgn.row, unasgn.col, d, 'backtrack']);
+
+
         // No need to deepcopy the constraints because we never alter them.
         // We always loop through them, creating new constraints for each loop,
         // which are then looped over next time.
@@ -283,7 +282,7 @@ function backtrack(assignment, constraints, moves, depth){
         // The prefix to the method here is "backtrack"
         [ac3result, moves] = arcConsistency3(tempBoard, constraints, moves, "backtrackPlus");
         if (ac3result != -1) {
-            [result, moves] = backtrack(tempBoard, constraints, moves, depth++);
+            [result, moves] = backtrack(tempBoard, constraints, moves);
                                                   //   assignment is returned
             if (result !== -1) {                  //   If it worked:
                 return [result, moves];           //  unwind or return to solve
@@ -294,7 +293,9 @@ function backtrack(assignment, constraints, moves, depth){
         // around we will just reset it, and if we run out of values, we
         // will return FAIL (-1)
         // But we do need it for the graphics
-        moves.push([unasgn.row, unasgn.col, d, 'backtrack']); 
+        //moves.push([unasgn.row, unasgn.col, d, 'backtrack']); 
+        moves = updateChangedMoves(assignment, moves);
+
         
     }
     return [-1, moves];   // Fail, but keep the moves
@@ -449,13 +450,18 @@ function solve(original) {
  * @param {*} board 
  */
 function printBoard(board) {
-    let nrows = board.length;
-    let ncols = board[0].length;
+    grid = getGrid(board);
+    
+    let nrows = grid.length;
+    let ncols = grid[0].length;
+    let printrow;
 
     for (let i=0; i<nrows; i++) {
+        printrow = [];
         for (let j=0; j<ncols; j++) {
-            box = board[i][j];
+            printrow.push(grid[i][j]);
         }
+        console.log(printrow);
     }
 }
 
