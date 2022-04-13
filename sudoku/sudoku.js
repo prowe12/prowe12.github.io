@@ -217,6 +217,20 @@ function loadStartingValues(puzzle='easy'){
      state.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p><P>Or choose a new puzzle or solver on the left.</p>";    
 }
 
+
+/**
+ * Unlight all control buttons (play, rewind, etc)
+ */
+ function refreshControls() {
+   // No play buttons should be highlighted
+    playButton.style.setProperty("border", "none");
+    rewindButton.style.setProperty("border", "none");
+    stepButton.style.setProperty("border", "none");
+    forwardToEndButton.style.setProperty("border", "none");
+    rewindToBegButton.style.setProperty("border", "none");
+    pauseButton.style.setProperty("border", "none");
+}
+
 /**
  * Reset the board and the state of play (i.e. filling in the board) to the beginning
  */
@@ -226,6 +240,14 @@ function loadStartingValues(puzzle='easy'){
     delay = 1000;
     imove = 0;
     running = false;
+
+    // No play buttons should be highlighted
+    // playButton.style.setProperty("border", "none");
+    // rewindButton.style.setProperty("border", "none");
+    // stepButton.style.setProperty("border", "none");
+    // forwardToEndButton.style.setProperty("border", "none");
+    // rewindToBegButton.style.setProperty("border", "none");
+    // pauseButton.style.setProperty("border", "none");
 }
 
 /**
@@ -446,38 +468,7 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
 
 // Solver demo for backtracking
 document.querySelector("#solverDemoBacktrack").addEventListener("click", function() {
-
     runBacktrackSolver();
-
-    // Highlight the button for the selected solver, and put the other back to normal
-    // let solverMethod = document.getElementById("solverDemoBacktrack"); 
-    // solverMethod.style.setProperty("background-color", "rgb(17, 49, 30)"); //"rgb(17, 49, 30)");
-    // solverMethod.style.setProperty("border", "4px solid yellow"); // rgb(25, 75, 45)");
-
-    // let nonsolverMethod = document.getElementById("playSudokuSolver"); 
-    // nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
-    // nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)"); 
-
-    // // Reset the state of play and the board
-    // playReset();
-    // boardReset();   
-
-    // // Print a message while we wait for the solver
-    // let explanation = document.querySelector(`.explanation`);
-    // explanation.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
-    
-    // // Solve the board using backtracking alone, using backtrack, in backtrack.js
-    // let result = backtracker(originalgrid);
-    // finalgrid = originalgrid;
-
-    // let msg = result[0];
-    // moves = result[1];
-
-    // // We wrote over the original grid, so recreate it
-    // originalgrid = loadStartingValues(puzzleType);
-
-    // // Write the message saying it's been solved
-    // explanation.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p><P>Or choose a new puzzle or solver on the left.</p>";    
 });
 
 
@@ -554,8 +545,12 @@ speedSlider.addEventListener('click',() => {
 });
 
 
+
 // Event listener for the play button
 playButton.addEventListener("click", function() {
+    // Unlight all control buttons and highlight the button of interest
+    refreshControls();
+    playButton.style.setProperty("border", "4px solid yellow");
 
     // Stop play or rewind
     clearInterval(timeId);
@@ -584,11 +579,16 @@ playButton.addEventListener("click", function() {
     playOrRewind = populator;
 });
 
+
 // Event listener for the rewind button <<
 // Rewind is tricky. We cannot undo the last move, because we don't know what was in
 // the square before the last move occurred. So instead we have to redo all moves up to
 // that point
 rewindButton.addEventListener("click", function() {
+
+    // Unlight all control buttons and highlight the button of interest
+    refreshControls();
+    rewindButton.style.setProperty("border", "4px solid yellow");
 
     // Stop play or rewind
     clearInterval(timeId);
@@ -637,12 +637,15 @@ rewindButton.addEventListener("click", function() {
     // Rewind at current delay;
     timeId = setInterval(depopulator, delay);
     playOrRewind = depopulator;
-    return;
+
  });
 
 
 // Event listener for the step button, which fills in the next box only
 stepButton.addEventListener("click", function() {
+    // Unlight all buttons and highlight the button of interest
+    refreshControls();
+    stepButton.style.setProperty("border", "4px solid yellow");
     running = false;
 
     let state = document.querySelector(".state");
@@ -654,11 +657,22 @@ stepButton.addEventListener("click", function() {
     // Stop play, decrease the delay, and fill in the next box
     clearInterval(timeId);
     populator();
+
+    // unhighlight the button
+    stepButton.style.setProperty("border", "none");
 });
 
 
 // Event listener for the forward to end button >>|
 forwardToEndButton.addEventListener("click", function() {
+    // Unlight all buttons and highlight the button of interest
+    refreshControls();
+    forwardToEndButton.style.setProperty("border", "4px solid yellow");
+    
+    // Print message that forward to end is in progress
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Working on completing the puzzle. Please wait.</p>";
+    
     running = true;
     // Stop play if any
     clearInterval(timeId);
@@ -670,18 +684,21 @@ forwardToEndButton.addEventListener("click", function() {
     }
 
     // Finished with solution
-    let state = document.querySelector(".state");
+    state = document.querySelector(".state");
     state.innerHTML = "<p>Puzzle Completed!</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
     let explanation = document.querySelector(".explanation");
     explanation.innerHTML = "<p></p>";
     running = false;
+
 });
-
-
 
 
 // Event listener for the rewind to beginning button |<<
 rewindToBegButton.addEventListener("click", function() {
+    // Unlight all buttons and highlight the button of interest
+    refreshControls();
+    rewindToBegButton.style.setProperty("border", "4px solid yellow");
+    
     running = true;
 
     // Stop play, reset the grid, index to moves, and control values (all globals)
@@ -700,7 +717,11 @@ rewindToBegButton.addEventListener("click", function() {
 
 // Event listener for the pause button
 pauseButton.addEventListener("click", function() {
-    // Pause   
+
+    // Unlight all buttons and highlight the button of interest
+    refreshControls();
+    pauseButton.style.setProperty("border", "4px solid yellow");
+
     let state = document.querySelector(".state");
     state.innerHTML = "<p>Paused.</p>"
     let explanation = document.querySelector(".explanation");
