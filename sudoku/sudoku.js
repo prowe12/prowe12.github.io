@@ -715,6 +715,24 @@ rewindToBegButton.addEventListener("click", function() {
 
 
 
+// Event listener for the show domain button
+showDomainButton.addEventListener("click", function() {
+
+    // Unlight all buttons and highlight the button of interest
+    refreshControls();
+    showDomainButton.style.setProperty("border", "4px solid yellow");
+
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Show the domain of each square.</p>"
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
+    clearInterval(timeId);
+
+    // For all squares with value = 0, get the domain and display it
+    
+});
+
+
 // Event listener for the pause button
 pauseButton.addEventListener("click", function() {
 
