@@ -171,7 +171,7 @@ function loadStartingValues(puzzle='easy'){
         row.classList.add(`row-${i}`);
         table.appendChild(row);
         for (j=0; j<ncols; j++){
-            // To let player play the game, make a input box as a child to the cell
+            // To let player play the game, make an input box as a child to the cell
             let col = document.createElement("td");
             col.classList.add(`col-${j}`);
             col.classList.add("sudokubox");
@@ -179,6 +179,7 @@ function loadStartingValues(puzzle='easy'){
         }
     }
 }
+
 
 /**
  * Reset the board and the state of play (i.e. filling in the board) to the beginning
@@ -204,15 +205,13 @@ function loadStartingValues(puzzle='easy'){
      explanation.innerHTML = "<p></p>";
 
      // Solve the board using backtracking alone, using backtrack, in backtrack.js
-     let result = backtracker(originalgrid);
-     finalgrid = originalgrid;
+     grid = loadStartingValues(puzzleType)
+     let result = backtracker(grid);
+     finalgrid = grid;
  
      let msg = result[0];
      moves = result[1]; // row, column, value, method
- 
-     // We wrote over the original grid, so recreate it
-     originalgrid = loadStartingValues(puzzleType);
- 
+  
      // Write the message saying it's been solved
      state.innerHTML = "<p>I have solved the puzzle using backtracking.</p><p>Use the controls to play the solution.</p><P>Or choose a new puzzle or solver on the left.</p>";    
 }
@@ -221,15 +220,18 @@ function loadStartingValues(puzzle='easy'){
 /**
  * Unlight all control buttons (play, rewind, etc)
  */
- function refreshControls() {
-   // No play buttons should be highlighted
-    playButton.style.setProperty("border", "none");
-    rewindButton.style.setProperty("border", "none");
-    stepButton.style.setProperty("border", "none");
-    forwardToEndButton.style.setProperty("border", "none");
-    rewindToBegButton.style.setProperty("border", "none");
-    pauseButton.style.setProperty("border", "none");
+function refreshControls() {
+    // Deselect all buttons - remove "selected" class from all play buttons
+    rewindToBegButton.classList.remove("selected");
+    rewindButton.classList.remove("selected");
+    pauseButton.classList.remove("selected");
+    playButton.classList.remove("selected");
+    forwardToEndButton.classList.remove("selected");
+    
+    stepButton.classList.remove("selected");
+    stepBackButton.classList.remove("selected");
 }
+
 
 /**
  * Reset the board and the state of play (i.e. filling in the board) to the beginning
@@ -240,14 +242,6 @@ function loadStartingValues(puzzle='easy'){
     delay = 1000;
     imove = 0;
     running = false;
-
-    // No play buttons should be highlighted
-    // playButton.style.setProperty("border", "none");
-    // rewindButton.style.setProperty("border", "none");
-    // stepButton.style.setProperty("border", "none");
-    // forwardToEndButton.style.setProperty("border", "none");
-    // rewindToBegButton.style.setProperty("border", "none");
-    // pauseButton.style.setProperty("border", "none");
 }
 
 /**
@@ -257,16 +251,22 @@ function loadStartingValues(puzzle='easy'){
     originalgrid = loadStartingValues(puzzleType);
     makeEmptyGrid(9, 9);
     populateBoard(originalgrid);
+
+    // global variable with the current state of the grid
+    currentgrid = loadStartingValues(puzzleType);
  }
 
 
  /**
  * Populate a box of the board and move the pointer to the next box.
  * If at the final move, quit playback
+ * Also update the grid to the current state
  */
 populator = function()  {
     if (imove < moves.length) {
+        // Populate the box, update the grid, and increment the pointer to the moves
         populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
+        currentgrid[moves[imove][0]][moves[imove][1]] = moves[imove][2];
         imove++;
     }
     else {
@@ -280,6 +280,29 @@ populator = function()  {
    };
 };
 
+
+/**
+ * Draw a box around the next square to be populated.
+ * Then populate the box and move the pointer to the next box.
+ * If at the final move, quit playback
+ * Also update the grid to the current state
+ */
+steppopulator = function()  {
+    if (boxit) {
+        // Draw a box around the next square that will be populated.
+        boxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
+
+        // Next time we will not draw the box
+        boxit = false;
+    }   
+    else {
+        // The populator should remove the box
+        removeboxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
+        populator();
+        // Next time we will draw the box again
+        boxit = true;
+    }
+};
 
 
 /**
@@ -333,6 +356,8 @@ rewindToMove = function(location)  {
     }
 
     // Build the board at the desired location and display it
+    // Remember that we start all over from the original grid
+    // and add all the moves up to the current location
     updateGridFromMoves(originalgrid, moves, location);
 
     return;
@@ -406,19 +431,20 @@ function incrementDelay(delay, buttonType) {
 //TODO: Do these all have to be globals?
 var puzzleType = document.getElementById("dropdownpuzzle").value;
 var originalgrid = loadStartingValues(puzzleType);
+var currentgrid = loadStartingValues(puzzleType);
 
 var rewindToBegButton = document.getElementById("rewindToBeg");
 var rewindButton = document.getElementById("rewind");
 var playButton = document.getElementById("playPause");
-var fastForwardButton = document.getElementById("fastForward");
 var forwardToEndButton = document.getElementById("forwardToEnd");
 var stepButton = document.getElementById("step");
+var stepBackButton = document.getElementById("stepBack");
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 var speedSlider = document.querySelector(".slider");
+var pauseButton = document.getElementById("pauseButton");
 
-//var pauseButton = document.getElementById("pauseButton");
-
+let boxit = true;
 let moves = [];
 let timeId;
 let imove = 0;
@@ -447,11 +473,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Get the desired puzzle based on the drop-down menu value
 document.querySelector("#dropdownpuzzle").addEventListener("change", function() {
+    refreshControls();
     puzzleType = document.getElementById("dropdownpuzzle").value;
 
-    // The original grid will be in the global scope - actually it seems it is not deepcopied
-    // and is therefore written over?
+    // Reset the original grid and the current grid
     originalgrid = loadStartingValues(puzzleType);
+    currentgrid = loadStartingValues(puzzleType);
 
     // Clear the Sudoku board and populate with the values from the selected puzzle
     imove = 0;
@@ -461,13 +488,13 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function() 
 
     // Default is Backtracking
     runBacktrackSolver();
-
-    
 });
 
 
 // Solver demo for backtracking
 document.querySelector("#solverDemoBacktrack").addEventListener("click", function() {
+    refreshControls();
+    clearDomainFromTableForRunning();
     runBacktrackSolver();
 });
 
@@ -480,6 +507,8 @@ document.querySelector("#solverDemoBacktrack").addEventListener("click", functio
 // copy this code to a temporary directory and undo all the changes in this branch
 // to find out (then copy the temp dir code back in, fix the problem, and commit)
 document.querySelector("#playSudokuSolver").addEventListener("click", function() {
+    refreshControls();
+    clearDomainFromTableForRunning();
 
     // Highlight the button for the selected solver, and put the other back to normal
     let solverMethod = document.getElementById("playSudokuSolver"); 
@@ -506,13 +535,12 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     // as well as the moves.
     // The moves array has an array for each move, containing the:
     // row, column, value, and method used to get the value
-    let result = solve(originalgrid);
+    grid = loadStartingValues(puzzleType);
+    let result = solve(grid);
+    finalgrid = grid;
 
     let msg = result[0];
     moves = result[1];
-
-    // We wrote over the original grid, so recreate it
-    originalgrid = loadStartingValues(puzzleType);
     
     // Write the message saying it's been solved
     state.innerHTML = "<p>I have solved the puzzle using AC-3 and backtracking.</p><p>Use the controls to play the solution.</p>";
@@ -549,8 +577,9 @@ speedSlider.addEventListener('click',() => {
 // Event listener for the play button
 playButton.addEventListener("click", function() {
     // Unlight all control buttons and highlight the button of interest
+    clearDomainFromTableForRunning();
     refreshControls();
-    playButton.style.setProperty("border", "4px solid yellow");
+    playButton.classList.add('selected');
 
     // Stop play or rewind
     clearInterval(timeId);
@@ -560,13 +589,16 @@ playButton.addEventListener("click", function() {
     let state = document.querySelector(".state");
     state.innerHTML = "<p>Playing Solution.</p>";
 
-    if (imove === moves.length) {
+    if (imove >= moves.length) {
         // Finished with solution
         let state = document.querySelector(".state");
         state.innerHTML = "<p>Puzzle Complete!</p><p>Continue using controls or choose a different puzzle or solver.</p>";
         let explanation = document.querySelector(".explanation");
         explanation.innerHTML = "<p></p>";
         running = false;
+
+        // Done, so deselect the button
+        playButton.classList.remove('selected');
         return;
     }
 
@@ -577,7 +609,9 @@ playButton.addEventListener("click", function() {
     // Start play using the current delay;
     timeId = setInterval(populator, delay);
     playOrRewind = populator;
+
 });
+
 
 
 // Event listener for the rewind button <<
@@ -587,8 +621,9 @@ playButton.addEventListener("click", function() {
 rewindButton.addEventListener("click", function() {
 
     // Unlight all control buttons and highlight the button of interest
+    clearDomainFromTableForRunning();
     refreshControls();
-    rewindButton.style.setProperty("border", "4px solid yellow");
+    rewindButton.classList.add("selected");
 
     // Stop play or rewind
     clearInterval(timeId);
@@ -631,6 +666,7 @@ rewindButton.addEventListener("click", function() {
             // Print a message while we wait for the solver
             let state = document.querySelector(`.explanation`);
             state.innerHTML = "<p>Rewound to beginning.</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+            rewindButton.classList.remove("selected");
         };
     };
 
@@ -641,34 +677,13 @@ rewindButton.addEventListener("click", function() {
  });
 
 
-// Event listener for the step button, which fills in the next box only
-stepButton.addEventListener("click", function() {
-    // Unlight all buttons and highlight the button of interest
-    refreshControls();
-    stepButton.style.setProperty("border", "4px solid yellow");
-    running = false;
-
-    let state = document.querySelector(".state");
-    state.innerHTML = "<p>Taking a single step.</p>";
-    let explanation = document.querySelector(".explanation");
-    explanation.innerHTML = "<p></p>";
-    running = false;
-
-    // Stop play, decrease the delay, and fill in the next box
-    clearInterval(timeId);
-    populator();
-
-    // unhighlight the button
-    stepButton.style.setProperty("border", "none");
-});
-
-
 // Event listener for the forward to end button >>|
 forwardToEndButton.addEventListener("click", function() {
     // Unlight all buttons and highlight the button of interest
+    clearDomainFromTableForRunning();
     refreshControls();
-    forwardToEndButton.style.setProperty("border", "4px solid yellow");
-    
+    forwardToEndButton.classList.add("selected");
+
     // Print message that forward to end is in progress
     let state = document.querySelector(".state");
     state.innerHTML = "<p>Working on completing the puzzle. Please wait.</p>";
@@ -689,6 +704,7 @@ forwardToEndButton.addEventListener("click", function() {
     let explanation = document.querySelector(".explanation");
     explanation.innerHTML = "<p></p>";
     running = false;
+    forwardToEndButton.classList.remove("selected");
 
 });
 
@@ -696,9 +712,10 @@ forwardToEndButton.addEventListener("click", function() {
 // Event listener for the rewind to beginning button |<<
 rewindToBegButton.addEventListener("click", function() {
     // Unlight all buttons and highlight the button of interest
+    clearDomainFromTableForRunning();
     refreshControls();
-    rewindToBegButton.style.setProperty("border", "4px solid yellow");
-    
+    rewindToBegButton.classList.add("selected");
+
     running = true;
 
     // Stop play, reset the grid, index to moves, and control values (all globals)
@@ -711,34 +728,15 @@ rewindToBegButton.addEventListener("click", function() {
     let explanation = document.querySelector(".explanation");
     explanation.innerHTML = "<p></p>";
     running = false;
+    rewindToBegButton.classList.remove("selected");
 });
-
-
-
-// Event listener for the show domain button
-showDomainButton.addEventListener("click", function() {
-
-    // Unlight all buttons and highlight the button of interest
-    refreshControls();
-    showDomainButton.style.setProperty("border", "4px solid yellow");
-
-    let state = document.querySelector(".state");
-    state.innerHTML = "<p>Show the domain of each square.</p>"
-    let explanation = document.querySelector(".explanation");
-    explanation.innerHTML = "<p></p>";
-    clearInterval(timeId);
-
-    // For all squares with value = 0, get the domain and display it
-    
-});
-
 
 // Event listener for the pause button
 pauseButton.addEventListener("click", function() {
 
     // Unlight all buttons and highlight the button of interest
     refreshControls();
-    pauseButton.style.setProperty("border", "4px solid yellow");
+    pauseButton.classList.add("selected");
 
     let state = document.querySelector(".state");
     state.innerHTML = "<p>Paused.</p>"
@@ -747,6 +745,196 @@ pauseButton.addEventListener("click", function() {
     clearInterval(timeId);
 });
 
+function getDomain(row, col, currentgrid) {
+    let nside = currentgrid.length;
+    let val;
+    let excluded = new Set();
+    let domain = new Set();
+
+    // Get the constraints for this grid box
+    constraints = getConstraintsForBox(row, col, nside);
+
+    // Get the domain from the constraints
+    while (constraints.length > 0) {
+        constraint = constraints.pop()
+        val = currentgrid[constraint[1][0]][constraint[1][1]];
+        excluded.add(val);
+    }
+
+    // Starting values for domain
+    for (i=0; i<=nside; i++) {
+        if (!(excluded.has(i))) {
+            domain.add(i);
+        }
+    }
+    
+    return domain;
+}
+
+
+/**
+ * For buttons that toggle on and off
+ */ 
+function toggle(button) {
+    if (button.value == "OFF") {
+      button.value = "ON";
+    } else {
+      button.value = "OFF";
+    }
+  }
+
+
+/**
+ * For all squares with value = 0, get the domain and display it
+ */
+function clearDomainFromTable() {
+    let domain;
+    nside = currentgrid.length;
+    for (row=0; row<nside; row++) {
+        for (col=0; col<nside; col++) {
+            if (currentgrid[row][col] === 0) {
+                // Return the Sudoku box to blank
+                populateSquare(row, col, 0, boxStyle='empty');                
+            }
+        }
+    }    
+}
+ 
+function clearDomainFromTableForRunning() {
+    let button = document.getElementById("showDomainButton");
+    if (button.value === "ON") {
+        button.value = "OFF";
+        showDomainButton.classList.remove("selected");
+        clearDomainFromTable();    
+    }
+}
+
+function showdomain() {
+    // For all squares with value = 0, get the domain and display it
+    let domain;
+    nside = currentgrid.length;
+    for (row=0; row<nside; row++) {
+        for (col=0; col<nside; col++) {
+            if (currentgrid[row][col] === 0) {
+                // Get the domain and show it in the Sudoku box
+                domain = getDomain(row, col, currentgrid);
+                populateSquareWithDomain(row, col, domain, boxStyle='domain');                
+            }
+        }
+    }
+}
+
+// Event listener for the show domain button
+showDomainButton.addEventListener("click", function() {
+
+    // Unhighlight all buttons
+    refreshControls();
+
+    // Toggle on/off
+    let button = document.getElementById("showDomainButton");
+    toggle(button);
+    
+    let state = document.querySelector(".state");
+    let explanation = document.querySelector(".explanation");
+    clearInterval(timeId);
+
+
+    // Highlight or unhighlight the button
+    if (button.value === "ON") {
+        showDomainButton.classList.add("selected");
+        state.innerHTML = "<p>Showing the domain of each square.</p>"
+        explanation.innerHTML = "<p></p>";
+        showdomain();
+    }
+    else {
+        showDomainButton.classList.remove("selected");
+        state.innerHTML = "<p>Removed the domain for each square.</p>"
+        explanation.innerHTML = "<p></p>";
+        clearDomainFromTable();    
+    }
+});
+
+
+// Event listener for the step button, which fills in the next box only
+stepButton.addEventListener("click", function() {
+    // Unlight all buttons and highlight the button of interest
+    refreshControls();
+    stepButton.classList.add("selected");
+
+    running = false;
+
+    let state = document.querySelector(".state");
+    state.innerHTML = "<p>Taking a single step.</p>";
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
+    running = false;
+
+    // Stop play, decrease the delay, and fill in the next box
+    clearInterval(timeId);
+    steppopulator();
+
+    // unhighlight the button
+    document.getElementById('step').classList.remove('selected');
+    stepButton.classList.remove("selected");
+
+    // If the show domain button is selected, update the domain shown
+    let button = document.getElementById("showDomainButton");
+    if (button.value === "ON") {
+        showdomain();
+    }
+});
+
+
+// Event listener for taking a single step back
+// Rewind is tricky. We cannot undo the last move, because we don't know what was in
+// the square before the last move occurred. So instead we have to redo all moves up to
+// that point
+stepBackButton.addEventListener("click", function() {
+
+    // Unlight all control buttons and highlight the button of interest
+    refreshControls();
+    stepBackButton.classList.add("selected");
+
+    // Stop play or rewind
+    clearInterval(timeId);
+
+    // We will be rewinding, so set running to true and print a message
+    let state = document.querySelector(".state");
+    let explanation = document.querySelector(".explanation");
+    explanation.innerHTML = "<p></p>";
+
+    // Check if we are aleady at the beginning or not and display appropriate message. Return if at beginning.
+    if (imove === 0) {
+        stepBack.style.setProperty("border", "none");
+        // Already at the beginning, so print message and return
+        state.innerHTML = "<p>At the beginning.</p><p>Use controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+        return;
+    }
+    state.innerHTML = "<p>Undoing the previous step.</p>";
+
+    
+    /**
+     * Redraw board at previous move
+     */
+    if (imove > 0) {
+        rewindToMove(Math.max(imove - 1, 0));
+        imove -= 1;
+    }
+    else {
+        // We have rewound to the very beginning
+        clearInterval(timeId);
+        imove = 0;
+        running = false;
+        // Print a message while we wait for the solver
+        let state = document.querySelector(`.explanation`);
+        state.innerHTML = "<p>Undid all moves back to beginning.</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
+    };
+
+    /**
+     * If showdomain is selected, keep displaying the domain
+     */
+    stepBackButton.classList.remove("selected");
+ });
 
 // // Function for play/pause button
 // function playpause() {

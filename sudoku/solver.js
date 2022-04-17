@@ -63,25 +63,16 @@ function removeValues(xi, xj) {
 
 
 /**
- * Create the board as an array of arrays of each cell, where each cell is a
+ * Create the board as an array of arrays of each Sudoku box, where each box is a
  * class containing its row and column index and the domain of values allowed
  * in it.
  * @param {} grid  The Numbers in the Sudoku board, as a list of list of int
- * @param {} nside  Elements in a side of the board; default 9
  * @return The board, an array of arrays of elements of class variable.
  */
 function getBoard(grid) {
     let nside = grid.length;
     var board = new Array();
 
-    // board = [[[] for i in range(nside)] for j in range(nside)]
-    // board = [[Variable(i, j, nside) for i in range(nside)] for j in range(nside)]
-    // for i, row_vals in enumerate(grid):
-    //     for j, val in enumerate(row_vals):
-    //         if val == 0:
-    //             board[i][j] = Variable(i, j, nside)
-    //         else:
-    //             board[i][j] = Variable(i, j, nside, {val}, fix=True)
     let boardRow;
     let value;
     let allVals;
@@ -110,7 +101,8 @@ function getBoard(grid) {
 
 
 /**
- * Get the grid for the board
+ * Given a board, which is an array of arrays of classes for each box,
+ * get the grid of 9x9 values in the current state of the board
  * @param board
  * @return grid
 */

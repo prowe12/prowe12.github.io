@@ -122,6 +122,48 @@ function qcBoard(board) {
 
 
 
+/**
+ * 
+ * Row: For the row (irow) containing the cell at (irow, icol),
+ * add all the columns (e.g. 1-9) to the constraints, except the cell's column (icol)
+ * Format: An array containing the current cell [irow, icol], followed by the
+ * constraint row and column [irow, jol]
+ * @param {*} board 
+ * @returns 
+ */
+function getConstraintsForBox(irow, icol, maxDomainVal) {
+    let boxConstraints = [];
+
+    for (let jcol=0; jcol<maxDomainVal; jcol++) {
+        if (jcol !== icol) {
+            boxConstraints.push([[irow, icol], [irow, jcol]]);
+        }
+    }
+
+    // Column: For the column (icol) containing the cell at (irow, icol), 
+    // add all the rows (e.g. 1-9), except the cell's row (irow)
+    for (let jrow=0; jrow<maxDomainVal; jrow++) {
+        if (jrow !== irow) {
+            boxConstraints.push([[irow, icol], [jrow, icol]]);
+        }
+    }
+
+    // Box: For the (e.g. 3x3) box containing the cell at (irow, icol),
+    // add all row,column sets that share the box, except the cell's 
+    // (irow, icol) and the constraint cells that have already been added
+    let boxRow = Math.floor(irow/3) * 3;
+    let boxCol = Math.floor(icol/3) * 3;
+    for (jrow=boxRow; jrow<boxRow+3; jrow++) {
+        for (jcol=boxCol; jcol<boxCol+3; jcol++) {
+            if (jrow != irow & jcol != icol) {
+                boxConstraints.push([[irow, icol], [jrow, jcol]]);
+            }
+        }
+    }
+
+    return boxConstraints;
+}
+
 
 /**
  * 
@@ -154,9 +196,9 @@ function qcBoard(board) {
  */
 function getConstraints(board) {
     maxDomainVal = board[0][0].maxDomainVal;
-    let constraints = new Array;
+    let constraints = [];
 
-    for (let irow=0; irow<maxDomainVal; irow++) {   //in list_rows:
+    for (let irow=0; irow<maxDomainVal; irow++) {
         for (let icol=0; icol<maxDomainVal; icol++) {
 
             // Do not get constraints for the boxes with fixed values, since
@@ -165,36 +207,39 @@ function getConstraints(board) {
                 continue;
             }
 
-            // Row: For the row (irow) containing the cell at (irow, icol),
-            // add all the columns (e.g. 1-9) to the constraints, except the cell's column (icol)
-            // Format: An array containing the current cell [irow, icol], followed by the
-            // constraint row and column [irow, jol]
-            for (let jcol=0; jcol<maxDomainVal; jcol++) {
-                if (jcol !== icol) {
-                    constraints.push([[irow, icol], [irow, jcol]]);
-                }
-            }
+            boxConstraints = getConstraintsForBox(irow, icol, maxDomainVal);
+            constraints = constraints.concat(boxConstraints);
 
-            // Column: For the column (icol) containing the cell at (irow, icol), 
-            // add all the rows (e.g. 1-9), except the cell's row (irow)
-            for (let jrow=0; jrow<maxDomainVal; jrow++) {
-                if (jrow !== irow) {
-                    constraints.push([[irow, icol], [jrow, icol]]);
-                }
-            }
+            // // Row: For the row (irow) containing the cell at (irow, icol),
+            // // add all the columns (e.g. 1-9) to the constraints, except the cell's column (icol)
+            // // Format: An array containing the current cell [irow, icol], followed by the
+            // // constraint row and column [irow, jol]
+            // for (let jcol=0; jcol<maxDomainVal; jcol++) {
+            //     if (jcol !== icol) {
+            //         constraints.push([[irow, icol], [irow, jcol]]);
+            //     }
+            // }
 
-            // Box: For the (e.g. 3x3) box containing the cell at (irow, icol),
-            // add all row,column sets that share the box, except the cell's 
-            // (irow, icol) and the constraint cells that have already been added
-            let boxRow = Math.floor(irow/3) * 3;
-            let boxCol = Math.floor(icol/3) * 3;
-            for (jrow=boxRow; jrow<boxRow+3; jrow++) {
-                for (jcol=boxCol; jcol<boxCol+3; jcol++) {
-                    if (jrow != irow & jcol != icol) {
-                        constraints.push([[irow, icol], [jrow, jcol]]);
-                    }
-                }
-            }
+            // // Column: For the column (icol) containing the cell at (irow, icol), 
+            // // add all the rows (e.g. 1-9), except the cell's row (irow)
+            // for (let jrow=0; jrow<maxDomainVal; jrow++) {
+            //     if (jrow !== irow) {
+            //         constraints.push([[irow, icol], [jrow, icol]]);
+            //     }
+            // }
+
+            // // Box: For the (e.g. 3x3) box containing the cell at (irow, icol),
+            // // add all row,column sets that share the box, except the cell's 
+            // // (irow, icol) and the constraint cells that have already been added
+            // let boxRow = Math.floor(irow/3) * 3;
+            // let boxCol = Math.floor(icol/3) * 3;
+            // for (jrow=boxRow; jrow<boxRow+3; jrow++) {
+            //     for (jcol=boxCol; jcol<boxCol+3; jcol++) {
+            //         if (jrow != irow & jcol != icol) {
+            //             constraints.push([[irow, icol], [jrow, jcol]]);
+            //         }
+            //     }
+            // }
         }
     }
     return constraints;
