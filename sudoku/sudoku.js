@@ -358,9 +358,9 @@ rewindToMove = function(location)  {
     // Build the board at the desired location and display it
     // Remember that we start all over from the original grid
     // and add all the moves up to the current location
-    updateGridFromMoves(originalgrid, moves, location);
+    let newgrid = updateGridFromMoves(originalgrid, moves, location);
 
-    return;
+    return newgrid;
 };
 
 
@@ -655,7 +655,7 @@ rewindButton.addEventListener("click", function() {
      */
     depopulator = function()  {
         if (imove > 0) {
-            rewindToMove(Math.max(imove - deltai, 0));
+            currentgrid = rewindToMove(Math.max(imove - deltai, 0));
             imove -= deltai;
         }
         else {
@@ -751,12 +751,14 @@ function getDomain(row, col, currentgrid) {
     let excluded = new Set();
     let domain = new Set();
 
+    console.log(currentgrid[row][col]);
+
     // Get the constraints for this grid box
     constraints = getConstraintsForBox(row, col, nside);
 
     // Get the domain from the constraints
     while (constraints.length > 0) {
-        constraint = constraints.pop()
+        constraint = constraints.pop();
         val = currentgrid[constraint[1][0]][constraint[1][1]];
         excluded.add(val);
     }
@@ -785,7 +787,7 @@ function toggle(button) {
 
 
 /**
- * For all squares with value = 0, get the domain and display it
+ * For all squares with value = 0, clear the domain
  */
 function clearDomainFromTable() {
     let domain;
@@ -800,7 +802,12 @@ function clearDomainFromTable() {
     }    
 }
  
-function clearDomainFromTableForRunning() {
+/**
+ * For running operations that should not show the domain, when the
+ * domain is on. Check if the domain button is on and, if so, turn it off
+ * and remove the domain from the display board
+ */
+ function clearDomainFromTableForRunning() {
     let button = document.getElementById("showDomainButton");
     if (button.value === "ON") {
         button.value = "OFF";
@@ -809,6 +816,9 @@ function clearDomainFromTableForRunning() {
     }
 }
 
+/**
+ * Show the domain on the display board
+ */
 function showdomain() {
     // For all squares with value = 0, get the domain and display it
     let domain;
@@ -912,17 +922,28 @@ stepBackButton.addEventListener("click", function() {
     }
     state.innerHTML = "<p>Undoing the previous step.</p>";
 
+    let button = document.getElementById("showDomainButton");
     
     /**
      * Redraw board at previous move
      */
     if (imove > 0) {
-        rewindToMove(Math.max(imove - 1, 0));
+        currentgrid = rewindToMove(Math.max(imove - 1, 0));
+        // If the show domain button is selected, update the domain shown
+        if (button.value === "ON") {
+            domain = getDomain(moves[imove], moves[imove], currentgrid)
+            showdomain();
+        }
         imove -= 1;
     }
     else {
         // We have rewound to the very beginning
         clearInterval(timeId);
+        // If the show domain button is selected, update the domain shown
+        if (button.value === "ON") {
+            domain = getDomain(moves[imove], moves[imove], currentgrid)
+            showdomain();
+        }
         imove = 0;
         running = false;
         // Print a message while we wait for the solver
@@ -930,9 +951,7 @@ stepBackButton.addEventListener("click", function() {
         state.innerHTML = "<p>Undid all moves back to beginning.</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
     };
 
-    /**
-     * If showdomain is selected, keep displaying the domain
-     */
+
     stepBackButton.classList.remove("selected");
  });
 

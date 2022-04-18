@@ -259,5 +259,5 @@ function updateGridFromMoves(grid, moves, location) {
         }
     };
 
-    return;
+    return newgrid;
 }
