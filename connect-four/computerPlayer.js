@@ -71,7 +71,7 @@ class computerPlayer{
          actVal.length = 2;
          if(this.cutoffTest(depth)){
             //  // console.log("evaluating and returning");
-             const evaluateBoard= this.evaluate();
+             const evaluateBoard= this.evaluate(this.playBoard);
              actVal[0] = prevPlay;
              actVal[1] = evaluateBoard;
              //// console.log("max returning score ",evaluateBoard," for move ",prevPlay);
@@ -117,7 +117,7 @@ class computerPlayer{
         let actVal = [];
         actVal.length = 2;
         if(this.cutoffTest( depth)){
-            const evaluateBoard= this.evaluate();
+            const evaluateBoard= this.evaluate(this.playBoard);
             actVal[0] = prevPlay;
             actVal[1] = evaluateBoard;
            // // console.log("min returning score ",evaluateBoard," for move ",prevPlay);
@@ -202,16 +202,16 @@ class computerPlayer{
 * and how close that player currently is to having a run of four.
 */
 
-evaluate(){
+evaluate(board){
     //// console.log("evaluating board ",this.copyBoard(this.makeNewBoard(),this.playBoard),"...")
     //// console.log("VERTICAL");
-    let vertScore = this.vertical();
+    let vertScore = this.vertical(board);
     // // console.log("HORIZONTAL");
-    let horizScore = this.horizontal();
+    let horizScore = this.horizontal(board);
     // // console.log("ASCEND");
-    let ascendScore = this.ascend();
+    let ascendScore = this.ascend(board);
     // // console.log("DESCEND");
-    let descendScore = this.descend();
+    let descendScore = this.descend(board);
 
     let computerScore = vertScore[0]+horizScore[0]+ascendScore[0]+descendScore[0];
     let humanScore = vertScore[1]+horizScore[1]+ascendScore[1]+descendScore[1];
@@ -250,7 +250,7 @@ evaluate(){
         return board;
     }
 
-    horizontal(){
+    horizontal(board){
         let computerScore = 0;
         let humanScore = 0;
 
@@ -262,10 +262,10 @@ evaluate(){
             for(let col = 0; col <= 3; col++){
                 let testFour = [];
                 testFour.length = 4;
-                testFour[0] = this.playBoard[row][col]
-                testFour[1] = this.playBoard[row][col+1]
-                testFour[2] = this.playBoard[row][col+2]
-                testFour[3] = this.playBoard[row][col+3]
+                testFour[0] = board[row][col]
+                testFour[1] = board[row][col+1]
+                testFour[2] = board[row][col+2]
+                testFour[3] = board[row][col+3]
 
                 scores = this.calculateFour(testFour)
                 computerScore += scores[0]
@@ -275,7 +275,7 @@ evaluate(){
         return [computerScore, humanScore]
     }
 
-    vertical(){
+    vertical(board){
         let computerScore = 0;
         let humanScore = 0;
 
@@ -287,10 +287,10 @@ evaluate(){
             for(let row = 0; row<=2; row++){
                 let testFour = []
                 testFour.length = 4
-                testFour[0] = this.playBoard[row][col]
-                testFour[1] = this.playBoard[row+1][col]
-                testFour[2] = this.playBoard[row+2][col]
-                testFour[3] = this.playBoard[row+3][col]
+                testFour[0] = board[row][col]
+                testFour[1] = board[row+1][col]
+                testFour[2] = board[row+2][col]
+                testFour[3] = board[row+3][col]
 
                 scores = this.calculateFour(testFour)
                 computerScore += scores[0]
@@ -300,7 +300,7 @@ evaluate(){
         return [computerScore, humanScore]
     }
 
-    ascend(){
+    ascend(board){
         let computerScore = 0;
         let humanScore = 0;
 
@@ -312,10 +312,10 @@ evaluate(){
             for(let col = 0; col <= 3; col++){
                 let testFour = []
                 testFour.length = 4
-                testFour[0] = this.playBoard[row][col]
-                testFour[1] = this.playBoard[row-1][col+1]
-                testFour[2] = this.playBoard[row-2][col+2]
-                testFour[3] = this.playBoard[row-3][col+3]
+                testFour[0] = board[row][col]
+                testFour[1] = board[row-1][col+1]
+                testFour[2] = board[row-2][col+2]
+                testFour[3] = board[row-3][col+3]
 
                 scores = this.calculateFour(testFour)
                 computerScore += scores[0]
@@ -325,7 +325,7 @@ evaluate(){
         return [computerScore, humanScore]
     }
 
-    descend(){
+    descend(board){
         let computerScore = 0;
         let humanScore = 0;
 
@@ -337,10 +337,10 @@ evaluate(){
             for(let col = 0; col <= 3; col++){
                 let testFour = []
                 testFour.length = 4
-                testFour[0] = this.playBoard[row][col]
-                testFour[1] = this.playBoard[row+1][col+1]
-                testFour[2] = this.playBoard[row+2][col+2]
-                testFour[3] = this.playBoard[row+3][col+3]
+                testFour[0] = board[row][col]
+                testFour[1] = board[row+1][col+1]
+                testFour[2] = board[row+2][col+2]
+                testFour[3] = board[row+3][col+3]
 
                 scores = this.calculateFour(testFour)
                 computerScore += scores[0]

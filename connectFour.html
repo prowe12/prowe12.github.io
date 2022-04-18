@@ -28,10 +28,16 @@
         <div class = "flex-container">
 
         <div class = "mm-walkthrough">
-            <h2 id = "walkthrough-function">MAX</h2>
+            <div class = "mm-max">
+
+            </div>
+            <div class = "mm-min">
+                
+            </div>
+            <!-- <h2 class = "walkthrough-function">MAX</h2>
             <h3 id = "walkthrough-depth">Depth = 0, Player = Computer</h3>
-            <par id = "walkthrough-explanation">Finding <strong id = "walkthrough-function"> MAX</strong> score for playing column <strong id = "walkthrough-move">0</strong></par>
-            <table id = "walkthrough-max-table">
+            <par id = "walkthrough-explanation">Finding <strong class = "walkthrough-function"> MAX</strong> score for playing column <strong id = "walkthrough-move">0</strong></par>
+            <table  class = "mmTable" id = "walkthrough-max-table">
                 <caption>Max Values for Computer</caption>
                 <tr>
                     <td>Column</td>
@@ -54,6 +60,30 @@
                     <td></td>
                 </tr>
             </table>
+
+            <table  class = "mmTable" id = "walkthrough-min-table">
+                <caption>Min Values for Human</caption>
+                <tr>
+                    <td>Column</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>Value</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table> -->
         </div>
         <div class = "game">
 
@@ -126,62 +156,6 @@
                     <td><canvas class="slot1" width = "60" height = "60"></canvas></td>
                     <td><canvas class="slot1" width = "60" height = "60"></canvas></td>
                 </tr>
-<!-- 
-                <tr class = "row">
-                    <td class = "slot"></td> 
-                     <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td> 
-                </tr>
-                <tr class = "row">
-                    <canvas class="slot1" width = "60" height = "60"></canvas>
-                     <td class = "slot"></td> 
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                </tr>
-                <tr class = "row">
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                </tr>
-                <tr class = "row">
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                </tr>
-                <tr class = "row">
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                </tr>
-                <tr class = "row">
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                    <td class = "slot"></td>
-                </tr> -->
 
 
             </table>
@@ -199,7 +173,7 @@
                   <input type="radio" id="auto" name="autoMan" value="auto" checked = "checked">
                   <label for="auto">Computer plays automatically</label><br>
                   <input type="radio" id="manual" name="autoMan" value="man">
-                  <label for="manual">I control computer moves</label><br>
+                  <label for="manual">Step through computer moves</label><br>
             </div>
 
             <div class = "space"></div>

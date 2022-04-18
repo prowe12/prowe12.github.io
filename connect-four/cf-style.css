@@ -58,13 +58,29 @@ h3{
     /* border: 1px solid black; */
 }
 
-#walkthrough-max-table{
+/* #walkthrough-max-table{
     position: relative;
     color: 'white';
     background-color: 'white';
     width: 80%;
     padding: 5px;
     border: 1px black;
+} */
+
+.mm-walkthrough table{
+    border-collapse: collapse;
+    position: relative;
+    background-color: white;
+    width: 80%;
+    padding: 5px;
+    border: solid 1px black;
+}
+.mm-walkthrough tr{
+    border: solid 1px black;
+}
+.mm-walkthrough td{
+    border: solid 1px black;
+    text-align: center;
 }
 
 
@@ -151,7 +167,7 @@ h3{
 .walkthrough{
     display: block;
     margin: auto;
-     border: none; 
+    border: none; 
     background: none;
     color: black;
     
