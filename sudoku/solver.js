@@ -182,7 +182,31 @@ function isComplete(board) {
  * game play or when the solver is working.
  * @param {array} grid 
  */
- function updateMoves(board, moves){
+//  function updateMoves(board, moves){
+//     nrows = board.length;
+//     ncols = board[0].length;
+
+//     grid = getGrid(board);
+
+//     // Put all non-zero values into the grid
+//     for (i=0; i<nrows; i++){
+//         for (j=0; j<ncols; j++){
+//             if (!(board[i][j].fixed)) {
+//                 moves.push([i, j, grid[i][j], 'backtrack']);
+//             }
+//         }
+//     }
+//     return moves;
+// }
+
+/**
+ * Populate the Sudoku board graphic with the values from grid
+ * This should only be done when a new puzzle is selected, not during
+ * game play or when the solver is working.
+ * @param board
+ * @param moves
+ */
+ function updateChangedMoves(board, moves){
     nrows = board.length;
     ncols = board[0].length;
 
@@ -200,13 +224,15 @@ function isComplete(board) {
 }
 
 
+
 /**
  * Backtracking search algorithm
  * @param assignment   The board, an array of arrays of elements of class variable.
  * @param constraints
- * @param boardPlot  Class for plotting the board
+ * @param moves
+ * @param depth  The depth of the backtracking
 */
-function backtrack(assignment, constraints, moves){
+function backtrack(assignment, constraints, moves, depth){
     let domainVals;
     let ac3result;
 
@@ -216,6 +242,7 @@ function backtrack(assignment, constraints, moves){
     let unasgn = getNextUnassigned(assignment);
 
     for (let d of unasgn.domain) {
+        console.log("On depth: " + depth + ", row,col: " + unasgn.row + ", " + unasgn.col + ", domain: " + d);
 
         // Replace the domain of x with d in the assignment
         assignment[unasgn.row][unasgn.col].replace(d);       // replace domain of x with d
@@ -223,7 +250,7 @@ function backtrack(assignment, constraints, moves){
         // Update the graphics: here is where we have to refresh a bunch of boxes that changed
         //TODO: only update the boxes that changed, and add a new style for this
         //updateBoard(assignment);
-        moves = updateMoves(assignment, moves);
+        moves = updateChangedMoves(assignment, moves);
         //moves.push([unasgn.row, unasgn.col, d, 'backtrack']);
 
         // Deep copy the board. Any fixed values (eventually "final") will never be changed,
@@ -253,10 +280,10 @@ function backtrack(assignment, constraints, moves){
 
         // Keep repeating AC-3 and backtracking until we get to an impossible value
         // (empty domain). When that occurs, move onto the next trial domain value
-        [ac3result, moves] = arcConsistency3(tempBoard, constraints, moves);
+        // The prefix to the method here is "backtrack"
+        [ac3result, moves] = arcConsistency3(tempBoard, constraints, moves, "backtrackPlus");
         if (ac3result != -1) {
-
-            [result, moves] = backtrack(tempBoard, constraints, moves);
+            [result, moves] = backtrack(tempBoard, constraints, moves, depth++);
                                                   //   assignment is returned
             if (result !== -1) {                  //   If it worked:
                 return [result, moves];           //  unwind or return to solve
@@ -266,9 +293,7 @@ function backtrack(assignment, constraints, moves){
         // There is no need to remove d from domain, because the next time
         // around we will just reset it, and if we run out of values, we
         // will return FAIL (-1)
-        // assignment[x.row,x.col] = d             //#   remove d from domain
         // But we do need it for the graphics
-        //populateSquare(unasgn.row, unasgn.col, d, 'backtrack'); 
         moves.push([unasgn.row, unasgn.col, d, 'backtrack']); 
         
     }
@@ -280,12 +305,13 @@ function backtrack(assignment, constraints, moves){
  * @param {*} assignment 
  * @param {*} constraints 
  * @param {*} moves 
+ * @param {*} prefix  A prefix (if any) to prepend to the solver method, e.g. "final" etc
  * @returns The assignment and the moves
  * @throws  Error if constraint exists for fixed values
  */
-function arcConsistency3(assignment, constraints, moves) {
+function arcConsistency3(assignment, constraints, moves, prefix="") {
 
-    function constraintChecker(assignment, constraints, moves) {
+    function constraintChecker(assignment, constraints, moves, prefix="") {
         // Array for any new constraints we need to add on
         let newConstraints = [];
         let resultFromRemoval;
@@ -318,8 +344,7 @@ function arcConsistency3(assignment, constraints, moves) {
             // Whenever we are down to a domain of one, update the moves
             if (anyremoved & xi.getDomainSize() == 1) {
                 value = xi.getOnlyValue();
-                //populateSquare(xi.row, xi.col, value, 'ac3'); 
-                moves.push([xi.row, xi.col, value, 'ac3']);
+                moves.push([xi.row, xi.col, value, prefix+'AC3']);
             }
             modified = true;
 
@@ -356,7 +381,7 @@ function arcConsistency3(assignment, constraints, moves) {
     // which is then returned and gone through next time around, until there are
     // no new constraints
     while (newConstraints.length > 0 & count < 100) {
-        newConstraints = constraintChecker(assignment, newConstraints, moves);
+        newConstraints = constraintChecker(assignment, newConstraints, moves, prefix);
         if (newConstraints === -1) {
             return [-1, moves];
         }
@@ -395,11 +420,12 @@ function solve(original) {
     // Get the starting constraints
     constraints = getConstraints(board);
 
-    // Try AC-3 alone first
-    [board, moves] = arcConsistency3(board, constraints, moves);
+    // Try AC-3 alone first. The prefix to the solver method is "final"
+    // because any AC-3 solutions found here are the final answer for the box.
+    [board, moves] = arcConsistency3(board, constraints, moves, "final");
 
     // If it isn't solved, using backtracking with AC-3
-    [board, moves] = backtrack(board, constraints, moves);
+    [board, moves] = backtrack(board, constraints, moves, 0);
 
     // Final check: check all constraints again    
     boardValid = qcBoard(board);

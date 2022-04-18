@@ -70,6 +70,7 @@ h1 {
    text-align: center;
 }
 
+
 /* Make a grid for the puzzles */
 #grid-container {
    display: flex;
@@ -109,8 +110,8 @@ h1 {
 /* Links that are play buttons  */
 .button {
    display: inline-block;
-   margin-top: 10px;
-   margin-bottom: 35px;
+   margin-top: 5px;
+   margin-bottom: 5px;
    font-weight: 400;
    text-align: center;
    white-space: nowrap;
@@ -124,7 +125,7 @@ h1 {
    border-right-color: transparent;
    border-bottom-color: transparent;
    border-left-color: transparent;
-   padding: 6px 12px;
+   padding: 6px 10px;
    font-size: 14px;
    line-height: 1.42857143;
    border-radius: 4px;
@@ -137,7 +138,13 @@ h1 {
    border-color: rgb(17, 49, 30);
 }
 
+.button:disabled {
+   color: #fff;
+   background-color: rgba(25, 75, 45, 0.693);
+   border-color: rgb(34, 47, 39);
+}
 
+/*TODO: Disable hover if the button is not active */
 .button:hover {
    color: #fff;
    background-color: rgb(17, 49, 30);
@@ -160,3 +167,10 @@ footer {
    bottom: 0;
    text-align: left;
 }
+
+/* Generics for fieldset */
+fieldset {
+   background-color: white;
+}
+
+

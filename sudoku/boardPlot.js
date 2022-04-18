@@ -14,7 +14,7 @@
     for (i=0; i<nrows; i++){
         for (j=0; j<ncols; j++){
             if (grid[i][j] > 0) {
-                populateSquare(i, j, grid[i][j], 'fixed');    //'black', 'bold');
+                populateSquare(i, j, grid[i][j], 'fixed');
             }
         }
     }
@@ -27,22 +27,22 @@
  * game play or when the solver is working.
  * @param {array} grid 
  */
- function updateBoard(board){
-    nrows = board.length;
-    ncols = board[0].length;
+//  function updateBoard(board){
+//     nrows = board.length;
+//     ncols = board[0].length;
 
-    grid = getGrid(board);
+//     grid = getGrid(board);
 
-    // Put all non-zero values into the grid
-    for (i=0; i<nrows; i++){
-        for (j=0; j<ncols; j++){
-            if (!(board[i][j].fixed)) {
-                populateSquare(i, j, grid[i][j], 'backtrack');    //'black', 'bold');
-            }
-        }
-    }
+//     // Put all non-zero values into the grid
+//     for (i=0; i<nrows; i++){
+//         for (j=0; j<ncols; j++){
+//             if (!(board[i][j].fixed)) {
+//                 populateSquare(i, j, grid[i][j], 'backtrack');
+//             }
+//         }
+//     }
 
-}
+// }
 
 
 /**
@@ -55,13 +55,13 @@
  function populateSquare(irow, icol, value, boxStyle='empty') { 
      
     // Allowed values for modifiable cell properties
-    let allowedBoxStyles = ['empty', 'fixed', 'final', 'backtrack', 'ac3'];
+    let allowedBoxStyles = ['empty', 'fixed', 'backtrack', 'AC3', 'backtrackPlusAC3', 'finalAC3'];
     let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     // If the value is outside the range, throw error
     if (!(value in allowedValues)) {
-        console.log("Bad value in square at " + irow + ", " + icol + ": " + value);
-        throw "Bad value for Sudoku square";
+        msg = "Bad value in square at " + irow + ", " + icol + ": " + value;
+        throw msg;
     } 
     
     // The Sudoku cell at irow, icol
@@ -91,19 +91,21 @@
     }
 
     // Also, indicate in the explanation text what is happening
-    // The explanation area
     let explanation = document.querySelector(`.explanation`);
     if (boxStyle === 'fixed') {
         explanationMsg = '<p>Puzzle ready!</p><p>Choose another puzzle or choose a solver.</p>';
     }
-    else if (boxStyle == 'backtrack') {
+    else if (boxStyle === 'backtrack') {
         explanationMsg = '<p>Solving with backtracking.</p>';
     }
-    else if (boxStyle == 'ac3') {
-        explanationMsg = '<p>Solving with AC-3.</p>';
+    else if (boxStyle === 'backtrackPlusAC3') {
+        explanationMsg = '<p>Solving with AC-3 during backtracking.</p>';
     }
-    else if (boxStyle == 'final') {
-        explanationMsg = '<p>Final possibility for square</p>';
+    else if (boxStyle === 'finalAC3') {
+        explanationMsg = '<p>Solving with AC-3: final solution for box.</p>';
+    }
+    else if (boxStyle === 'AC3') {
+        explanationMsg = '<p>Solving with AC-3.</p>';
     }
     else {
         explanationMsg = '<p></p>';
@@ -138,8 +140,11 @@
 
 
 /**
- * Get the grid for the board from a starting grid and moves
- * @param board
+ * Get the grid for the board up to a certain point (location) in the list of moves,
+ * from a starting grid.
+ * @param grid
+ * @param moves
+ * @param location
  * @return grid
 */
 function updateGridFromMoves(grid, moves, location) {
@@ -148,6 +153,7 @@ function updateGridFromMoves(grid, moves, location) {
     let ncols = grid[0].length;
     let newgrid = new Array(nrows); 
 
+    // Create empty grid (grid of zeros)
     for (i=0; i<nrows; i++) {
         newgrid[i] = new Array(ncols); 
         for (j=0; j<ncols; j++) {
@@ -155,13 +161,13 @@ function updateGridFromMoves(grid, moves, location) {
         }
     };
 
-    // create grid of final moves at location
+    // Create grid of final moves at location
     for (iloc=0; iloc<location; iloc++) {
-        move = moves[iloc];
+        move = moves[iloc];  // row, column, value, method
         newgrid[move[0]][move[1]] = [move[2], move[3]];
     };
 
-    // Put all non-zero values into the grid
+    // Put all values into the grid
     for (i=0; i<nrows; i++){
         for (j=0; j<ncols; j++){
             populateSquare(i, j, newgrid[i][j][0], newgrid[i][j][1]);
