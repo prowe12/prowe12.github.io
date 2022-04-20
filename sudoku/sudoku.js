@@ -478,12 +478,6 @@ document.querySelector("#solverDemoBacktrack").addEventListener("click", functio
 
 
 // Solver demo for backtracking + AC-3
-// TODO: The evil puzzle, and maybe all puzzles, is giving the wrong answer 
-// (e.g. there are a lot of ones). Remember this was seen before. Perhaps it was
-// fixed in the main version? Compare codes to find out. Or perhaps it was
-// correct here before making all the changes to save the moves -
-// copy this code to a temporary directory and undo all the changes in this branch
-// to find out (then copy the temp dir code back in, fix the problem, and commit)
 document.querySelector("#playSudokuSolver").addEventListener("click", function() {
     refreshControls();
     clearDomainFromTableForRunning();
@@ -544,7 +538,6 @@ speedSlider.addEventListener('click',() => {
         clearInterval(timeId);
 
         // Restart play at the new speed
-        //TODO: I think this only plays forward!
         timeId = setInterval(playOrRewind, delay);
     };
 });
