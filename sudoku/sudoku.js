@@ -17,20 +17,6 @@
  * 
  */
 
-// Built-in modules
-//import sys
-//from os.path import exists
-//from numpy import loadtxt
-
-// Sudoku modules
-//from backtrack import backtracker                      # Backtrack
-//from solver import solve                               # Backtrack + AC-3
-//from board_plotter import BoardPlot                    # Include graphics
-
-// For debugging, use this instead of the above to turn off graphics
-//from board_plotter import BoardPrint as BoardPlot      # No graphics
-
-
 /*****************************************************
     FUNCTIONS
 ******************************************************/
@@ -47,7 +33,6 @@ function fileExists(urlToFile) {
     if (xhr.status === 404) {
         throw `File ${urlToFile} not found.`;
     }
-         
     return xhr.status !== 404;
 }
 
@@ -66,7 +51,6 @@ function loadStartingValues(puzzle='easy'){
         puzzle = puzzleTypes[randint];
      }
 
-    //TODO: Add all the puzzles here
     if (puzzle === 'easy') {
         grid = [[5, 3, 0, 0, 7, 0, 0, 0, 0], 
                 [6, 0, 0, 1, 9, 5, 0, 0, 0], 
@@ -131,8 +115,6 @@ function loadStartingValues(puzzle='easy'){
             [0, 0, 0, 0, 8, 0, 0, 7, 9]];
     return grid;
 }
-
-
 
 
 /**
@@ -364,7 +346,6 @@ rewindToMove = function(location)  {
 };
 
 
-
 /** Determine the delay for the graphics display based on the animation speed
 * @param {*} ANIMATION_SPEED The speed from the slider
 * @returns  The delay for filling in boxes in the puzzle
@@ -377,6 +358,7 @@ function getDelayFromSpeed(ANIMATION_SPEED) {
     return delay;
 }
 
+
 /**
  * Increment the delay from large (slow) to 0 (no delay=>fastest possible speed)
  * @param {*} delay The delay for filling in boxes in the puzzle
@@ -385,7 +367,6 @@ function getDelayFromSpeed(ANIMATION_SPEED) {
 function incrementDelay(delay, buttonType) {
     let forwardText;
     let rewindText;
-
 
     // There are 4 speeds: slow (1000), medium (100), fast (10), fastest (0)
     // bump up to the next speed (periodic boundary conditions) 
@@ -419,8 +400,6 @@ function incrementDelay(delay, buttonType) {
 
     return [delay, delayText];
  }
-
-
 
 
 /*****************************************************
@@ -462,7 +441,6 @@ document.addEventListener("DOMContentLoaded", function () {
     playReset();
     boardReset();   
     runBacktrackSolver();
-
 });
   
 
@@ -519,7 +497,6 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function()
     nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
     nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)"); 
 
- 
     // Reset the state of play and the board
     playReset();
     boardReset();   
@@ -731,6 +708,7 @@ rewindToBegButton.addEventListener("click", function() {
     rewindToBegButton.classList.remove("selected");
 });
 
+
 // Event listener for the pause button
 pauseButton.addEventListener("click", function() {
 
@@ -745,6 +723,13 @@ pauseButton.addEventListener("click", function() {
     clearInterval(timeId);
 });
 
+
+/**
+ * Get the domain
+ * @param row  Index to the row of currentgrid
+ * @param col  Index to the column of currentgrid
+ * @param currentgrid  The current grid with values for row and col
+ */ 
 function getDomain(row, col, currentgrid) {
     let nside = currentgrid.length;
     let val;
@@ -802,6 +787,7 @@ function clearDomainFromTable() {
     }    
 }
  
+
 /**
  * For running operations that should not show the domain, when the
  * domain is on. Check if the domain button is on and, if so, turn it off
@@ -815,6 +801,7 @@ function clearDomainFromTable() {
         clearDomainFromTable();    
     }
 }
+
 
 /**
  * Show the domain on the display board
@@ -833,6 +820,7 @@ function showdomain() {
         }
     }
 }
+
 
 // Event listener for the show domain button
 showDomainButton.addEventListener("click", function() {
@@ -951,10 +939,11 @@ stepBackButton.addEventListener("click", function() {
         state.innerHTML = "<p>Undid all moves back to beginning.</p><p>Continue using controls to play the solution.</p><p>Or choose a different puzzle or solver.</p>";
     };
 
-
     stepBackButton.classList.remove("selected");
  });
 
+
+//     TO IMPLEMENT LATER  //
 // // Function for play/pause button
 // function playpause() {
 //     // Find out the status of the play/pause button
