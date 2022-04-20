@@ -44,6 +44,90 @@
 
 // }
 
+function domainBuilder(i, domain) {
+    if (domain.has(i)) {
+        return String(i);
+    }
+    else {
+        return " ";
+    }
+}
+
+/** Populate the domain in a Sudoku square
+* Populate a Sudoku board graphic square based on given row and col
+* @param {number} row 
+* @param {number} col 
+* @param {number} value 
+* @throws error if bad value given for style of sudoku box
+*/
+function populateSquareWithDomain(irow, icol, domain, boxStyle='empty') { 
+    let domainstr = "<p>" //123</p><p>456</p><p>789</p>"
+
+    for (i=1; i<=3; i++) {
+        domainstr += domainBuilder(i, domain);
+    }
+    domainstr += "</p><p>"
+    for (i=4; i<=6; i++) {
+        domainstr += domainBuilder(i, domain);
+    }
+    domainstr += "</p><p>"
+    for (i=7; i<=9; i++) {
+        domainstr += domainBuilder(i, domain);
+    }
+    domainstr += "</p>"
+    
+    domain = domainstr;
+
+    // Allowed values for modifiable cell properties
+    let allowedBoxStyles = ['empty', 'fixed', 'backtrack', 'AC3', 'backtrackPlusAC3', 'finalAC3'];
+    let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    // The Sudoku cell at irow, icol
+    let box = document.querySelector(`.row-${irow} .col-${icol}`);
+
+    // If this box has already been set to fixed, we should not be changing it
+    if (box.className.indexOf("fixed") !== -1) {
+        return;
+    }
+
+    // Clear out all box style classes
+    for (let thisStyle of allowedBoxStyles) {
+        box.classList.remove(thisStyle);
+    }
+
+    // Add the input box style class. If it is not an allowed value, use default
+    box.classList.add("domain");
+
+    // Put the number in the box, unless it is zero, then keep empty
+    box.innerHTML = domain;
+
+}
+
+   
+/**
+ * Populate a Sudoku board graphic square based on given row and col
+ * @param {number} row 
+ * @param {number} col 
+ * @throws error if bad value given for style of sudoku box
+ */
+function boxborder(irow, icol, boxStyle='empty') { 
+    // Get the sudoku box at the row and column and draw a border
+    let box = document.querySelector(`.row-${irow} .col-${icol}`);
+    box.classList.add("boxborder");
+}
+
+/**
+ * Populate a Sudoku board graphic square based on given row and col
+ * @param {number} row 
+ * @param {number} col 
+ * @throws error if bad value given for style of sudoku box
+ */
+ function removeboxborder(irow, icol, boxStyle='empty') { 
+    // Get the sudoku box at the row and column and draw a border
+    let box = document.querySelector(`.row-${irow} .col-${icol}`);
+    box.classList.remove("boxborder");
+}
+
 
 /**
  * Populate a Sudoku board graphic square based on given row and col
@@ -52,10 +136,11 @@
  * @param {number} value 
  * @throws error if bad value given for style of sudoku box
  */
- function populateSquare(irow, icol, value, boxStyle='empty') { 
+function populateSquare(irow, icol, value, boxStyle='empty') { 
      
     // Allowed values for modifiable cell properties
-    let allowedBoxStyles = ['empty', 'fixed', 'backtrack', 'AC3', 'backtrackPlusAC3', 'finalAC3'];
+    let explanationMsg;
+    let allowedBoxStyles = ['empty', 'fixed', 'backtrack', 'AC3', 'backtrackPlusAC3', 'finalAC3', 'domain'];
     let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     // If the value is outside the range, throw error
@@ -79,7 +164,7 @@
 
     // Add the input box style class. If it is not an allowed value, use default
     if (allowedBoxStyles.indexOf(boxStyle) !== -1) {
-            box.classList.add(boxStyle);
+        box.classList.add(boxStyle);
     }
 
     // Put the number in the box, unless it is zero, then keep empty
@@ -174,5 +259,5 @@ function updateGridFromMoves(grid, moves, location) {
         }
     };
 
-    return;
+    return newgrid;
 }

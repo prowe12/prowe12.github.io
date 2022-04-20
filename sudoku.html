@@ -70,14 +70,20 @@
                     <button type="button" id="pauseButton" class="button controlButton">Pause</button>
                     <button type="button" id="playPause" class="button controlButton">Play</button>
                     <button type="button" id="forwardToEnd" class="button controlButton">Finish</button>
-                    &nbsp;
-                    <button type="button" id="step" class="button controlButton">Step</button>
 
                     <!-- Slider for controlling the speed of playback -->
+                    <br>
                     Speed <input class="slider" type=range min=0 max=300 value=20 class="anim-speed"></input>
 
+                    <br>
+                    <br>
                     <!-- Button to show the domain of each square -->
-                    <button type="button" id="showDomainButton" class="button controlButton">Show the domain</button>
+                    <button type="button" id="showDomainButton" class="button controlButton" value="OFF">
+                        Show the domain
+                    </button>
+                    &nbsp; &nbsp; 
+                    <button type="button" id="step" class="button controlButton">Step</button>
+                    <button type="button" id="stepBack" class="button controlButton">Undo</button>
                 </fieldset>
             </div>
 
