@@ -20,17 +20,6 @@
  * March 14, 2021
  */
 
-// from copy import deepcopy
-
-// from variable import Variable
-// from constraints import get_all_constraints, qc_board_and_constraints
-// from constraints import reverse_constraints, final_constraints
-
-// # Choose how to get the next unassigned variable
-// #from get_unassigned_variable import get_next_unassigned as get_unassigned
-// #from get_unassigned_variable import get_unassigned_using_mrv as get_unassigned
-// from get_unassigned_variable import get_unassigned_using_mrv_and_degree as get_unassigned
-
 
 /**
  * If the constraint given by xj has only one value, and if that value is present in the
@@ -58,30 +47,20 @@ function removeValues(xi, xj) {
         }
     }
     return new Array(xi, modified);
-
 }
 
 
 /**
- * Create the board as an array of arrays of each cell, where each cell is a
+ * Create the board as an array of arrays of each Sudoku box, where each box is a
  * class containing its row and column index and the domain of values allowed
  * in it.
  * @param {} grid  The Numbers in the Sudoku board, as a list of list of int
- * @param {} nside  Elements in a side of the board; default 9
  * @return The board, an array of arrays of elements of class variable.
  */
 function getBoard(grid) {
     let nside = grid.length;
     var board = new Array();
 
-    // board = [[[] for i in range(nside)] for j in range(nside)]
-    // board = [[Variable(i, j, nside) for i in range(nside)] for j in range(nside)]
-    // for i, row_vals in enumerate(grid):
-    //     for j, val in enumerate(row_vals):
-    //         if val == 0:
-    //             board[i][j] = Variable(i, j, nside)
-    //         else:
-    //             board[i][j] = Variable(i, j, nside, {val}, fix=True)
     let boardRow;
     let value;
     let allVals;
@@ -108,9 +87,9 @@ function getBoard(grid) {
 }
 
 
-
 /**
- * Get the grid for the board
+ * Given a board, which is an array of arrays of classes for each box,
+ * get the grid of 9x9 values in the current state of the board
  * @param board
  * @return grid
 */
@@ -143,8 +122,6 @@ function getGrid(board) {
 }
 
 
-
-
 /**
  * Check if the board is complete, where complete means each cell has
  * only one value. Note that checking for consistency is not done here.
@@ -175,30 +152,6 @@ function isComplete(board) {
 }
 
 
-
-/**
- * Populate the Sudoku board graphic with the values from grid
- * This should only be done when a new puzzle is selected, not during
- * game play or when the solver is working.
- * @param {array} grid 
- */
-//  function updateMoves(board, moves){
-//     nrows = board.length;
-//     ncols = board[0].length;
-
-//     grid = getGrid(board);
-
-//     // Put all non-zero values into the grid
-//     for (i=0; i<nrows; i++){
-//         for (j=0; j<ncols; j++){
-//             if (!(board[i][j].fixed)) {
-//                 moves.push([i, j, grid[i][j], 'backtrack']);
-//             }
-//         }
-//     }
-//     return moves;
-// }
-
 /**
  * Populate the Sudoku board graphic with the values from grid
  * This should only be done when a new puzzle is selected, not during
@@ -224,40 +177,28 @@ function isComplete(board) {
 }
 
 
-
 /**
  * Backtracking search algorithm
  * @param assignment   The board, an array of arrays of elements of class variable.
  * @param constraints
  * @param moves
- * @param depth  The depth of the backtracking
 */
-function backtrack(assignment, constraints, moves, depth){
+function backtrack(assignment, constraints, moves) {
     let domainVals;
     let ac3result;
 
     if (isComplete(assignment)) {                // Exit condition: board done!
-        return [assignment, moves];         // This returns to the last call to backtrack
+        return [assignment, moves];              // This returns to the last call to backtrack
     }
     let unasgn = getNextUnassigned(assignment);
 
     for (let d of unasgn.domain) {
-        console.log("On depth: " + depth + ", row,col: " + unasgn.row + ", " + unasgn.col + ", domain: " + d);
-
-        // Replace the domain of x with d in the assignment
-        assignment[unasgn.row][unasgn.col].replace(d);       // replace domain of x with d
-
-        // Update the graphics: here is where we have to refresh a bunch of boxes that changed
-        //TODO: only update the boxes that changed, and add a new style for this
-        //updateBoard(assignment);
-        moves = updateChangedMoves(assignment, moves);
-        //moves.push([unasgn.row, unasgn.col, d, 'backtrack']);
 
         // Deep copy the board. Any fixed values (eventually "final") will never be changed,
         // so they can be references. Everything else must be new so we can revert
         // back if needed.
         let nside = assignment.length;
-        let tempBoard = new Array(nside); //assignment;
+        let tempBoard = new Array(nside);
         for (let irow=0; irow<nside; irow++) {
             tempBoard[irow] = new Array(nside);
             for (let icol=0; icol<nside; icol++) {
@@ -274,6 +215,16 @@ function backtrack(assignment, constraints, moves, depth){
             }
         }
 
+        // Replace the domain of x with d in the assignment
+        tempBoard[unasgn.row][unasgn.col].replace(d);       // replace domain of x with d
+
+        // Update the graphics: here is where we have to refresh a bunch of boxes that changed
+        //TODO: only update the boxes that changed, and add a new style for this
+        //updateBoard(assignment);
+        //moves = updateChangedMoves(assignment, moves);
+        moves.push([unasgn.row, unasgn.col, d, 'backtrack']);
+
+
         // No need to deepcopy the constraints because we never alter them.
         // We always loop through them, creating new constraints for each loop,
         // which are then looped over next time.
@@ -282,8 +233,9 @@ function backtrack(assignment, constraints, moves, depth){
         // (empty domain). When that occurs, move onto the next trial domain value
         // The prefix to the method here is "backtrack"
         [ac3result, moves] = arcConsistency3(tempBoard, constraints, moves, "backtrackPlus");
-        if (ac3result != -1) {
-            [result, moves] = backtrack(tempBoard, constraints, moves, depth++);
+        if (ac3result !== -1) {
+            // This means d is ok (for now)
+            [result, moves] = backtrack(tempBoard, constraints, moves);
                                                   //   assignment is returned
             if (result !== -1) {                  //   If it worked:
                 return [result, moves];           //  unwind or return to solve
@@ -294,11 +246,15 @@ function backtrack(assignment, constraints, moves, depth){
         // around we will just reset it, and if we run out of values, we
         // will return FAIL (-1)
         // But we do need it for the graphics
-        moves.push([unasgn.row, unasgn.col, d, 'backtrack']); 
+        //moves.push([unasgn.row, unasgn.col, d, 'backtrack']); 
+        moves = updateChangedMoves(assignment, moves);
         
+        // change current move to false because it did not work
+
     }
     return [-1, moves];   // Fail, but keep the moves
 }
+
 
 /**
  * 
@@ -310,6 +266,7 @@ function backtrack(assignment, constraints, moves, depth){
  * @throws  Error if constraint exists for fixed values
  */
 function arcConsistency3(assignment, constraints, moves, prefix="") {
+    let inverseMoves = [];
 
     function constraintChecker(assignment, constraints, moves, prefix="") {
         // Array for any new constraints we need to add on
@@ -344,6 +301,7 @@ function arcConsistency3(assignment, constraints, moves, prefix="") {
             // Whenever we are down to a domain of one, update the moves
             if (anyremoved & xi.getDomainSize() == 1) {
                 value = xi.getOnlyValue();
+                inverseMoves.push([xi.row, xi.col, 0, 'undoAC3']);
                 moves.push([xi.row, xi.col, value, prefix+'AC3']);
             }
             modified = true;
@@ -367,12 +325,12 @@ function arcConsistency3(assignment, constraints, moves, prefix="") {
                 // add them to the queue
                 if (xi.getDomainSize() === 0) {
                     // CSP cannot be solved
-                    return -1;
+                    return [-1, inverseMoves];
                 }
                 newConstraints = reverseConstraints(xi.row, xi.col, xi.maxDomainVal, newConstraints, assignment);
             }
         }
-        return newConstraints;
+        return [newConstraints, inverseMoves];
     }
 
     let newConstraints = constraints;
@@ -381,7 +339,7 @@ function arcConsistency3(assignment, constraints, moves, prefix="") {
     // which is then returned and gone through next time around, until there are
     // no new constraints
     while (newConstraints.length > 0 & count < 100) {
-        newConstraints = constraintChecker(assignment, newConstraints, moves, prefix);
+       [newConstraints, inverseMoves] = constraintChecker(assignment, newConstraints, moves, prefix);
         if (newConstraints === -1) {
             return [-1, moves];
         }
@@ -390,9 +348,8 @@ function arcConsistency3(assignment, constraints, moves, prefix="") {
     if (count >= 99) {
         throw "Tried to go through constraint loop too many times, so quit."
     }
-    return [assignment, moves];
+    return [assignment, moves, inverseMoves];
 }      
-
 
 
 /*
@@ -407,6 +364,7 @@ function solve(original) {
 
     let grid;
     let moves = [];
+    let dum;
 
     // Get the board as an array of arrays of Variables
     let board = getBoard(original);
@@ -422,7 +380,7 @@ function solve(original) {
 
     // Try AC-3 alone first. The prefix to the solver method is "final"
     // because any AC-3 solutions found here are the final answer for the box.
-    [board, moves] = arcConsistency3(board, constraints, moves, "final");
+    [board, moves, dum] = arcConsistency3(board, constraints, moves, "final");
 
     // If it isn't solved, using backtracking with AC-3
     [board, moves] = backtrack(board, constraints, moves, 0);
@@ -442,24 +400,25 @@ function solve(original) {
 }
 
 
-
-
 /**
  * Helper function for debugging that prints the board
  * @param {*} board 
  */
 function printBoard(board) {
-    let nrows = board.length;
-    let ncols = board[0].length;
+    grid = getGrid(board);
+    
+    let nrows = grid.length;
+    let ncols = grid[0].length;
+    let printrow;
 
     for (let i=0; i<nrows; i++) {
+        printrow = [];
         for (let j=0; j<ncols; j++) {
-            box = board[i][j];
+            printrow.push(grid[i][j]);
         }
+        console.log(printrow);
     }
 }
-
-
 
 /**
  * A function to be used in debugging that prints the location and domains of xi and xj
@@ -472,3 +431,28 @@ function printStuff(xi, xj) {
     console.log(`xj is at ${xj.row}, ${xj.col} with domain:`);
     console.log(xj.domain);
 }
+
+
+//     DEAD CODE. DO WE WANT TO IMPLEMENT THIS? 
+/**
+ * Populate the Sudoku board graphic with the values from grid
+ * This should only be done when a new puzzle is selected, not during
+ * game play or when the solver is working.
+ * @param {array} grid 
+ */
+//  function updateMoves(board, moves){
+//     nrows = board.length;
+//     ncols = board[0].length;
+
+//     grid = getGrid(board);
+
+//     // Put all non-zero values into the grid
+//     for (i=0; i<nrows; i++){
+//         for (j=0; j<ncols; j++){
+//             if (!(board[i][j].fixed)) {
+//                 moves.push([i, j, grid[i][j], 'backtrack']);
+//             }
+//         }
+//     }
+//     return moves;
+// }

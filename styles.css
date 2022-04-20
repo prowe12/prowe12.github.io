@@ -47,7 +47,7 @@ h1 {
 body {
    display: flex;
    flex-direction: column;
-   background-color: rgb(242, 238, 255); /* rgb(200, 225, 250); */
+   background-color: rgb(242, 238, 255); 
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
@@ -148,7 +148,6 @@ h1 {
 .button:hover {
    color: #fff;
    background-color: rgb(17, 49, 30);
-   border-color: rgb(17, 49, 30);
 }
 
 /* Space at the bottom */
