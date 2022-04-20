@@ -542,16 +542,11 @@ async function mmWalkthrough(){
             fakeMove(col,currentPlayer);
             
             // Call the asynchronus function, which returns a promise that should resolve to tempScore
-            alert("Wait started");
             tempScore = await mmWalkthrough2();
             console.log("tempScore: " + tempScore);
-            alert("Wait ended");
-
         }
         addToTable(col, table, tempScore);
-        alert("Just added to table");
         if(tempScore >= maxScore){
-            alert("tempScore >= maxScore");
             //if you've hit a new max value, update the table and the max
             changeColColor(table,maxCol,"black")
             maxScore = tempScore
@@ -634,6 +629,21 @@ async function addToTable(column, table, score){
     return score
 }
 
+
+
+
+/**
+ * The function for pausing, which returns a promise.
+ */
+function pause(delay) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve();
+        }, delay);
+    })
+}
+
+
 // Because this function will have a delay in it, the function that calls it will need
 // to wait for it to finish. Therefore this function must be asynchronus and return
 // a promise
@@ -653,44 +663,46 @@ async function mmWalkthrough2(){
     let minCol = 0;
     let delay = 1000;
 
+      
+    console.log("Before getMinScore, minScore = " + minScore);
+   
+    
+
     // Every time through the for loop we have to wait longer than before
     // to update the table, so multiply the delay by the column
-    async function getMinScore() {
+    async function getMinScore(minScore) {
         console.log("In getMinScore");
         console.log("board[0].length: " + board[0].length);
         console.log("minScore: " + minScore)
         for(let col = 0; col < board[0].length; col++){
-            minScore = setTimeout( () => {
-                console.log("In setInterval of for loop");
-                alert("");
-                if(col>0){
-                    undoMove(col-1);
-                }
-                fakeMove(col, Math.abs(1-currentPlayer));
-                let score = computer.evaluate(board);
+            console.log("In for loop");
+            if(col>0){
+                undoMove(col-1);
+            }
+            fakeMove(col, Math.abs(1-currentPlayer));
+            let score = computer.evaluate(board);
 
-                addToTable(col, table, score);
+            addToTable(col, table, score);
 
-                console.log("score:",score);
-                console.log("min score: ",minScore);
-                //let score = minWalkthroughLoop(col,table);
+            console.log("score:",score);
+            console.log("min score: ",minScore);
+            //let score = minWalkthroughLoop(col,table);
 
-                if(score < minScore){
-                    console.log("updating score for col ",col);
-                    changeColColor(table, minCol, "black");
-                    minScore = score;
-                    minCol = col;
-                    changeColColor(table, col, "red");
-                    console.log("min score change to : ",minScore);
-                }
-            }, delay * col);
+            if(score < minScore){
+                console.log("updating score for col ",col);
+                changeColColor(table, minCol, "black");
+                minScore = score;
+                minCol = col;
+                changeColColor(table, col, "red");
+                console.log("min score change to : ",minScore);
+            }
+            await pause(delay);
         }
         console.log("About to return minScore from getMinScore: " + minScore);
         return minScore;
     }
-      
-    console.log("Before getMinScore, minScore = " + minScore);
-    minScore = await getMinScore();
+
+    minScore = await getMinScore(minScore);
 
     // The rest of this needs to wait until all of the above finsihes
     // So the delay is set to delay * board[0].length
@@ -704,7 +716,6 @@ async function mmWalkthrough2(){
     send_value.addEventListener('click', () => {
         return minScore;
     })
-    alert("About to return minScore");
     console.log("minScore: " + minScore);
     return minScore;
 }
