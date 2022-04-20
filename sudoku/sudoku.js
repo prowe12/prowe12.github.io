@@ -224,6 +224,9 @@ function refreshControls() {
     delay = 1000;
     imove = 0;
     running = false;
+
+    // Turn off the domain, if on
+    clearDomainFromTableForRunning()
 }
 
 /**
