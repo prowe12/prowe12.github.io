@@ -40,7 +40,7 @@ var mmDepth = depth.value;
 //mode of the computer player
 let computerModes = document.getElementsByName('autoMan');
 for(let i = 0; i< computerModes.length; i++){
-    console.log(computerModes[i].value);
+    console.log("computerModes[i].value: " + computerModes[i].value);
 }
 
 let computerMode = 'auto';
@@ -53,7 +53,7 @@ playerHuman = [-1,'red',"Human"]
 playerComputer = [1, 'yellow',"Computer"]
 
 players = [playerHuman,playerComputer];
-console.log(players)
+console.log("players: " + players)
 //state player colors
 player1Color = 'red';
 player2Color = 'yellow';
@@ -129,6 +129,7 @@ for(let i = 0; i< computerModes.length; i++){
         if(computerMode == 'auto'){
             nextMove.style.display = 'none';
         }
+        console.log("computerMode:")
         console.log(computerMode);
     })
 }
@@ -154,7 +155,7 @@ reset.addEventListener('click',()=>{
 
 depth.addEventListener('click',()=>{
     mmDepth = depth.value;
-    console.log(mmDepth);
+    console.log("mmDepth: " + mmDepth);
     if(depth.value <=2){
         walkthrough_button.style.display = 'block';
     }
@@ -196,11 +197,11 @@ nextMove.addEventListener('click',()=>{
 async function fallingTile(col){
     let animate;
     for(let i = 0; i<playBoard.length && playBoard[i][col]==0;i++){
-        console.log(tableRow[i].children[col]);
+        //console.log(tableRow[i].children[col]);
         animationCell = tableRow[i].children[col];
         animationStartPix = 0;
         animationEndPix = animationCell.children[0].height+animationCell.children[0].height/2;
-        console.log(animationEndPix);
+        //console.log(animationEndPix);
         console.log("calling animation");
         animate = await fallingTileAnimation(); 
     }
@@ -217,9 +218,6 @@ async function fallingTileAnimation(){
     if(animationStartPix==2){
         console.log(cell);
     }
-    //console.log(cell);
-    //console.log(animationStartPix);
-    //console.log(animationEndPix);
     let context = cell.getContext("2d");
 
     context.clearRect(0,0,cell.width,cell.height);
@@ -261,7 +259,7 @@ playerTurn.textContent = `Your turn!`;
 
 
 for(let i = 0; i<tableRow.length; i++){
-    console.log(tableRow[i]);
+    //console.log(tableRow[i]);
     for(let j = 0; j<tableRow[i].children.length; j++){
         cell = tableRow[i].children[j];
         cell.addEventListener('click',(cell)=>{
@@ -482,9 +480,8 @@ function changeTileColor(row,col,color){
 //     return;
 // }
 
-function mmWalkthrough(){
+async function mmWalkthrough(){
     gamePause = true;
-
 
     mm_max = createMaxElement();
     console.log(mm_max);
@@ -512,7 +509,7 @@ function mmWalkthrough(){
         return;
     });
     //changeColColor(table,col,"green")
-    next_step.addEventListener('click',()=>{
+    next_step.addEventListener('click', async () => {
         // If you pass the end of the board, undo the last move
         if(col >= board[0].length){
             undoMove(col-1);
@@ -543,10 +540,18 @@ function mmWalkthrough(){
         }
         else{
             fakeMove(col,currentPlayer);
-            tempScore = mmWalkthrough2();
+            
+            // Call the asynchronus function, which returns a promise that should resolve to tempScore
+            alert("Wait started");
+            tempScore = await mmWalkthrough2();
+            console.log("tempScore: " + tempScore);
+            alert("Wait ended");
+
         }
-        addToTable(col,table, tempScore);
+        addToTable(col, table, tempScore);
+        alert("Just added to table");
         if(tempScore >= maxScore){
+            alert("tempScore >= maxScore");
             //if you've hit a new max value, update the table and the max
             changeColColor(table,maxCol,"black")
             maxScore = tempScore
@@ -578,7 +583,7 @@ function mmWalkthrough(){
     return;
 }
 
-function undoMove(col){
+async function undoMove(col){
     console.log("undo move");
     console.log(col);
     console.log(board);
@@ -622,16 +627,18 @@ function fakeMove(column,player){
     return score;
 }
 
-function addToTable(column, table, score){
-
+async function addToTable(column, table, score){
     let tbody = table.children[1];
-
-   // console.log(column);
-    tbody.rows[1].cells[column+1].textContent = `${score}`
+    
+    tbody.rows[1].cells[column+1].textContent = `${score}`;
     return score
 }
 
-function mmWalkthrough2(){
+// Because this function will have a delay in it, the function that calls it will need
+// to wait for it to finish. Therefore this function must be asynchronus and return
+// a promise
+async function mmWalkthrough2(){
+    console.log("in mmWalkthrough2");
     mm_min = createMinElement();
     let min_children = mm_min.children;
     let table = min_children[2];
@@ -641,39 +648,65 @@ function mmWalkthrough2(){
     send_value.textContent = "Return Min Value";
     mm_min.appendChild(send_value);
     //let col = 0;
-    let minScore = 100000;
+    //let minScore = 100000;
+    var minScore = 100000;
     let minCol = 0;
-    for(let col = 0; col < board[0].length; col++){
-        if(col>0){
-            undoMove(col-1);
+    let delay = 1000;
+
+    // Every time through the for loop we have to wait longer than before
+    // to update the table, so multiply the delay by the column
+    async function getMinScore() {
+        console.log("In getMinScore");
+        console.log("board[0].length: " + board[0].length);
+        console.log("minScore: " + minScore)
+        for(let col = 0; col < board[0].length; col++){
+            minScore = setTimeout( () => {
+                console.log("In setInterval of for loop");
+                alert("");
+                if(col>0){
+                    undoMove(col-1);
+                }
+                fakeMove(col, Math.abs(1-currentPlayer));
+                let score = computer.evaluate(board);
+
+                addToTable(col, table, score);
+
+                console.log("score:",score);
+                console.log("min score: ",minScore);
+                //let score = minWalkthroughLoop(col,table);
+
+                if(score < minScore){
+                    console.log("updating score for col ",col);
+                    changeColColor(table, minCol, "black");
+                    minScore = score;
+                    minCol = col;
+                    changeColColor(table, col, "red");
+                    console.log("min score change to : ",minScore);
+                }
+            }, delay * col);
         }
-        fakeMove(col,Math.abs(1-currentPlayer));
-        let score = computer.evaluate(board);
-        addToTable(col,table,score);
-        console.log("score:",score);
-        console.log("min score: ",minScore);
-        //let score = minWalkthroughLoop(col,table);
-        if(score<minScore){
-            console.log("updating score for col ",col);
-            changeColColor(table,minCol,"black");
-            minScore = score;
-            minCol = col;
-            changeColColor(table,col,"red");
-        }
-        setTimeout(pause,500);
+        console.log("About to return minScore from getMinScore: " + minScore);
+        return minScore;
     }
+      
+    console.log("Before getMinScore, minScore = " + minScore);
+    minScore = await getMinScore();
+
+    // The rest of this needs to wait until all of the above finsihes
+    // So the delay is set to delay * board[0].length
+
+    // Update the depth=1 table with the minimum score
+    console.log("After for loop, minScore = " + minScore);
+
+    // What's going on here?
     undoMove(6);
     send_value.style.display = "block"
-    send_value.addEventListener('click',()=>{
+    send_value.addEventListener('click', () => {
         return minScore;
     })
+    alert("About to return minScore");
+    console.log("minScore: " + minScore);
     return minScore;
-
-
-}
-
-function pause(){
-
 }
 
 
@@ -851,11 +884,6 @@ function maxValue(depth, board, maxDepth, prevPlay){
 }
 
 function minValue(depth, board, maxDepth, prevPlay){
-    //console.log("min value");
-    //console.log("depth: ",depth);
-    //console.log("prev play: ",prevPlay);
-   // console.log("board: ");
-    //console.log(board);
 
     var actVal = [];
     actVal.length = 2;
@@ -884,7 +912,6 @@ function minValue(depth, board, maxDepth, prevPlay){
         }
         undoResult(a, board);
     }
-    //console.log("taking action ",actVal);
     return actVal;
 }
 
