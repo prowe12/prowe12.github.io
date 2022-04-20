@@ -14,6 +14,7 @@ const playerTurn = document.querySelector('.player-turn');
 const reset = document.querySelector('.reset');
 //nextMove button
 const nextMove = document.querySelector('.next-move');
+
 nextMove.style.display = 'none';
 
 /* Walkthrough variables */
@@ -36,6 +37,7 @@ var mm_min = document.querySelector('.mm-min');
 let aboveTable = document.querySelectorAll('.aboveTable');
 //depth of the slider
 var depth = document.querySelector('.slider');
+var depthContainer = document.querySelector('.slidecontainer');
 var mmDepth = depth.value;
 //mode of the computer player
 let computerModes = document.getElementsByName('autoMan');
@@ -43,29 +45,25 @@ for(let i = 0; i< computerModes.length; i++){
     console.log(computerModes[i].value);
 }
 
+//initialize computer mode to auto
 let computerMode = 'auto';
 
+//grab all the td slots
 let table = document.querySelectorAll('.slot1');
 var gamePause = false;
 
 //set players
 playerHuman = [-1,'red',"Human"]
 playerComputer = [1, 'yellow',"Computer"]
-
 players = [playerHuman,playerComputer];
-console.log(players)
+//want current player to start the game
+var currentPlayer = 0;
+playerTurn.textContent = `Your turn!`;
+
 //state player colors
-player1Color = 'red';
-player2Color = 'yellow';
 background = "rgb(242, 238, 255)";
 
-//animation variables
-let animationCell;
-let animationColumn = 0;
-let animationStartPix = 0;
-let animationEndPix = 0;
-let animationColor = player1Color;
-let dropID;
+
 
 
 /**
@@ -90,99 +88,112 @@ let dropID;
     }
  }
 
- console.log("making computer");
+ //make the computer player
  let computer = new computerPlayer(1,-1,board,mmDepth);
 
- //let background = "rgb(200, 225, 250)";
- console.log("making graphics");
+//make the graphics object
  let graphic = new graphics(background);
 
+ //reset the table for the begining of the game
  graphic.resetTable(table);
- //console.log(computer.makeMove());
 
- computer.testCalc();
 
 /**
- * Mouseover events that display a game tile above whatever column the
- * human player is hovering over
+ * Event listeners for all the buttons
  */
+
+//mouseover events that display a tile over whatever column the human is hovering over
 for(let i = 0; i < tableCell.length; i++){
     //when the player hovers over a cell, place a red tile above that column
     tableCell[i].addEventListener('mouseenter',(e)=>{
-        graphic.displayAboveTable(aboveTable[e.target.cellIndex],animationColor);
+        graphic.displayAboveTable(aboveTable[e.target.cellIndex],players[currentPlayer][1]);
     })
 
     //when a player stops hovering over a cell, remove the tile above that column
     tableCell[i].addEventListener('mouseleave',(e)=>{
         graphic.clearAboveTable(aboveTable[e.target.cellIndex]);
-        //clearDisplayMove(e.target.cellIndex);
     })
 }
 
+//event listener for switching from automatic to manual mode for the computer
 for(let i = 0; i< computerModes.length; i++){
-    computerModes[i].addEventListener('click', ()=>{
-        console.log("updating computer mode")
-        computerMode = computerModes[i].value;
-        if(computerMode == 'man'){
-            nextMove.style.display = 'block';
-        }
-        if(computerMode == 'auto'){
-            nextMove.style.display = 'none';
-        }
-        console.log(computerMode);
-    })
+    if(!gamePause){
+        computerModes[i].addEventListener('click', ()=>{
+            computerMode = computerModes[i].value;
+            //in manual, show the next move button. otherwise, hide it
+            if(computerMode == 'man'){
+                nextMove.style.display = 'block';
+            }
+            if(computerMode == 'auto'){
+                nextMove.style.display = 'none';
+            }
+        })
+    }
+
 }
 
+//event listener for resetting the game
 reset.addEventListener('click',()=>{
+    //reset the playboard
     graphic.resetTable(table);
-    //setCanvasBoard();
-        for(let i = 0; i<6; i++){
-            board[i] = [];
-            board[i].length = 7;
-            for(let j = 0; j<7; j++){
-                board[i][j] = 0;
-            }
-        
+    //reset the board that makeMove() uses to play
+    for(let i = 0; i<6; i++){
+        board[i] = [];
+        board[i].length = 7;
+        for(let j = 0; j<7; j++){
+            board[i][j] = 0;
         }
-        //board = copyBoard(playBoard,board);
-        //return(currentPlayer ===1 ? playerTurn.textContent = `Your turn` : playerTurn.textContent = `Computer's turn!`);
-        playerTurn.style.color = 'black';
-        return playerTurn.textContent = 'Your turn!';
+    
+    }
+    //reset it so its the human's turn
+    currentPlayer = 0;
+    playerTurn.style.color = 'black';
+    return playerTurn.textContent = 'Your turn!';
     }
 );
 
-
+//event listener to adjust the depth of the minimax algorithm
 depth.addEventListener('click',()=>{
-    mmDepth = depth.value;
-    console.log(mmDepth);
-    if(depth.value <=2){
-        walkthrough_button.style.display = 'block';
+    if(!gamePause){
+        mmDepth = depth.value;
+        //for depths of 1 or 2, display the walkthrough
+        if(depth.value <=2){
+            walkthrough_button.style.display = 'block';
+        }
+        //for depths of 3 or 4, hide the walkthrough and reset it
+        if(depth.value >2){
+            walkthrough_button.style.display = 'none';
+            walkthrough.style.display = 'none';
+            gamePause = false;
+            resetWalkthrough();
+        }
+        //update the depth for the computer player
+        computer.updateDepth(mmDepth);
     }
-    if(depth.value >2){
-        walkthrough_button.style.display = 'none';
-        walkthrough.style.display = 'none';
-        resetWalkthrough();
-    }
-    computer.updateDepth(mmDepth);
 });
 
+//event listener to display the walkthrough
 walkthrough_button.addEventListener('click', ()=>{
-
+    //if it is currently not showing, display the walkthrough
     if(walkthrough.style.display === 'none'){
         mmWalkthrough();
         walkthrough.style.display = 'block';
+        //hide the button, since another one shows up as part of the walkthrough
         walkthrough_button.style.display = "none";
-        //walkthrough_button.textContent = 'Hide Minimax Walkthrough'
     }
-    else{
+    else{  
+        //allow the game to continue play
+        gamePause = false;
+        //hide the walkthrough and display the button
         resetWalkthrough();
         walkthrough.style.display = 'none';
         walkthrough_button.textContent = 'Show Minimax Walkthrough'
-        gamePause = false;
+      
     }
     }
 )
 
+//event listener to make the computer's next move
 nextMove.addEventListener('click',()=>{
     if(currentPlayer ==1){
         makeMove(computer.makeMove());
@@ -190,84 +201,12 @@ nextMove.addEventListener('click',()=>{
 })
 
 
-
-
-
-async function fallingTile(col){
-    let animate;
-    for(let i = 0; i<playBoard.length && playBoard[i][col]==0;i++){
-        console.log(tableRow[i].children[col]);
-        animationCell = tableRow[i].children[col];
-        animationStartPix = 0;
-        animationEndPix = animationCell.children[0].height+animationCell.children[0].height/2;
-        console.log(animationEndPix);
-        console.log("calling animation");
-        animate = await fallingTileAnimation(); 
-    }
-    console.log("returning from fallingTile");
-    return;
-
-}
-
-
-
-
-async function fallingTileAnimation(){
-    let cell = animationCell.children[0];
-    if(animationStartPix==2){
-        console.log(cell);
-    }
-    //console.log(cell);
-    //console.log(animationStartPix);
-    //console.log(animationEndPix);
-    let context = cell.getContext("2d");
-
-    context.clearRect(0,0,cell.width,cell.height);
-    context.save();
-
-    context.beginPath();
-    context.arc(cell.width/2,animationStartPix,cell.width/2-2,0,2*Math.PI);
-    context.fillStyle = animationColor;
-    context.fill();
-    //context.restore();
-    animationStartPix++;
-
-    if(animationStartPix <= animationEndPix){
-        window.requestAnimationFrame(fallingTileAnimation);
-        //return;
-    }
-    else{
-        clearCell(cell);
-        console.log("setting animation back to 0");
-        animationStartPix=0;
-        console.log("returning from fallingTileAnimation");
-        return;
-    }
-}
-
-
-
-
-
-
-
-
-
-//want current player to start the game
-var currentPlayer = 0;
-playerTurn.textContent = `Your turn!`;
-
-//go through the cells and show that we know they all have white background
-
-
+//event listener for the human to make a move on all of the table cells
 for(let i = 0; i<tableRow.length; i++){
-    console.log(tableRow[i]);
     for(let j = 0; j<tableRow[i].children.length; j++){
         cell = tableRow[i].children[j];
-        cell.addEventListener('click',(cell)=>{
+        cell.addEventListener('click',()=>{
             if(currentPlayer ===0){
-              //  console.log(j);
-                // playerMove(cell,j);
                 makeMove(j);
             }
         });
@@ -276,8 +215,17 @@ for(let i = 0; i<tableRow.length; i++){
 
 
 
+
+
+
+
+/**
+ * making a move on the gameboard, for either the human or the computer
+ * @param {*} column column to make the move in
+ * @returns 
+ */
 function makeMove(column){
-    console.log("current Player: ",currentPlayer)
+    //if the walkthrough is happening, no player can make a move
     if(gamePause){
         console.log("game paused")
         return;
@@ -285,18 +233,20 @@ function makeMove(column){
 
     for(let i = 5; i >=0; i --){
         //work up from the bottom of the column and fill the first
-            //empty slot you come across with a tile from the player
+        //empty slot you come across with a tile from the player
         if(board[i][column]==0){
+            //update the array board and the displayed board
             board[i][column] = players[currentPlayer][0];
-            console.log(board);
             graphic.drawTile(tableRow[i].children[column].children[0], players[currentPlayer][1]);
+            //if there is a winning state on the board, the game is over
             if(winCheck()){
-                console.log("winning");
+                //if the human won, print that to the screen and keep them the current player
                 if(currentPlayer==0){
                     playerTurn.textContent = `You won!`;
                     playerTurn.style.color = players[currentPlayer][1];
                     currentPlayer = 0;
                 }
+                //if the computer won, print that to the screen and set human to current player
                 else{
                     playerTurn.textContent = `Computer won!`;
                     playerTurn.style.color = players[(currentPlayer*-1)][1];
@@ -304,27 +254,28 @@ function makeMove(column){
                 }
                 reset.textContent = 'Play Again';
             }  
+            //if there is a draw, print to the screen and set human to current player
             else if(drawCheck()){
                 playerTurn.textContent = 'Game is a Draw';
+                currentPlayer = 0;
             }
             else{
+                //after the human makes a move
                 if(currentPlayer==0){
                     playerTurn.textContent = `Computer's turn!`;
                     currentPlayer = 1;
-                    console.log(computerMode);
-                    console.log(board);
+                    //if the computer is automatically playing, make the computer move
                     if(computerMode==='auto' && walkthrough.style.display=="none"){
                         return makeMove(computer.makeMove());
                     }
                 }
                 else{
+                    //after the computer makes a move
                     playerTurn.textContent = 'Your turn!';
                     currentPlayer = 0;
-
-                    console.log(board);
-                    console.log("updating currentPlayer = ",currentPlayer);
                 }          
             }
+            //if we are going through the walkthrough, call the walkthrough on the next move
             if(walkthrough.style.display=="block"){
                 mmWalkthrough();
             }
@@ -337,182 +288,66 @@ function makeMove(column){
 
 
 
-
-//win checks
-function colorMatchCheck(one,two, three, four){
-    return (one ===two && one === three && one === four && one !== 0);
-}
-
-function horizontalCheck(){
-    for(let row = 0; row < tableRow.length; row ++){
-        for(let col = 0; col < 4; col++){
-            if(colorMatchCheck(board[row][col],
-                board[row][col+1],
-                board[row][col+2],
-                board[row][col+3])){
-                    return true;
-                }
-        }
-    }
-}
-
-function verticalCheck(){
-    for(let col = 0; col < 7; col ++){
-        for(let row = 0; row < 3; row ++){
-            if(colorMatchCheck(board[row][col],
-                board[row+1][col],
-                board[row+2][col],
-                board[row+3][col])){
-                    return true;
-                }
-        }
-    }
-}
-
-function diagCheckLR(){
-    for(let col = 0; col < 4; col ++){
-        for(let row = 0; row < 3; row ++){
-            if(colorMatchCheck(board[row][col],
-                board[row+1][col+1],
-                board[row+2][col+2],
-                board[row+3][col+3])){
-                    return true;
-                }
-        }
-    }
-}
-
-function diagCheckRL(){
-    for(let col = 0; col < 4; col ++){
-        for(let row = 5; row >2; row --){
-            if(colorMatchCheck(board[row][col],
-                board[row-1][col+1],
-                board[row-2][col+2],
-                board[row-3][col+3])){
-                    return true;
-                }
-        }
-    }
-}
-
-function winCheck(){
-    return (horizontalCheck() || verticalCheck() || diagCheckLR() || diagCheckRL());
-}
-
-function drawCheck(){
-    for(let i = 0; i< board[0].length; i++){
-        if(board[0][i]==0){
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
-/* 
- function computerMove(board){
-    var depth = 0;
-    var maxDepth = mmDepth;
-    board = copyBoard(playBoard,board);
-    console.log("computerMove");
-    console.log("playBoard: ");
-    console.log(playBoard);
-    console.log("board:");
-    console.log(board);
-    var column =  getNextPlay(depth, maxDepth, board);
-    console.log(column);
-    console.log(typeof column);
-    let row = [];
-
-    //dropTile(0,column);
-    for(let i = 5; i >=0; i --){
-        //work up from the bottom of the column and fill the first
-            //empty slot you come across with a tile from the player
-        if(playBoard[i][column]==0){
-            row.push(tableRow[i].children[column]);
-            playBoard[i][column] = -1
-            animationColor = player2Color;
-            fallingTile(column);
-            changeCellColor(tableRow[i].children[column]);
-            if(winCheck()){
-                console.log(board);
-                playerTurn.textContent = "Computer won!";
-                reset.textContent = 'Play Again';
-                }
-                else if(drawCheck()){
-                    playerTurn.textContent = 'game is a draw';
-                }
-                else{
-                    playerTurn.textContent = `your turn!`;
-                    animationColor = player1Color;
-                    return  currentPlayer = 1;
-
-                }
-            return;
-        }
-    }
-} */
+/**
+ * Functions for the minimax walkthrough
+ */
 
 
 
-function dropTile(row, col){
-    dropID = setTimeout(changeTileColor(row,col,animationColor),10000);
-    row++;
-    if(playBoard[row][col]==0){
-        dropTile(row,col);
-    }
-    return;
-}
-
-function changeTileColor(row,col,color){
-    tableRow[row].children[col].style.backgroundColor = color;
-}
-
-// function mmWalkthrough(){
-//     console.log(currentPlayer);
-
-//     gamePause = true;
-//     if(mmDepth==1){
-//         mmWalkthrough1();
-//     }
-//     else{
-//         mmWalkthrough2();
-//     }
-//     return;
-// }
-
-function mmWalkthrough(){
+/**
+ * mmWalkthrough displays and controls the minimax walkthrough element of the html
+ * @returns 
+ */
+async function mmWalkthrough(){
+    //pause the game so that human cannot make any moves
     gamePause = true;
+    flipButtons();
 
-
+    //make the max value table
     mm_max = createMaxElement();
-    console.log(mm_max);
+    //grab the max value table
     let max_children = mm_max.children;
     let table = max_children[2];
+
+    let further_explanation = document.createElement('p');
+    further_explanation.style.display = 'none';
+    further_explanation.style.width = "250px";
+    mm_max.appendChild(further_explanation);
+
+    //make a button to step through the table
     let next_step = document.createElement('button');
     next_step.textContent = "Next Step";
     mm_max.appendChild(next_step);
+
+    //set up the values to walk through the board
     let col = 0;
     let maxScore = 0;
     let maxCol = 0;
 
+    //button to return to normal play
     let return_to_game = document.createElement('button');
     return_to_game.textContent = "Return to normal play";
     walkthrough.appendChild(return_to_game);
+
+    //if they want to return to the game
     return_to_game.addEventListener('click',()=>{
-        console.log("rTT",col);
+        //undo the last move
         if(col>0){
             undoMove(col-1);
         }
-        resetWalkthrough();
-        walkthrough_button.style.display = "block";
-        walkthrough.style.display = "none";
+        //allow the human to make moves
         gamePause = false;
+        //reset the walkthorugh 
+        resetWalkthrough();
+        //display the "show walkthrough" button
+        walkthrough_button.style.display = "block";
+        //hide the walkthrough
+        walkthrough.style.display = "none";
         return;
     });
-    //changeColColor(table,col,"green")
-    next_step.addEventListener('click',()=>{
+
+    //step through the max value table
+    next_step.addEventListener('click',async()=>{
         // If you pass the end of the board, undo the last move
         if(col >= board[0].length){
             undoMove(col-1);
@@ -538,13 +373,17 @@ function mmWalkthrough(){
 
         //evaluate the score for that column and update the table
         let tempScore;
+        //if we are only showing max_value, the score is evaluated for the board
         if(mmDepth==1){
             tempScore = fakeMove(col,currentPlayer);
         }
+        // if we are showing min_value, the score is the minimum score from min_value
         else{
             fakeMove(col,currentPlayer);
-            tempScore = mmWalkthrough2();
+            tempScore = await mmWalkthrough2();
         }
+
+        //update the table with the best score from that move
         addToTable(col,table, tempScore);
         if(tempScore >= maxScore){
             //if you've hit a new max value, update the table and the max
@@ -560,6 +399,10 @@ function mmWalkthrough(){
 
         //if you've evaluated the last column, update the button
         if(col >= board[0].length){
+            further_explanation.style.display = 'block';
+            further_explanation.textContent = `The minimax algorithm has determined 
+                that the best move the ${players[currentPlayer][2]} player can get is
+                to play in column ${maxCol}, since this will result in a board with the highest score.`;
             if(currentPlayer==1){
                 next_step.textContent = "Make Computer Move"
             }
@@ -578,10 +421,11 @@ function mmWalkthrough(){
     return;
 }
 
+/**
+ * removes the highest tile from the inputted column
+ * @param {*} col column to take a tile out of
+ */
 function undoMove(col){
-    console.log("undo move");
-    console.log(col);
-    console.log(board);
     for(let i = 0; i <6; i ++){
         if(board[i][col]==1){
             board[i][col] = 0;
@@ -592,13 +436,19 @@ function undoMove(col){
 }
 
 
-
+/**
+ * if the current column is highlighted, unhighlight it. 
+ * if the current column is unhighlighted, highlight it.
+ * @param {*} table table to update
+ * @param {*} column column to update the value on
+ * @param {*} color color to change the column values to
+ */
 function changeColColor(table,column,color){
     let tbody = table.children[1];
     tbody.rows[0].cells[column+1].style.color = color
     tbody.rows[1].cells[column+1].style.color = color
 
-    if(color==="green"){
+    if(color!=="black"){
         tbody.rows[0].cells[column+1].style.fontWeight = 'bold'
         tbody.rows[1].cells[column+1].style.fontWeight = 'bold'
     }
@@ -608,6 +458,12 @@ function changeColColor(table,column,color){
     }
 }
 
+/**
+ * update the board with the move and evaluate the resulting board
+ * @param {*} column column to make the move in
+ * @param {*} player player making the move
+ * @returns 
+ */
 function fakeMove(column,player){
     for(let i = 5; i >=0; i --){
         //work up from the bottom of the column and fill the first
@@ -618,81 +474,106 @@ function fakeMove(column,player){
             break;
         }
     }
+    //get the score of the board
     let score = computer.evaluate(board);
     return score;
 }
 
+/**
+ * update the table in the inputted column with the inputted score
+ * @param {*} column column to update
+ * @param {*} table table to update
+ * @param {*} score score to put in the column
+ * @returns 
+ */
 function addToTable(column, table, score){
-
     let tbody = table.children[1];
-
-   // console.log(column);
     tbody.rows[1].cells[column+1].textContent = `${score}`
     return score
 }
 
-function mmWalkthrough2(){
+/**
+ * this is the walkthrough for depth 2. It creates a table for min_value
+ * @returns the minimum score for the table
+ */
+async function mmWalkthrough2(){
+    //create the element for min_value
     mm_min = createMinElement();
+
+    //grab the min_value table
     let min_children = mm_min.children;
     let table = min_children[2];
-    console.log("table: ",table);
-    let send_value = document.createElement('button');
-    send_value.style.display = "none";
-    send_value.textContent = "Return Min Value";
-    mm_min.appendChild(send_value);
-    //let col = 0;
+    let explanation = min_children[1];
+
+
     let minScore = 100000;
     let minCol = 0;
-    for(let col = 0; col < board[0].length; col++){
-        if(col>0){
-            undoMove(col-1);
+
+    async function getMinScore(minScore,minCol,explanation){
+        for(let col = 0; col < board[0].length; col++){
+            explanation.textContent = `Evaluating board for col ${col}`;
+            //undo the last move
+            if(col>0){
+                undoMove(col-1);
+            }
+            //make a move with the opposite of the currentPlayer(min)
+            let score = fakeMove(col,Math.abs(1-currentPlayer));
+            //update the table with the new value
+            addToTable(col,table,score);
+            //if you come across a smaller score, update the min score
+            if(score<minScore){
+                changeColColor(table,minCol,"black");
+                minScore = score;
+                minCol = col;
+                changeColColor(table,col,"red");
+            }
+            await pause(500);
         }
-        fakeMove(col,Math.abs(1-currentPlayer));
-        let score = computer.evaluate(board);
-        addToTable(col,table,score);
-        console.log("score:",score);
-        console.log("min score: ",minScore);
-        //let score = minWalkthroughLoop(col,table);
-        if(score<minScore){
-            console.log("updating score for col ",col);
-            changeColColor(table,minCol,"black");
-            minScore = score;
-            minCol = col;
-            changeColColor(table,col,"red");
-        }
-        setTimeout(pause,500);
+
+        //before returning, undo the move made in the last column
+        undoMove(6);
+        return [minScore,minCol];
     }
-    undoMove(6);
-    send_value.style.display = "block"
-    send_value.addEventListener('click',()=>{
-        return minScore;
-    })
+  
+    tempVals = await getMinScore(minScore,minCol,explanation);
+    minScore = tempVals[0];
+    minCol = tempVals[1];
+    explanation.textContent = `Returning minimum score ${minScore} in column ${minCol}`;
     return minScore;
-
-
 }
 
-function pause(){
-
+function pause(delay){
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            resolve();
+        },delay);
+    })
 }
 
-
+/**
+ * Creates max_value element
+ * @returns DOM element
+ */
 function createMaxElement(){
+    //make a header
     let header = document.createElement('h2');
     header.textContent = `Depth: 1 Player: ${players[currentPlayer][2]}`;
     mm_max.appendChild(header);
 
+    //explain the current move
     let col = 0;
     let explanation = document.createElement('h3');
     explanation.textContent = `Evaluating board for col ${col}`;
     mm_max.appendChild(explanation);
 
+    //create a table that will store the values for every column
     let mm_table = document.createElement('table');
     mm_table.backgroundColor = 'white';
     mm_table.createCaption("Max Values for ConnectFour Board");
     let tbody = document.createElement('tbody');
     mm_table.appendChild(tbody);
 
+    //fill the first row of the table with column labels
     tbody.insertRow(0);
     tbody.rows[0].insertCell(0);
     tbody.rows[0].cells[0].appendChild(document.createTextNode("Column"));
@@ -701,6 +582,7 @@ function createMaxElement(){
         tbody.rows[0].cells[i].appendChild(document.createTextNode(`${i-1}`));
     }
 
+    //leave the second row of the table empty to be updated by max
     tbody.insertRow(1);
     tbody.rows[1].insertCell(0);
     tbody.rows[1].cells[0].appendChild(document.createTextNode("Value"));
@@ -713,23 +595,30 @@ function createMaxElement(){
     return mm_max;
 }
 
+/**
+ * Creates min element
+ * @returns DOM element
+ */
 function createMinElement(){
+    //create header
     let header = document.createElement('h2');
-
     header.textContent = `Depth: 2 Player: ${players[Math.abs(currentPlayer-1)][2]}`;
     mm_min.appendChild(header);
 
+    //explain the current move
     let col = 0;
     let explanation = document.createElement('h3');
     explanation.textContent = `Evaluating board for col ${col}`;
     mm_min.appendChild(explanation);
 
+    //create a table that will store the values for every column
     let mm_table = document.createElement('table');
     mm_table.backgroundColor = 'white';
     mm_table.createCaption("Min Values for ConnectFour Board");
     let tbody = document.createElement('tbody');
     mm_table.appendChild(tbody);
 
+    //fill the first row of the table with the column labels
     tbody.insertRow(0);
     tbody.rows[0].insertCell(0);
     tbody.rows[0].cells[0].appendChild(document.createTextNode("Column"));
@@ -738,6 +627,7 @@ function createMinElement(){
         tbody.rows[0].cells[i].appendChild(document.createTextNode(`${i-1}`));
     }
 
+    //leave the second row empty to be updated by min
     tbody.insertRow(1);
     tbody.rows[1].insertCell(0);
     tbody.rows[1].cells[0].appendChild(document.createTextNode("Value"));
@@ -750,473 +640,110 @@ function createMinElement(){
     return mm_min;
 }
 
+/**
+ * resetWalkthrough clears the walkthrough element
+ */
 function resetWalkthrough(){
+    flipButtons();
+    //reset max_value element
     resetElement(mm_max);
+    //reset min_value element
     resetElement(mm_min);
+    //remove the "return to normal play" button
     walkthrough.removeChild(walkthrough.lastElementChild);
-
-    //walkthrough.style.display = 'none';
-    //walkthrough_button.textContent = 'Show Minimax Walkthrough'
 }
 
+/**
+ * resetElement clears the passed in element
+ * @param {*} elem the DOM element to clear
+ */
 function resetElement(elem){
+    //grab the last child
     let child = elem.lastElementChild;
+    //while the element still has children, remove the child
     while(child){
         elem.removeChild(child);
         child = elem.lastElementChild;
     }
 }
 
+function flipButtons(){
+    flipNextMove();
+    flipSlider();
+}
+
 function flipNextMove(){
-    //grey out nextMove button and print error message saying cannot make next move until minimax simulation is completed
-}
-
-function flipSlider(){
-    //grey out slideer and print error mesaage saying cannot change depth until minimax simulation is completed
-}
-/* 
-function copyBoard(playBoard,board){
-    for(let i = 0; i<board.length; i++){
-        for(let j = 0; j<board[i].length; j++){
-            board[i][j] = playBoard[i][j];
-        }
-    }
-    return board;
-}
-
-
-
-
-
-
-
-// nextMove.addEventListener('click', ()=>{
-//     if(currentPlayer !==1){
-//         console.log("INSIDE NEXT MOVE. current player = ",currentPlayer);
-//         computerMove(board);
-//         currentPlayer = 1;
-//     }
-// });
-
-
-
- function getNextPlay(depth, maxDepth, board){
-   // console.log("board before minimax:");
-   // console.log(board);
-    var res =  minimax(depth, maxDepth, board);
-    return res;
-}
-
- function minimax(depth, maxDepth, board){
-    var actVal = maxValue(depth, board, maxDepth, -1);
-    return actVal[0];
-}
-
-function maxValue(depth, board, maxDepth, prevPlay){
-   // console.log("min value");
-    //console.log("depth: ",depth);
-    //console.log("prev play: ",prevPlay);
-    //console.log("board: ");
-    //console.log(board);
-    var actVal = [];
-    actVal.length = 2;
-    if(cutoffTest(board, depth, maxDepth)){
-        const eval = evaluate(1,board);
-        actVal[0] = prevPlay;
-        actVal[1] = eval;
-        return actVal;
-    }
-
-    var value = -100000;
-    var action = -1;
-    depth++;
-    var validActs = getAction(board);
-    for(let i = 0; i< validActs.length; i++){
-        let a = validActs[i];
-        if(a == -1){
-            continue;
-        }
-
-        let minA = minValue(depth, result(a, board, 1),maxDepth, a)[1];
-        if(minA >=value){
-            value = minA;
-            action = a;
-            actVal[0] = action;
-            actVal[1] = value;
-        }
-
-        undoResult(a, board);
-    }
-    return actVal;
-}
-
-function minValue(depth, board, maxDepth, prevPlay){
-    //console.log("min value");
-    //console.log("depth: ",depth);
-    //console.log("prev play: ",prevPlay);
-   // console.log("board: ");
-    //console.log(board);
-
-    var actVal = [];
-    actVal.length = 2;
-    if(cutoffTest(board, depth, maxDepth)){
-        const eval = evaluate(-1,board);
-        actVal[0] = prevPlay;
-        actVal[1] = eval;
-        return actVal;
-    }
-
-    var value = 10000;
-    var action;
-    depth++;
-    var validActs = getAction(board);
-    for(let i = 0; i<validActs.length; i++){
-        let a = validActs[i];
-        if(a==-1){
-            continue;
-        }
-        let maxA = maxValue(depth, result(a,board, -1),maxDepth, a)[1];
-        if(maxA <= value){
-            action = a;
-            value = maxA;
-            actVal[0] = a;
-            actVal[1] = value;
-        }
-        undoResult(a, board);
-    }
-    //console.log("taking action ",actVal);
-    return actVal;
-}
-
-function result(column, board, player){
-    if(board[0][column]!==0){
-        return board;
-    }
-
-    for(let i = 0; i< board.length-1; i++){
-        if(board[i+1][column]!==0){
-            board[i][column] = player;
-            break;
-        }
-    }
-
-    return board;
-}
-
-function undoResult(column, board){
-    for(let row = 0; row<board.length; row++){
-        if(board[row][column]!==0){
-            board[row][column] = 0;
-            return board;
-        }
-    }
-    return board;
-}
-
-function cutoffTest(board, depth, maxDepth){
-    return depth >= maxDepth || mmWinCheck(board);
-}
-
-function getAction(board){
-    var validActs = [];
-    for(let i = 0; i<board[0].length; i++){
-        if(board[0][i] ===0){
-            validActs.push(i);
-        }
-    }
-    return validActs;
-}
-
-
-* The following are the evaluation functions that minimax uses to evaluate the score for a board.
-* A board's score is based on how many opportunities there are for a player to have a run of four,
-* and how close that player currently is to having a run of four.
-
-
-
-
-function evaluate(player, board){
-    var eval = 0;
-    eval = eval - (vertical(board, -1*player) + horizontal(board,-1*player)+ ascend(board,-1*player)+descend(board,-1*player));
-    eval = eval + (vertical(board,player) + horizontal(board,player)+ ascend(board,player)+descend(board,player));
-    return eval;
-}
-
-function vertical(board,player){
-    //for each column on the board, calculate 
-    //the vertical score of that column
-    var vertScore = 0;
-    for(let col = 0; col < 7; col++){
-        //count the number of blank tiles at the top of the column
-        blank = 0;
-        var row;
-        for(row = 0; row < board.length; row++){
-            if(board[row][col]===0){
-                blank++;
-            }
-            else{
-                break;
-            }
-        }
-
-        //count the number of the player's tiles at the top
-        playerCount = 0;
-        for(row = row; row < board.length; row++){
-            if(board[row][col] !== player){
-                break;
-            }
-            else{
-                playerCount++;
-            }
-        }
-
-        //calculate the potential score for this column
-        if(playerCount+blank < 4){
-            vertScore +=0;
-        }
-        else{
-            vertScore += calcHeuristic(playerCount);
-        }
-    }
-    return vertScore;
-}
-
-function horizontal(board, player){
-    let horizScore = 0;
-    var row;
-    var blankCount;
-    var playerCount;
-    
-    //calculate the potential score for every row in the board
-    for(row = 0; row < board.length; row++){
-        for(let col = 0; col < 7; col++){
-            //if you come across a blank slot, count the blank tiles
-            if(board[row][col]==0){
-                blankCount += blankTileRow(board,row,col)[0];
-                col = blankTileRow(board,row,col)[1];
-            }
-
-            //if you come across a tile of your own, increment
-            if(board[row][col] == player){
-                playerCount++;
-            }
-
-            //if you come across opponent's tile, check for points
-            //and continue the search
-            if(board[row][col]== -1*player){
-                //if there is no room for a run of four, continue
-                if(blankCount + playerCount <4){
-                    blankCount = 0 ;
-                    playerCount = 0;
-                    continue;
-                }
-                else{
-                    horizScore += calcHeuristic(playerCount);
-                }
-            }
-        }
-        //check for a run at the end of the row
-        //ensure you don't double count if the last tile was opponent
-        if(board[row][6] != (-1*player) && (blankCount+playerCount >=4)){
-            horizScore +=calcHeuristic(playerCount);
-        }
-    }
-    return horizScore;
-}
-
-function blankTileRow(board, row, startCol){
-    let ret = [];
-    ret.length = 2;
-    count = 0;
-    var col;
-    for(col = startCol; col<7; col++){
-        if(board[row][col]!=0){
-            break;
-        }
-        count++;
-    }
-    ret[0] = count;
-    ret[1] = col;
-    return ret;
-}
-
-function ascend(board,player){
-    let ascendScore = 0;
-    //for each row with enough space for a run of four, evaluate score
-    for(let row = 3; row < board.length; row++){
-        //cut off the columns when there is no longer room for a run
-        for(let col = 0; col < board[row].length-3; col++){
-            //if the starting position is a valid start for a run of four,
-            //check for room and add to the score
-            if(board[row][col]!=(-1*player)){
-                ascendScore += ascendRun(board,player,row,col);
-            }
-
-        }
-    }
-    return ascendScore;
-}
-
-function ascendRun(board,player,startRow,startCol){
-    let blankCount = 0;
-    let playerCount = 0;
-    let col = startCol;
-    for(let row = startRow; row>(startRow-4); row--){
-        //if you come across a blank spot in the run, count the blank tiles
-        if(board[row][col]==0){
-            blankCount = blankTileAscend(board,row,col)[0];
-            row = blankTileAscend(board,row,col)[1];
-            col = blankTileAscend(board,row,col)[2];
-        }
-        if(col==board[row].length){
-            break;
-        }
-
-        //if you come across your own player, increment
-        if(board[row][col]==player){
-            playerCount++;
-        }
-
-        //if you come across the opponent, then since we are only checking
-        //for this specific slot of four, we know that there is no room to score
-        //and so we return 0
-        if(board[row][col]==(-1*player)){
-            return 0;
-        }
-        col++;
-    }
-    //if there is room for a run, return the heuristic score
-    if(blankCount + playerCount >=4){
-        return calcHeuristic(playerCount);
+    if(gamePause){
+        nextMove.style.backgroundColor = "grey";
+        nextMove.style.cursor = "default";
     }
     else{
-        return 0;
+        nextMove.style.backgroundColor = "";
+        nextMove.style.cursor = "grab";
     }
 }
 
-function blankTileAscend(board, startRow, startCol){
-    let ret = [];
-    ret.length = 3;
-    count = 0;
-    var row;
-    var col = startCol;
-    for(row = startRow; row > 0; row--){
-         if(board[row][col]!=0){
-            break;
-        }
-        count++;
-        col++;
-    }
-    ret[0] = count;
-    ret[1] = row;
-    ret[2] = col;
-    return ret;
-}
-
-function descend(board,player){
-    let descendScore = 0;
-    //for each row with enough space for a run of four, evaluate score
-    for(let row = 0; row < board.length-3; row++){
-        //cut off the columns when there is no longer room for a run
-        for(let col = 0; col < board[row].length-3; col++){
-            //if the starting position is a valid start for a run of four,
-            //check for room and add to the score
-            if(board[row][col]!=(-1*player)){
-                descendScore += descendRun(board,player,row,col);
-            }
-
-        }
-    }
-    return descendScore;
-}
-
-function descendRun(board,player,startRow,startCol){
-    let blankCount = 0;
-    let playerCount = 0;
-    let col = startCol;
-    for(let row = startRow; row<board.length; row++){
-        //if you come across a blank spot in the run, count the blank tiles
-        if(board[row][col]==0){
-            blankCount = blankTileDescend(board,row,col)[0];
-            row = blankTileDescend(board,row,col)[1];
-            col = blankTileDescend(board,row,col)[2];
-        }
-        if(row==board.length){
-            break;
-        }
-
-        //if you come across your own player, increment
-        if(board[row][col]==player){
-            playerCount++;
-        }
-
-        //if you come across the opponent, then since we are only checking
-        //for this specific slot of four, we know that there is no room to score
-        //and so we return 0
-        if(board[row][col]==(-1*player)){
-            return 0;
-        }
-        col++;
-    }
-    //if there is room for a run, return the heuristic score
-    if(blankCount + playerCount >=4){
-        return calcHeuristic(playerCount);
+function flipSlider(){ 
+    console.log(depthContainer);
+    if(gamePause){
+    depthContainer.style.backgroundColor = "grey";
+    depthContainer.style.cursor = "default";
     }
     else{
-        return 0;
+     depthContainer.style.backgroundColor = "";
+     depthContainer.style.cursor = "grab";
     }
 }
 
-function blankTileDescend(board, startRow, startCol){
-    let ret = [];
-    ret.length = 3;
-    count = 0;
-    var row;
-    var col = startCol;
-    for(row = startRow; row < board.length; row++){
-        if(board[row][col]!=0){
-            break;
+
+
+/**
+ * Win Checks for the html board
+*/
+
+
+/**
+ * check if there are any runs of four
+ * @returns boolean that says whether or not the game has been won
+ */
+function winCheck(){
+    return (horizontalCheck() || verticalCheck() || diagCheckLR() || diagCheckRL());
+}
+
+/**
+ * check if there are no possible moves left on the board
+ * @returns boolean that says whether or not there is a draw
+ */
+function drawCheck(){
+    for(let i = 0; i< board[0].length; i++){
+        if(board[0][i]==0){
+            return false;
         }
-        count++;
-        
-        col++;
     }
-    ret[0] = count;
-    ret[1] = row;
-    ret[2] = col;
-    return ret;
+    //if there are no possible moves left, the game is a draw
+    return true;
 }
 
-function calcHeuristic(counter){
-    if (counter === 0){
-        return counter;
-    }
-    else if(counter ===1){
-        return 1;
-    }
-    else if(counter ===2){
-        return 10;
-    }
-    else if(counter ===3){
-        return 100;
-    }
-    else{
-        return 10000;
-    }
+/**
+ * check to see if there is a run of four
+ * @param {*} one color for tile 1
+ * @param {*} two color for tile 2
+ * @param {*} three color for tile 3
+ * @param {*} four color for tile 4
+ * @returns boolean saying whether all four colors are the same
+ */
+function colorMatchCheck(one,two, three, four){
+    return (one ===two && one === three && one === four && one !== 0);
 }
 
-function mmWinCheck(board){
-    return mmHorizontalCheck(board) || mmVerticalCheck(board) || mmDiagLRCheck(board) || mmDiagRLCheck(board);
-}
-
-function mmMatchCheck(one, two, three, four){
-    return one == two && one == three && one == four && one !=0;
-}
-
-function mmHorizontalCheck(board){
-    for(let row = 0; row < board.length; row++){
+/**
+ * check all horizontal runs for a run of four
+ * @returns a boolean saying whether there is a horizontal win
+ */
+function horizontalCheck(){
+    for(let row = 0; row < tableRow.length; row ++){
         for(let col = 0; col < 4; col++){
-            if(mmMatchCheck(board[row][col],
+            if(colorMatchCheck(board[row][col],
                 board[row][col+1],
                 board[row][col+2],
                 board[row][col+3])){
@@ -1226,24 +753,31 @@ function mmHorizontalCheck(board){
     }
 }
 
-function mmVerticalCheck(board){
+/**
+ * check all vertical runs for a run of four
+ * @returns a boolean saying whether there is a vertical win
+ */
+function verticalCheck(){
     for(let col = 0; col < 7; col ++){
         for(let row = 0; row < 3; row ++){
-            if(mmMatchCheck(board[row][col],
+            if(colorMatchCheck(board[row][col],
                 board[row+1][col],
                 board[row+2][col],
                 board[row+3][col])){
                     return true;
                 }
         }
-    }  
+    }
 }
 
-
-function mmDiagLRCheck(board){
+/**
+ * check all diagonal descending runs for a run of four
+ * @returns a boolean saying whether there is a diagonal descending win
+ */
+function diagCheckLR(){
     for(let col = 0; col < 4; col ++){
         for(let row = 0; row < 3; row ++){
-            if(mmMatchCheck(board[row][col],
+            if(colorMatchCheck(board[row][col],
                 board[row+1][col+1],
                 board[row+2][col+2],
                 board[row+3][col+3])){
@@ -1253,10 +787,14 @@ function mmDiagLRCheck(board){
     }
 }
 
-function mmDiagRLCheck(board){
+/**
+ * check all diagonal ascending runs for a run of four
+ * @returns a boolean saying whether there is a diagonal ascending win
+ */
+function diagCheckRL(){
     for(let col = 0; col < 4; col ++){
         for(let row = 5; row >2; row --){
-            if(mmMatchCheck(board[row][col],
+            if(colorMatchCheck(board[row][col],
                 board[row-1][col+1],
                 board[row-2][col+2],
                 board[row-3][col+3])){
@@ -1266,7 +804,72 @@ function mmDiagRLCheck(board){
     }
 }
 
- */
 
-//fill in minimax win checks
+
+
+
+
+// async function fallingTile(col){
+//     let animate;
+//     for(let i = 0; i<playBoard.length && playBoard[i][col]==0;i++){
+//         console.log(tableRow[i].children[col]);
+//         animationCell = tableRow[i].children[col];
+//         animationStartPix = 0;
+//         animationEndPix = animationCell.children[0].height+animationCell.children[0].height/2;
+//         console.log(animationEndPix);
+//         console.log("calling animation");
+//         animate = await fallingTileAnimation(); 
+//     }
+//     console.log("returning from fallingTile");
+//     return;
+
+// }
+
+
+
+
+// async function fallingTileAnimation(){
+//     let cell = animationCell.children[0];
+//     if(animationStartPix==2){
+//         console.log(cell);
+//     }
+//     let context = cell.getContext("2d");
+
+//     context.clearRect(0,0,cell.width,cell.height);
+//     context.save();
+
+//     context.beginPath();
+//     context.arc(cell.width/2,animationStartPix,cell.width/2-2,0,2*Math.PI);
+//     context.fillStyle = animationColor;
+//     context.fill();
+//     animationStartPix++;
+
+//     if(animationStartPix <= animationEndPix){
+//         window.requestAnimationFrame(fallingTileAnimation);
+//     }
+//     else{
+//         clearCell(cell);
+//         console.log("setting animation back to 0");
+//         animationStartPix=0;
+//         console.log("returning from fallingTileAnimation");
+//         return;
+//     }
+// }
+
+
+// function dropTile(row, col){
+//     dropID = setTimeout(changeTileColor(row,col,animationColor),10000);
+//     row++;
+//     if(playBoard[row][col]==0){
+//         dropTile(row,col);
+//     }
+//     return;
+// }
+
+// function changeTileColor(row,col,color){
+//     tableRow[row].children[col].style.backgroundColor = color;
+// }
+
+
+
 
