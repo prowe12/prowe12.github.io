@@ -20,17 +20,6 @@
  * March 14, 2021
  */
 
-// from copy import deepcopy
-
-// from variable import Variable
-// from constraints import get_all_constraints, qc_board_and_constraints
-// from constraints import reverse_constraints, final_constraints
-
-// # Choose how to get the next unassigned variable
-// #from get_unassigned_variable import get_next_unassigned as get_unassigned
-// #from get_unassigned_variable import get_unassigned_using_mrv as get_unassigned
-// from get_unassigned_variable import get_unassigned_using_mrv_and_degree as get_unassigned
-
 
 /**
  * If the constraint given by xj has only one value, and if that value is present in the
@@ -58,7 +47,6 @@ function removeValues(xi, xj) {
         }
     }
     return new Array(xi, modified);
-
 }
 
 
@@ -99,7 +87,6 @@ function getBoard(grid) {
 }
 
 
-
 /**
  * Given a board, which is an array of arrays of classes for each box,
  * get the grid of 9x9 values in the current state of the board
@@ -135,8 +122,6 @@ function getGrid(board) {
 }
 
 
-
-
 /**
  * Check if the board is complete, where complete means each cell has
  * only one value. Note that checking for consistency is not done here.
@@ -167,30 +152,6 @@ function isComplete(board) {
 }
 
 
-
-/**
- * Populate the Sudoku board graphic with the values from grid
- * This should only be done when a new puzzle is selected, not during
- * game play or when the solver is working.
- * @param {array} grid 
- */
-//  function updateMoves(board, moves){
-//     nrows = board.length;
-//     ncols = board[0].length;
-
-//     grid = getGrid(board);
-
-//     // Put all non-zero values into the grid
-//     for (i=0; i<nrows; i++){
-//         for (j=0; j<ncols; j++){
-//             if (!(board[i][j].fixed)) {
-//                 moves.push([i, j, grid[i][j], 'backtrack']);
-//             }
-//         }
-//     }
-//     return moves;
-// }
-
 /**
  * Populate the Sudoku board graphic with the values from grid
  * This should only be done when a new puzzle is selected, not during
@@ -214,7 +175,6 @@ function isComplete(board) {
     }
     return moves;
 }
-
 
 
 /**
@@ -292,9 +252,9 @@ function backtrack(assignment, constraints, moves) {
         // change current move to false because it did not work
 
     }
-
     return [-1, moves];   // Fail, but keep the moves
 }
+
 
 /**
  * 
@@ -392,7 +352,6 @@ function arcConsistency3(assignment, constraints, moves, prefix="") {
 }      
 
 
-
 /*
  Solve Sudoku given a set of cells with fixed values
  @param original Starting grid, with zeros for unknown values, as
@@ -441,8 +400,6 @@ function solve(original) {
 }
 
 
-
-
 /**
  * Helper function for debugging that prints the board
  * @param {*} board 
@@ -463,8 +420,6 @@ function printBoard(board) {
     }
 }
 
-
-
 /**
  * A function to be used in debugging that prints the location and domains of xi and xj
  * @param xi  Sudoku box that is being constrained
@@ -476,3 +431,28 @@ function printStuff(xi, xj) {
     console.log(`xj is at ${xj.row}, ${xj.col} with domain:`);
     console.log(xj.domain);
 }
+
+
+//     DEAD CODE. DO WE WANT TO IMPLEMENT THIS? 
+/**
+ * Populate the Sudoku board graphic with the values from grid
+ * This should only be done when a new puzzle is selected, not during
+ * game play or when the solver is working.
+ * @param {array} grid 
+ */
+//  function updateMoves(board, moves){
+//     nrows = board.length;
+//     ncols = board[0].length;
+
+//     grid = getGrid(board);
+
+//     // Put all non-zero values into the grid
+//     for (i=0; i<nrows; i++){
+//         for (j=0; j<ncols; j++){
+//             if (!(board[i][j].fixed)) {
+//                 moves.push([i, j, grid[i][j], 'backtrack']);
+//             }
+//         }
+//     }
+//     return moves;
+// }
