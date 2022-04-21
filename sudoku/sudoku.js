@@ -42,7 +42,7 @@ function fileExists(urlToFile) {
  * @return  The grid of numbers; list of lists
  * @raises  NameError  If filename is not '' and does not exist
  */
-function loadStartingValues(puzzle = 'easy') {
+function loadStartingValues(puzzle='easy') {
     let grid;
 
     if (puzzle === 'random') {
@@ -759,10 +759,6 @@ function getDomain(row, col, currentgrid) {
     let excluded = new Set();
     let domain = new Set();
 
-    console.log(row);
-    console.log(col);
-    console.log("currentgrid[row][col]: " + currentgrid[row][col]);
-
     // Get the constraints for this grid box
     constraints = getConstraintsForBox(row, col, nside);
 
@@ -779,7 +775,6 @@ function getDomain(row, col, currentgrid) {
             domain.add(i);
         }
     }
-
     return domain;
 }
 
@@ -833,7 +828,6 @@ function clearDomainFromTableForRunning() {
  */
 function showdomain() {
     // For all squares with value = 0, get the domain and display it
-    console.log("In showdomain");
     let domain;
     nside = currentgrid.length;
     for (row = 0; row < nside; row++) {
@@ -949,7 +943,8 @@ stepBackButton.addEventListener("click", function () {
         currentgrid = rewindToMove(Math.max(imove - 1, 0));
         // If the show domain button is selected, update the domain shown
         if (button.value === "ON") {
-            domain = getDomain(moves[imove], moves[imove], currentgrid)
+            move = moves[imove]
+            domain = getDomain(move[0], move[1], currentgrid)
             showdomain();
         }
         imove -= 1;
@@ -959,7 +954,8 @@ stepBackButton.addEventListener("click", function () {
         clearInterval(timeId);
         // If the show domain button is selected, update the domain shown
         if (button.value === "ON") {
-            domain = getDomain(moves[imove], moves[imove], currentgrid)
+            move = moves[imove]
+            domain = getDomain(move[0], move[1], currentgrid)
             showdomain();
         }
         imove = 0;

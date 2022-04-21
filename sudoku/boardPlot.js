@@ -223,29 +223,38 @@ function populateSquare(irow, icol, value, boxStyle='empty') {
  * @return grid
 */
 function updateGridFromMoves(grid, moves, location) {
-
     let nrows = grid.length;
     let ncols = grid[0].length;
     let newgrid = new Array(nrows); 
+    let solverMethod = new Array(nrows);
 
     // Create empty grid (grid of zeros)
     for (i=0; i<nrows; i++) {
         newgrid[i] = new Array(ncols); 
+        solverMethod[i] = new Array(ncols); 
         for (j=0; j<ncols; j++) {
-            newgrid[i][j] = [0, ''];
+            val = grid[i][j];
+            if (val > 0) {
+                solverMethod[i][j] = 'fixed';
+            }
+            else {
+                solverMethod[i][j] = '';
+            }
+            newgrid[i][j] = val;
         }
     };
 
     // Create grid of final moves at location
     for (iloc=0; iloc<location; iloc++) {
-        move = moves[iloc];  // row, column, value, method
-        newgrid[move[0]][move[1]] = [move[2], move[3]];
+        move = moves[iloc];  // row, column, value
+        newgrid[move[0]][move[1]] = move[2];
+        solverMethod[move[0]][move[1]] = move[3]; 
     };
 
-    // Put all values into the grid
+    // Put all values into the display grid
     for (i=0; i<nrows; i++){
         for (j=0; j<ncols; j++){
-            populateSquare(i, j, newgrid[i][j][0], newgrid[i][j][1]);
+            populateSquare(i, j, newgrid[i][j], solverMethod[i][j]);
         }
     };
 
