@@ -175,27 +175,17 @@ function populateSquare(irow, icol, value, boxStyle='empty') {
         box.innerHTML = value;
     }
 
+    let messages = {
+        'fixed': '<p>Puzzle ready!</p><p>Choose another puzzle or choose a solver.</p>',
+        'backtrack': '<p>Solving with backtracking.</p>',
+        'backtrackPlusAC3':  '<p>Solving with AC-3 during backtracking.</p>',
+        'finalAC3': '<p>Solving with AC-3: final solution for box.</p>',
+        'AC3': '<p>Solving with AC-3.</p>'    
+    }
+
     // Also, indicate in the explanation text what is happening
     let explanation = document.querySelector(`.explanation`);
-    if (boxStyle === 'fixed') {
-        explanationMsg = '<p>Puzzle ready!</p><p>Choose another puzzle or choose a solver.</p>';
-    }
-    else if (boxStyle === 'backtrack') {
-        explanationMsg = '<p>Solving with backtracking.</p>';
-    }
-    else if (boxStyle === 'backtrackPlusAC3') {
-        explanationMsg = '<p>Solving with AC-3 during backtracking.</p>';
-    }
-    else if (boxStyle === 'finalAC3') {
-        explanationMsg = '<p>Solving with AC-3: final solution for box.</p>';
-    }
-    else if (boxStyle === 'AC3') {
-        explanationMsg = '<p>Solving with AC-3.</p>';
-    }
-    else {
-        explanationMsg = '<p></p>';
-    }
-    explanation.innerHTML = explanationMsg;
+    explanation.innerHTML = messages[boxStyle];
 
     
 
