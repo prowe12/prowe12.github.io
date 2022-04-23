@@ -63,8 +63,8 @@ tr:nth-child(6) {
 }
 
 td {
-   width: 36px;
-   height: 36px;
+   width: 38px;
+   height: 38px;
    border: 1px solid gray;
    text-align: center;
 }
@@ -101,17 +101,17 @@ td {
    color: red;
 }
 
-.sudokubox.backtrack {
+.backtrack {
    color: green;
 }
 
-.sudokubox.backtrackPlusAC3 {
-   color: cyan;
-}
-
-.sudokubox.finalAC3 {
+.finalAC3 {
    color: blue;
 }
+.backtrackPlusAC3 {
+   color: orange;
+}
+
 
 .sudokubox.boxborder {
    /* Add a border */
@@ -119,16 +119,24 @@ td {
 }
 
 
+
 /* Control button overrides for standard button  */
 .controlButton {
+   margin-left: 3px;
+   margin-right: 3px;
+   margin-bottom: 20px;
    padding: 4px 4px;
-   border: 4px solid rgb(242, 238, 255);
+   border: 2px solid; /*rgba(25, 75, 45, 0.693) rgb(242, 238, 255); */
+   border-color: rgb(39, 116, 70);
+   outline: 1px solid rgb(17, 49, 30);
 }
 
 
 /* Selected buttons */
 .selected {
-   border: 4px solid yellow;
+   padding: 4px 4px;
+   border: 2px solid yellow;
+   outline: 1px solid rgb(17, 49, 30);
 }
 
 

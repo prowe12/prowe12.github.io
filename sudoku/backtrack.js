@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+// @ts-check
+
 //# -*- coding: utf-8 -*-
 /**
  * Created on Sat Mar 13 11:27:10 2021
@@ -14,9 +15,9 @@
 
 /**
  * Get all the numbers from the 3x3 square that the row and the column are in.
- * @param {2-D array or list of lists} grid
- * @param {int} row
- * @param {int} col
+ * @param {} grid  2-D array or list of lists
+ * @param {} row int
+ * @param {}} col int
  * @return  The values in the 3x3 square
  */
 function getsquarevals(grid, row, col) {
@@ -28,8 +29,8 @@ function getsquarevals(grid, row, col) {
     let rowmax = irow * 3 + 3;
     let colmin = icol * 3;
     let colmax = icol * 3 + 3;
-    for (i=rowmin; i<rowmax; i++) {
-        for (j=colmin; j<colmax; j++) {
+    for (let i=rowmin; i<rowmax; i++) {
+        for (let j=colmin; j<colmax; j++) {
             result.push(grid[i][j]);
         }
     }
@@ -135,13 +136,12 @@ function backtrackOnly(grid, row, col, moves){
 /**
  * Make sure that the board is valid
  * @param grid  The current numbers of the Sudoku board, list of lists
- * @return True if QC passes, else false. 
- * @return Message
+ * @return True if QC passes, else false., Message
  */
 function qualityCheck(grid){
-    for (row=0; row<9; row++){        //row in range(9):
-        for (col=0; col<9; col++) {   //col in range(9):
-            val = grid[row][col];
+    for (let row=0; row<9; row++){        //row in range(9):
+        for (let col=0; col<9; col++) {   //col in range(9):
+            let val = grid[row][col];
             if (val === 0){
                 continue;
             }

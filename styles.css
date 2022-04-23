@@ -47,7 +47,8 @@ h1 {
 body {
    display: flex;
    flex-direction: column;
-   background-color: rgb(242, 238, 255); 
+   /*background-color: rgb(242, 238, 255); */
+   background-color: rgb(238, 252, 255); 
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
@@ -55,7 +56,7 @@ body {
 
 /* Fonts Anna likes */
 /* Barlow, Carla, Abel Karla */
-  /*"Rubik wet paint", Palatino, "Trebuchet MS", sans-serif; Trebuchet MS Palatino Barlow */
+/*"Rubik wet paint", Palatino, "Trebuchet MS", sans-serif; Trebuchet MS Palatino Barlow */
 
 
  
@@ -121,10 +122,6 @@ h1 {
    cursor: pointer;
    background-image: none;
    border: 1px solid transparent;
-   border-top-color: transparent;
-   border-right-color: transparent;
-   border-bottom-color: transparent;
-   border-left-color: transparent;
    padding: 6px 10px;
    font-size: 14px;
    line-height: 1.42857143;
@@ -133,21 +130,21 @@ h1 {
    -moz-user-select: none;
    -ms-user-select: none;
    user-select: none; 
-   color: #fff;
-   background-color: rgb(25, 75, 45); /*rgb(48, 3, 153);*/
+   color: white;
+   background-color: rgb(39, 116, 70); /*rgb(48, 3, 153);*/
    border-color: rgb(17, 49, 30);
 }
 
 .button:disabled {
    color: #fff;
-   background-color: rgba(25, 75, 45, 0.693);
+   background-color: rgba(25, 75, 45);
    border-color: rgb(34, 47, 39);
 }
 
 /*TODO: Disable hover if the button is not active */
 .button:hover {
    color: #fff;
-   background-color: rgb(17, 49, 30);
+   background-color: rgba(25, 75, 45) /*rgb(17, 49, 30);*/
 }
 
 /* Space at the bottom */
@@ -160,7 +157,7 @@ h1 {
 footer {
    margin: -8px;
    padding: 8px 10px;
-   background-color: rgb(235, 204, 186);
+   background-color: rgb(242, 218, 204);
    color: black;
    left: 0;
    bottom: 0;
@@ -178,17 +175,4 @@ fieldset {
    width: 60%;
    margin: 0 auto;
 }
-
-/* Text of different colors */
-.green {
-   color: green;
-}
-.blue {
-   color: blue;
-}
-.cyan {
-   color: cyan;
-}
-
-
 
