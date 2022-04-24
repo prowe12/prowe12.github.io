@@ -136,8 +136,7 @@ function boxborder(irow, icol, boxStyle='empty') {
  * @param {number} value 
  * @throws error if bad value given for style of sudoku box
  */
-function populateSquare(irow, icol, value, boxStyle='empty') { 
-     
+function populateSquare(irow, icol, value, boxStyle='none') { 
     // Allowed values for modifiable cell properties
     let explanationMsg;
     let allowedBoxStyles = ['empty', 'fixed', 'backtrack', 'AC3', 'backtrackPlusAC3', 'finalAC3', 'domain'];
@@ -177,38 +176,26 @@ function populateSquare(irow, icol, value, boxStyle='empty') {
 
     let messages = {
         'fixed': '<p>Puzzle ready!</p><p>Choose another puzzle or choose a solver.</p>',
-        'backtrack': '<p>Solving with backtracking.</p>',
-        'backtrackPlusAC3':  '<p>Solving with AC-3 during backtracking.</p>',
+        'backtrack': '<p>Solved with backtracking.</p>',
+        'backtrackPlusAC3': '<p>Solved with AC-3 during backtracking.</p>',
         'finalAC3': '<p>Solving with AC-3: final solution for box.</p>',
-        'AC3': '<p>Solving with AC-3.</p>'    
+        'AC3': '<p>Solving with AC-3.</p>',
+        'none': '<p>none</p>',
+        '': '<p>unknown</p>',
+        'empty': '<p>empty</p>',
+        'undobacktrack': '<p>Undoing square that was solved with backtracking.</p>',
+        'undobacktrackPlusAC3': '<p>Undoing square that was solved with AC-3 during backtracking.</p>',
+        'undofinalAC3': '<p>Undoing square that was solved with AC-3.</p>'
+    }
+
+    if (!(messages.hasOwnProperty(boxStyle))) {
+        msg = "boxStyle " + boxStyle + " not defined"
+        throw msg;
     }
 
     // Also, indicate in the explanation text what is happening
     let explanation = document.querySelector(`.explanation`);
     explanation.innerHTML = messages[boxStyle];
-
-    
-
-
-    // Set the color of the number in the cell, if color specified is allowed.
-    // Otherwise, throw an error
-    // if (allowedNumberColors.indexOf(numberColor) !== -1){
-    //     box.style.setProperty("color", numberColor);
-    // }
-    // else {
-    //     // TODO: throw an exception
-    //     console.log("Bad color choice!");
-    // }
-
-    // Set the style of the number in the cell, if it is allowed.
-    //if (allowedNumberFontWeights.includes(numberFontWeight)) {
-    //    box.style.setProperty("fontWeight", numberFontWeight);
-    //}
-
-    // Add a border, if color specified is allowed
-    //if (allowedBorderColors.indexOf(borderColor) !== -1) {
-    //    box.style.borderColor = borderColor; //("borderColor", "green");
-    //}
     return;
 
 }
@@ -217,9 +204,9 @@ function populateSquare(irow, icol, value, boxStyle='empty') {
 /**
  * Get the grid for the board up to a certain point (location) in the list of moves,
  * from a starting grid.
- * @param grid
- * @param moves
- * @param location
+ * @param {array} grid  Array of arrays of the values on the sudoku board
+ * @param {array} moves  Array of arrays of moves: [row, col, value, string]
+ * @param {number} location  The index to the location in the list of moves
  * @return grid
 */
 function updateGridFromMoves(grid, moves, location) {
@@ -227,7 +214,11 @@ function updateGridFromMoves(grid, moves, location) {
     let ncols = grid[0].length;
     let newgrid = new Array(nrows); 
     let solverMethod = new Array(nrows);
+    let lastmove = moves[location+1];
 
+    //TODO: If any square is outlined, remove the outline
+    removeboxborder(lastmove[0], lastmove[1], boxStyle='empty')
+    
     // Create empty grid (grid of zeros)
     for (i=0; i<nrows; i++) {
         newgrid[i] = new Array(ncols); 
@@ -246,10 +237,19 @@ function updateGridFromMoves(grid, moves, location) {
 
     // Create grid of final moves at location
     for (iloc=0; iloc<location; iloc++) {
+        // Go through all the moves and get each
+        // then set the value in newgrid and
+        // the method in solverMethod
         move = moves[iloc];  // row, column, value
         newgrid[move[0]][move[1]] = move[2];
         solverMethod[move[0]][move[1]] = move[3]; 
     };
+
+    // If we are in step mode, the very next move is the one we are undoing
+    // If in rewind, this is done by blocks and so does not apply
+    move = moves[iloc];  // row, column, value
+    solverMethod[move[0]][move[1]] = move[3]; 
+    
 
     // Put all values into the display grid
     for (i=0; i<nrows; i++){
@@ -257,6 +257,10 @@ function updateGridFromMoves(grid, moves, location) {
             populateSquare(i, j, newgrid[i][j], solverMethod[i][j]);
         }
     };
+
+    
+    // Put the last square on again, so its message will show up
+    populateSquare(move[0], move[1], 0, "undo"+move[3]);
 
     return newgrid;
 }

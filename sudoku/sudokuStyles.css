@@ -114,7 +114,7 @@ td {
 
 
 .sudokubox.boxborder {
-   /* Add a border */
+   /* Add a border to outline the square */
    border: solid 2px blue;
 }
 
