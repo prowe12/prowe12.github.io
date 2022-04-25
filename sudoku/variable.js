@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * Created on Wed Mar 10 12:20:03 2021
  * 
@@ -17,9 +19,15 @@
  * 
  */
 
+
 /**
  * A variable in a Sudoku CSP with domain {1, 2, 3, ..., 9}
  * The value of the variable may be fixed by the original problem.
+ * @param {number} row  The index to the row
+ * @param {number} col   The index to the column
+ * @param {number} nside   The number of boxes per side of the board
+ * @param {*} domainVals  The values in the domain
+ * @param {boolean} fix  True if the value in the box is fixed.
  */
 function Variable(row, col, nside, domainVals, fix=false) {
     // def __init__(self, row, col, nside, val={1, 2, 3, 4, 5, 6, 7, 8, 9},
@@ -39,7 +47,7 @@ function Variable(row, col, nside, domainVals, fix=false) {
 
 /**
  * Replace the domain of the variable with a value
- * @param val  The value to be added
+ * @param {number} value  The value to be added
  * @throws IllegalStateException  The domain is fixed
  */
 Variable.prototype.replace = function(value) {
@@ -51,10 +59,9 @@ Variable.prototype.replace = function(value) {
 
 
 /**
- * Returns the number of items in the domain
- * @return The number of items in the domain
+ * Return the number of items in the domain
+ * @returns The number of items in the domain
  */
-// def getDomainSize(self):
 Variable.prototype.getDomainSize = function() {
     return this.domain.size;
 }
@@ -63,7 +70,7 @@ Variable.prototype.getDomainSize = function() {
 /**
  * Returns the only value in the variable's domain
  * @throws IllegalStateException The domain has more than 1 value or is empty
- * @return The only value in the variable's domain
+ * @returns The only value in the variable's domain
  */
 Variable.prototype.getOnlyValue = function() {
     if (this.getDomainSize() !== 1) {

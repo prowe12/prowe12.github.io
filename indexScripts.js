@@ -1,3 +1,5 @@
+// @ts-check
+
 /*
 Code to be used with index.html
 */
