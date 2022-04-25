@@ -25,8 +25,8 @@
 /**
  * If the constraint given by xj has only one value, and if that value is present in the
  * domain of xj, remove it. Return xi and whether it was modified
- * @param xi  Sudoku box that is being constrained
- * @param xj  Sudoku box with value that serves as constraint
+ * @param {Variable} xi  Sudoku box that is being constrained
+ * @param {Variable} xj  Sudoku box with value that serves as constraint
  * @return  Array containing xi and true if modified, else false
 */
 function removeValues(xi, xj) { 

@@ -46,6 +46,7 @@ function domainBuilder(i, domain) {
 */
 function populateSquareWithDomain(irow, icol, domain, boxStyle='empty') { 
     let domainstr = "<p>" //123</p><p>456</p><p>789</p>"
+    let i;
 
     for (i=1; i<=3; i++) {
         domainstr += domainBuilder(i, domain);
