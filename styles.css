@@ -23,13 +23,13 @@
 /* Orient list horizontal, not vertical */
 #nav ul li {
    display: inline-block;
-   color: rgb(200, 225, 250);
+   color: rgb(238, 252, 255);
    padding: 10px;
 }
 
 /* Link colors in nav bar */
 #nav li > a {
-   color: rgb(200, 225, 250);
+   color: rgb(238, 252, 255);
 }
 
 /* Remove underlines in the links in the nav bar */
