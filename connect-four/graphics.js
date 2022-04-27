@@ -20,6 +20,10 @@ class graphics{
         context.restore();
     }
 
+    highlightCell(canvas, highlightColor){
+        canvas.style.background = highlightColor;
+    }
+
     resetTable(table){
         console.log("resetting table");
         for(let i = 0; i < table.length; i++){
@@ -52,6 +56,36 @@ class graphics{
         context.strokeStyle = "black";
         context.beginPath();
         context.arc(xcoord,ycoord,rad,0,2*Math.PI);
+        context.stroke();
+        context.fill();
+        context.restore();
+    }
+
+    drawArrowLeft(canvas){
+        console.log("drawing triangle");
+        let y = canvas.height;
+        let x = canvas.width;
+        let context = canvas.getContext('2d');
+        context.beginPath();
+        context.moveTo(5,y/2);
+        context.lineTo(x-5,2);
+        context.lineTo(x-5,y-2);
+        context.fillStyle = "yellow";
+        context.stroke();
+        context.fill();
+        context.restore();
+    }
+
+    drawArrowRight(canvas){
+        console.log("drawing triangle");
+        let y = canvas.height;
+        let x = canvas.width;
+        let context = canvas.getContext('2d');
+        context.beginPath();
+        context.moveTo(x-5,y/2);
+        context.lineTo(5,2);
+        context.lineTo(5,y-2);
+        context.fillStyle = "yellow";
         context.stroke();
         context.fill();
         context.restore();

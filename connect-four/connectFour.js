@@ -59,6 +59,7 @@ players = [playerHuman,playerComputer];
 //want current player to start the game
 var currentPlayer = 0;
 playerTurn.textContent = `Your turn!`;
+playerTurn.style.color = players[currentPlayer][1];
 
 //state player colors
 background = "rgb(242, 238, 255)";
@@ -329,6 +330,8 @@ async function mmWalkthrough(){
     return_to_game.textContent = "Return to normal play";
     walkthrough.appendChild(return_to_game);
 
+
+
     //if they want to return to the game
     return_to_game.addEventListener('click',()=>{
         //undo the last move
@@ -343,6 +346,11 @@ async function mmWalkthrough(){
         walkthrough_button.style.display = "block";
         //hide the walkthrough
         walkthrough.style.display = "none";
+
+        //if it is the computer's turn and they're playing automatically, continue the game
+        if(currentPlayer == 1 && computerMode == 'auto'){
+            return makeMove(computer.makeMove());
+        }
         return;
     });
 
@@ -381,6 +389,7 @@ async function mmWalkthrough(){
         else{
             fakeMove(col,currentPlayer);
             tempScore = await mmWalkthrough2();
+            
         }
 
         //update the table with the best score from that move
@@ -497,6 +506,7 @@ function addToTable(column, table, score){
  * @returns the minimum score for the table
  */
 async function mmWalkthrough2(){
+    console.log("mm2");
     //create the element for min_value
     mm_min = createMinElement();
 
@@ -535,6 +545,7 @@ async function mmWalkthrough2(){
         return [minScore,minCol];
     }
   
+    //get the minimum score
     tempVals = await getMinScore(minScore,minCol,explanation);
     minScore = tempVals[0];
     minCol = tempVals[1];
@@ -571,7 +582,6 @@ function createMaxElement(){
     mm_table.backgroundColor = 'white';
     mm_table.createCaption("Max Values for ConnectFour Board");
     let tbody = document.createElement('tbody');
-    mm_table.appendChild(tbody);
 
     //fill the first row of the table with column labels
     tbody.insertRow(0);
@@ -591,6 +601,7 @@ function createMaxElement(){
         tbody.rows[1].cells[i].appendChild(document.createTextNode(""));
     }
 
+    mm_table.appendChild(tbody);
     mm_max.appendChild(mm_table);
     return mm_max;
 }
@@ -667,6 +678,10 @@ function resetElement(elem){
     }
 }
 
+/**
+ * if the buttons are greyed out, it switches them to valid. 
+ * if the buttons are green, it greys them out.
+ */
 function flipButtons(){
     flipNextMove();
     flipSlider();
@@ -741,8 +756,9 @@ function colorMatchCheck(one,two, three, four){
  * @returns a boolean saying whether there is a horizontal win
  */
 function horizontalCheck(){
-    for(let row = 0; row < tableRow.length; row ++){
+    for(let row = 0; row < board.length; row ++){
         for(let col = 0; col < 4; col++){
+            console.log(row);
             if(colorMatchCheck(board[row][col],
                 board[row][col+1],
                 board[row][col+2],
