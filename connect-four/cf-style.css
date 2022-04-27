@@ -1,4 +1,4 @@
-#{
+# {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -8,15 +8,9 @@ h1{
     text-align: center;
 }
 
-h2{
+/* h3{
     text-align: center;
-} 
-
-h3{
-    text-align: center;
-} 
-
-
+} */
 
 .player-turn{
     text-align: center;
@@ -105,7 +99,7 @@ h3{
 
 
 .row{
-    background-color: midnightblue;
+    background-color: blue;
 }
 
 td{
@@ -132,7 +126,7 @@ td{
     position: relative;
     width: 60px;
     height: 60px;
-    background:midnightblue;
+    background:blue;
     display: block;
     font-size: 0;
     /* border: 1px solid black; */
@@ -186,7 +180,7 @@ td{
     border: 1px solid black;
     width: 40%;
     text-align: center;
-    /* background: rgb(255, 91, 91); */
+    background: rgb(255, 91, 91);
     cursor: grab;
     /* position: absolute; */
     /* top: 10px; */
@@ -200,30 +194,11 @@ td{
     cursor: grab; */
 }
 
-.walkthrough{
-    display: block;
-    margin: auto;
-    border: none; 
-    background: none;
-    color: black;
-    
-    /* width: 40%; */
-    text-align: center;
-    cursor: grab;
-}
-
-.walkthrough:hover{
-    color: none;
-    background-color: none;
-    border-color: none;
-}
-
-
 .slidecontainer{
     display: block;
     text-align: center;
     width: 100%;
-    /* background: white; */
+    background: white;
     border: 1px solid black;
 }
 

@@ -1,4 +1,4 @@
-// #!/usr/bin/env python3
+// @ts-check
 // # -*- coding: utf-8 -*-
 //
 // Created on Sat Mar 13 08:35:26 2021
@@ -7,29 +7,27 @@
 // 
 
 
-
 /** 
  * Get the next unassigned variable in the domain (no heuristic)
- * @param board: list, Sudoku board. List of lists of variables, making up
+ * @param {array} board: Array of Arrays of objects of type Variable, making up
  *                a 2-D array of the board
- *  @return cell  Class instance of Variable; a cell of the Sudoku board
+ * @return Class instance of Variable; a box of the Sudoku board
+ * @throws An error if everything has already been assigned.
  * 
  */
 function getNextUnassigned(board) {
-    for (row of board) {
-        for (cell of row) {
+    for (let row of board) {
+        for (let cell of row) {
             if (cell.getDomainSize() > 1) {
                 return cell;
             }
         }
     }
-
     throw 'Looking for next unassigned, but everything seems to be assigned!';
 }
 
 
-
-
+//TODO: Implement the methods for the heuristics
 // def get_unassigned_using_mrv(board):
 //     """
 //     Get the next unassigned variable in the domain using a heuristic:
