@@ -152,6 +152,10 @@ h1 {
    margin-bottom: 100px;
 }
 
+/* Space at the top */
+.spaceabove {
+   margin-top: 50px;
+}
 
 /* The footer */
 footer {
