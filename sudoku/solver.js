@@ -256,18 +256,10 @@ function backtrack(assignment, constraints, moves, unmoves) {
         }
 
         // We get to here if ac3result fails or backtrack fails, so here is where
-        // we undo all the moves that were done.
-        // 
-        // There is no need to remove d from domain, because the next time
-        // around we will just reset it, and if we run out of values, we
-        // will return FAIL (-1)
-        //moves = updateChangedMoves(assignment, moves);
-
         // The backtracking + AC3 failed, so add the "unmoves" that undo everything
         // that was done. Then set the unmoves to [] for the next round.
         moves = [].concat(moves, unmoves.reverse());
-        unmoves = [];
-        
+        unmoves = [];        
     }
 
     // If we've gone through all the domain and the puzzle is not complete, then fail, 
@@ -386,11 +378,10 @@ function arcConsistency3(assignment, constraints, prefix="") {
 }      
 
 
-/*
+/**
  Solve Sudoku given a set of cells with fixed values
- @param {array}  Original Starting grid, with zeros for unknown values, array of arrays of integers
- @return {boolean}  Whether successful
- @return {array}  Array of arrays of moves made: [row, col, value, method]
+ @param {array}  original Starting grid, with zeros for unknown values, array of arrays of integers
+ @return {array}  Array of arrays of whether successful and moves made: [row, col, value, method]
  @throws  Error if the board is not valid
 */
 function solve(original) { 
@@ -415,8 +406,6 @@ function solve(original) {
     // Try AC-3 alone first. The prefix to the solver method is "final"
     // because any AC-3 solutions found here are the final answer for the box.
     [board, ac3moves, dum] = arcConsistency3(board, constraints, "final");
-    //console.log("Just finished AC3 alone. moves=");
-    //console.log(moves);
 
     // If it isn't solved, using backtracking with AC-3
     [board, moves] = backtrack(board, constraints, [], []);
