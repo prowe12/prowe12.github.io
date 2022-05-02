@@ -195,6 +195,7 @@ function populateSquare(irow, icol, value, boxStyle='none') {
  * @param {array} grid  Array of arrays of the values on the sudoku board
  * @param {array} moves  Array of arrays of moves: [row, col, value, string]
  * @param {number} location  The index to the location in the list of moves
+ * @param {boolean} outlined  True if there is an outline around moves[location+1]
  * @return grid
 */
 function updateGridFromMoves(grid, moves, location, outlined) {
@@ -214,7 +215,7 @@ function updateGridFromMoves(grid, moves, location, outlined) {
 
     //TODO: If any square is outlined, remove the outline
     if (outlined) {
-        removeboxborder(lastmove[0], lastmove[1], boxStyle='empty');
+        removeboxborder(lastmove[0], lastmove[1], lastmove[2]);
     }
     
     // Create empty grid (grid of zeros)
