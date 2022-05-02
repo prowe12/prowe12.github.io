@@ -557,7 +557,7 @@ speedSlider.addEventListener('click', () => {
  * @param dynamicParameter
  * @param {number} interval
  */
- function createInterval(f, dynamicParameter, interval) { 
+function createInterval(f, dynamicParameter, interval) { 
     return setInterval(function() { 
         f(dynamicParameter); 
     }, interval); 
@@ -753,7 +753,7 @@ rewindToBegButton.addEventListener("click", async function () {
 
 // Event listener for the pause button
 pauseButton.addEventListener("click", function () {
-
+    running = false;
     // Unlight all buttons and highlight the button of interest
     refreshControls();
     pauseButton.classList.add("selected");

@@ -167,6 +167,7 @@ footer {
    left: 0;
    bottom: 0;
    text-align: left;
+   height: 50px;
 }
 
 /* Generics for fieldset */
