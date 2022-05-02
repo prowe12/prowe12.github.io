@@ -434,7 +434,7 @@ let methodSpecificMsgsForDomain = {
 
 let stepMethodMsg = {
     'backtracking': "<p>Solving the outlined square with backtracking.</p><p>If there is more than one value in the domain, backtracking tries one, makes a note of the others, and then moves on to the next box.<p>This continues until it encounters an empty square, and then it backs up.</p><p>Click 'Step' again to keep going.",
-    'ac3': "<p>Solving the outlined square with AC-3.</p><p>AC-3 solves any boxes with only one value in the domain first. After that it recomputes the domain.</p><p>If all incomplete boxes have more than one value in the domain, it uses backtracking to try out a value from the domain of a square.</p>"
+    'ac3': "<p>Solving the outlined square with AC-3.</p><p>AC-3 solves any boxes with only one value in the domain first. After solving a box, the domains of all the boxes that depend on it are recomputed.</p><p>If all incomplete boxes have more than one value in the domain, it uses backtracking to try out a value from the domain of a square.</p>"
 }
 
 
