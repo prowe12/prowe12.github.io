@@ -47,17 +47,12 @@ h1 {
 body {
    display: flex;
    flex-direction: column;
-   /*background-color: rgb(242, 238, 255); */
    background-color: rgb(238, 252, 255); 
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
    margin: 0 auto -100px;
-};
-
-/* Fonts Anna likes */
-/* Barlow, Carla, Abel Karla */
-/*"Rubik wet paint", Palatino, "Trebuchet MS", sans-serif; Trebuchet MS Palatino Barlow */
+}
 
 
  
@@ -86,7 +81,6 @@ h1 {
  */
 #grid-container > div {
    text-align: center;
-   background-color: none;
    border:brown;
 }
 
