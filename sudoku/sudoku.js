@@ -230,6 +230,7 @@ function playReset() {
     setupForControls();
 }
 
+
 /**
  * Reset the board, but do not clear timers or alter the state of play
  */
