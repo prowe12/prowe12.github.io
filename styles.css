@@ -52,7 +52,7 @@ body {
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
-   margin: 0 auto -50px;
+   margin: 0 auto -100px;
 };
 
 /* Fonts Anna likes */
@@ -167,7 +167,7 @@ footer {
    left: 0;
    bottom: 0;
    text-align: left;
-   height: 150px;
+   height: 100px;
 }
 
 /* Generics for fieldset */
