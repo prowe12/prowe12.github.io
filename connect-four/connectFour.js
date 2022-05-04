@@ -62,7 +62,7 @@ playerTurn.textContent = `Your turn!`;
 playerTurn.style.color = players[currentPlayer][1];
 
 //state player colors
-background = "rgb(242, 238, 255)";
+background = "rgb(238, 252, 255)";
 
 
 
@@ -506,7 +506,6 @@ function addToTable(column, table, score){
  * @returns the minimum score for the table
  */
 async function mmWalkthrough2(){
-    console.log("mm2");
     //create the element for min_value
     mm_min = createMinElement();
 
@@ -514,6 +513,9 @@ async function mmWalkthrough2(){
     let min_children = mm_min.children;
     let table = min_children[2];
     let explanation = min_children[1];
+    let furtherExplanation = document.createElement('p');
+    mm_min.appendChild(furtherExplanation);
+    
 
 
     let minScore = 100000;
@@ -542,6 +544,8 @@ async function mmWalkthrough2(){
 
         //before returning, undo the move made in the last column
         undoMove(6);
+        furtherExplanation.textContent = `Min will play in column ${minCol} as that will minimize the score of their opponent.`
+
         return [minScore,minCol];
     }
   
@@ -549,6 +553,8 @@ async function mmWalkthrough2(){
     tempVals = await getMinScore(minScore,minCol,explanation);
     minScore = tempVals[0];
     minCol = tempVals[1];
+    furtherExplanation.textContent = `Min will play in column ${minCol} as that will 
+    <br> minimize the score of their opponent.`
     explanation.textContent = `Returning minimum score ${minScore} in column ${minCol}`;
     return minScore;
 }

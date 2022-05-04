@@ -45,7 +45,7 @@ h1{
 }
 
 #evaluate-board{
-    background: midnightblue; 
+    background: blue; 
     position: relative;
     border-collapse:collapse;
     top: 10px;
@@ -137,7 +137,7 @@ td{
     position: relative;
     width: 45px;
     height: 45px;
-    background:midnightblue;
+    background:blue;
     display: block;
     font-size: 0;
     /* border: 1px solid black; */
@@ -204,7 +204,7 @@ td{
 
 .slider{
     -webkit-appearance: none;  /* Override default CSS styles */
-    appearance: none;
+    /* appearance: none; */
     /* left: 1000px; */
     width: 80%; /* Full-width */
     height: 25%; /* Specified height */

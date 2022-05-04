@@ -10,6 +10,9 @@
     </div>
     <!--General styles; common to most pages-->
     <link rel="stylesheet" href="./styles.css">
+
+        <!-- Sytles specific to connectFour-->
+        <link rel = "stylesheet" href = "connect-four/cf-style.css">
     <!--JavaScript for nav bar-->
     <script src="script.js"></script>
 
@@ -19,18 +22,149 @@
 </head>
 
 <body>
-    <header> <h1>Solving Connect Four Using Minimax</h1> </header>  
+    <header> <h1>Solving Connect Four</h1> </header>  
     <main>
         <h2>How to Play</h2>
-        <p>blah blah blah</p>
+        <p>
+            Connect Four is a fairly common 2-player board game. Opponents take turns dropping
+            a colored tile into a grid with 6 rows and 7 columns. The first player to get four tiles
+            in a row, either horizontally, vertically, ascending, or descending, wins. This means that each move,
+            each player has to act in a way that maximizes their chance to get four tiles in a row, while
+            also minimizing their opponents chance to get four tiles in a row. The game ends when one of the players 
+            has one, or when there are no possible moves left to make (each column is completely filled with tiles).
+        </p>
 
         <h2>The Computer Player</h2>
-        <p>blah blah blah</p>
+        <p>
+            On this website, you will play against the computer. You may notice that if you set the depth at 0,
+            the computer is easy to beat. However, if you ramp up the depth to 4, it is very difficult
+            to catch the computer off guard. This is because the computer is using the minimax algorithm to determine its next move.
+            <br>
+            If you would like to see how the computer is using minimax for the current game, set the 
+            depth to 2 or under and click "show minimax walkthrough" on the game page.
+        </p>
 
         <h3>Minimax Algorithm</h3>
-        <p> blah blah blah</p>
+        <p>  Once The minimax tree has reached the passed in depth level, 
+            it uses an evaluation heuristic to measure the current score on the board. 
+            The min value wants to make a move that minimizes this value, and the max
+            value wants to make a move that maxmimzes this value.
+        </p>
 
-        <h3>Connect Four Heuristic</h3>
-        <p>blah blah blah</p>
+        <h3>Evaluation Heuristic</h3>
+        <p>The evaluation heuristic is used to measure the current score on the board.
+            Since the algorithm is playing for the computer, the human player (red) will
+            receive negative points and the computer player (yellow) will receive positive points.
+        </p>
+         <p>
+            The heuristic moves through each area on the board where there could be four tiles in a row.
+            It starts by moving through each row and measuring each set of four tiles.
+            It then moves through each column and measures each set of four tiles.
+            It then looks at all ascending runs and measures each set of four tiles.
+            It then looks at all descending runs and measures each set of four tiles.
+            Each set of tiles gets points based on the following criteria:
+            <br>
+            <br>
+            If there are tiles from both players (red and yellow), no points are gained. 
+            This is because there is no room for either player to win the game by placing four tiles in a row.
+            The following rules assume there are only tiles from one player.
+            <br>
+            <br>
+            If there is one tile for the player, the player receives a score of 1 or -1.
+            <br>
+            <br>
+            if there are two tiles for the player, the player receives a score of 10 or -10.
+            <br>
+            <br>
+            If there are three tiles for the player, the player receives a score of 100 or -100.
+            <br>
+            <br>
+            If there are four tiles for the player, the player receives a score of 1000 or -1000.
+            <br>
+            <br>
+            As the heuristic evaluates the board, it sums the score that it finds in each set of tiles
+            and returns the total score. The human player seeks the board with the maximum negative score, and the 
+            computer player seeks the board with the maximum positive score.
+         </p>
+
+         <p>
+            Below is an example board. Click the arrow on the right to see how this board is evaluated.
+        </p>
+        
     </main>
+    <div class = "flex-container">
+        <table id = "evaluate-board">
+
+            <tr class = "row">
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+
+            </tr>
+            <tr class = "row">
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+            </tr>
+            <tr class = "row">
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+            </tr>
+            <tr class = "row">
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+            </tr>
+            <tr class = "row">
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+            </tr>
+            <tr class = "row">
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+                <td><canvas class="slot2" width = "45" height = "45"></canvas></td>
+            </tr>
+            <tr class = "row">
+                <td>0</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+            </tr>
+        </table>
+        <div id = "arrow-container"><canvas class = "arrow right"></canvas></div>
+        <div id = "board-score"></div>
+    </div>
+
+    <script src = "connect-four/graphics.js"></script> 
+    <script src = "connect-four/computerPlayer.js"></script> 
+   <script src = "connect-four/solvingCF.js"></script>
 </body>

@@ -24,8 +24,11 @@ class graphics{
         canvas.style.background = highlightColor;
     }
 
+    unHighlightCell(canvas){
+        canvas.style = "blue"
+    }
+
     resetTable(table){
-        console.log("resetting table");
         for(let i = 0; i < table.length; i++){
             let cell = table[i];
             this.resetCell(cell);
@@ -62,7 +65,6 @@ class graphics{
     }
 
     drawArrowLeft(canvas){
-        console.log("drawing triangle");
         let y = canvas.height;
         let x = canvas.width;
         let context = canvas.getContext('2d');
@@ -77,7 +79,6 @@ class graphics{
     }
 
     drawArrowRight(canvas){
-        console.log("drawing triangle");
         let y = canvas.height;
         let x = canvas.width;
         let context = canvas.getContext('2d');
