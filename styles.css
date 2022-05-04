@@ -23,13 +23,13 @@
 /* Orient list horizontal, not vertical */
 #nav ul li {
    display: inline-block;
-   color: rgb(200, 225, 250);
+   color: rgb(238, 252, 255);
    padding: 10px;
 }
 
 /* Link colors in nav bar */
 #nav li > a {
-   color: rgb(200, 225, 250);
+   color: rgb(238, 252, 255);
 }
 
 /* Remove underlines in the links in the nav bar */
@@ -47,16 +47,11 @@ h1 {
 body {
    display: flex;
    flex-direction: column;
-   /*background-color: rgb(242, 238, 255); */
    background-color: rgb(238, 252, 255); 
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
-};
-
-/* Fonts Anna likes */
-/* Barlow, Carla, Abel Karla */
-/*"Rubik wet paint", Palatino, "Trebuchet MS", sans-serif; Trebuchet MS Palatino Barlow */
+}
 
 
  
@@ -85,7 +80,6 @@ h1 {
  */
 #grid-container > div {
    text-align: center;
-   background-color: none;
    border:brown;
 }
 
@@ -149,9 +143,13 @@ h1 {
 
 /* Space at the bottom */
 .spacebelow {
-   margin-bottom: 40px;
+   margin-bottom: 100px;
 }
 
+/* Space at the top */
+.spaceabove {
+   margin-top: 50px;
+}
 
 /* The footer */
 footer {

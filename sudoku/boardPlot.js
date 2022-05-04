@@ -195,18 +195,28 @@ function populateSquare(irow, icol, value, boxStyle='none') {
  * @param {array} grid  Array of arrays of the values on the sudoku board
  * @param {array} moves  Array of arrays of moves: [row, col, value, string]
  * @param {number} location  The index to the location in the list of moves
+ * @param {boolean} outlined  True if there is an outline around moves[location+1]
  * @return grid
 */
-function updateGridFromMoves(grid, moves, location) {
+function updateGridFromMoves(grid, moves, location, outlined) {
     let nrows = grid.length;
     let ncols = grid[0].length;
     let newgrid = new Array(nrows); 
     let solverMethod = new Array(nrows);
-    let lastmove = moves[location+1];
     let move;
 
+    // If we are at end of puzzle, there is nothing to do, so return
+    if (location >= moves.length-1) {
+        location = moves.length-1;
+        //return;
+    }
+
+    let lastmove = moves[location+1];
+
     //TODO: If any square is outlined, remove the outline
-    removeboxborder(lastmove[0], lastmove[1], boxStyle='empty')
+    if (outlined) {
+        removeboxborder(lastmove[0], lastmove[1], lastmove[2]);
+    }
     
     // Create empty grid (grid of zeros)
     for (let i=0; i<nrows; i++) {

@@ -14,7 +14,14 @@
  * @returns {boolean}  True if the board is ok, otherwise false
  */
 function qcBoard(board) {
+
     let maxDomainVal = board[0][0].maxDomainVal;
+    
+    // Fail if the maxDomainVal is not a number above 0
+    if (!(Number.isFinite(maxDomainVal)) || maxDomainVal <= 0) {
+        return false;
+    }
+
     let boxval;
 
     for (let irow=0; irow<maxDomainVal; irow++) {  
@@ -28,11 +35,11 @@ function qcBoard(board) {
             boxval = board[irow][icol].getOnlyValue();
 
             // Row: For the row (irow) containing the cell at (irow, icol),
-            // add all the columns (e.g. 1-9) to the constraints, except the cell's column (icol)
-            // Format: An array containing the current cell [irow, icol], followed by the
-            // constraint row and column [irow, jol]
+            // add all the columns (e.g. 1-9), except the cell's column (icol)
+            // Check if there is only one value in the domain, and, if so,
+            // make sure it is different than the value in irow, icol
             for (let jcol=0; jcol<maxDomainVal; jcol++) {
-                if (jcol !== icol && boxval === board[irow][jcol].value) {
+                if (jcol !== icol && board[irow][jcol].domain.size === 1 && board[irow][jcol].getOnlyValue() === boxval) {
                     return false;
                 }
             }
@@ -40,7 +47,7 @@ function qcBoard(board) {
             // Column: For the column (icol) containing the cell at (irow, icol), 
             // check all the rows (e.g. 1-9), except the cell's row (irow)
             for (let jrow=0; jrow<maxDomainVal; jrow++) {
-                if (jrow !== irow && boxval === board[jrow][icol].value) {
+                if (jrow !== irow && board[jrow][icol].domain.size === 1 && boxval === board[jrow][icol].getOnlyValue()) {
                     return false;
                 }
             }
@@ -52,7 +59,7 @@ function qcBoard(board) {
             let boxCol = Math.floor(icol/3) * 3;
             for (let jrow=boxRow; jrow<boxRow+3; jrow++) {
                 for (let jcol=boxCol; jcol<boxCol+3; jcol++) {
-                    if (boxval === board[jrow][jcol]) {
+                    if (!(jrow===irow && jcol===icol) && board[jrow][jcol].domain.size===1 && boxval===board[jrow][jcol].getOnlyValue()) {
                         return false;
                     }
                 }

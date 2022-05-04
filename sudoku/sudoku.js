@@ -169,14 +169,13 @@ function makeEmptyGrid(nrows, ncols) {
  * Reset the board and the state of play (i.e. filling in the board) to the beginning
  */
 function runBacktrackSolver() {
+
     // Highlight the button for the selected solver, and put the other back to normal
     let solverMethod = document.getElementById("solverDemoBacktrack");
-    solverMethod.style.setProperty("background-color", "rgb(17, 49, 30)"); //"rgb(17, 49, 30)");
-    solverMethod.style.setProperty("border", "4px solid yellow"); // rgb(25, 75, 45)");
+    solverMethod.classList.add("selectedsolver");
 
     let nonsolverMethod = document.getElementById("playSudokuSolver");
-    nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
-    nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)");
+    nonsolverMethod.classList.remove("selectedsolver");
 
     // Reset the state of play and the board
     playReset();
@@ -228,8 +227,9 @@ function playReset() {
     running = false;
 
     // Turn off the domain, if on
-    clearDomainFromTableForRunning();
+    setupForControls();
 }
+
 
 /**
  * Reset the board, but do not clear timers or alter the state of play
@@ -276,19 +276,21 @@ let populator = function (moves) {
  * Also update the grid to the current state
  */
 let steppopulator = function () {
-    if (boxit) {
+    if (!outlined && !(typeof moves==='undefined') && (!(typeof imove==='undefined')) && (!(typeof moves[imove]==='undefined'))) {
         // Draw a box around the next square that will be populated.
         boxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
 
-        // Next time we will not draw the box
-        boxit = false;
+        // There is an outline drawn. Next time we will not draw the outline
+        outlined = true;        
     }
     else {
         // The populator should remove the box
-        removeboxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
+        if (outlined) {
+            removeboxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
+        }
         populator(moves);
         // Next time we will draw the box again
-        boxit = true;
+        outlined = false;
     }
 };
 
@@ -323,6 +325,27 @@ function stepSizeForRewind(imove, delay) {
 
 
 /**
+ * For running operations that should not show the domain, when the
+ * domain is on. Check if the domain button is on and, if so, turn it off
+ * and remove the domain from the display board. Also remove any box outlines
+ */
+ function setupForControls() {
+    let button = document.getElementById("showDomainButton");
+    if (button.value === "ON") {
+        button.value = "OFF";
+        //TODO: better way to do the following?
+        showDomainButton.classList.remove("selected");
+        clearDomainFromTable();
+    }
+
+    if (outlined && !(typeof moves === 'undefined') && !(typeof imove === 'undefined')) {
+        removeboxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
+        outlined = false;
+    }
+}
+
+
+/**
  * Repopulate the board back the given location (movement number)
  * 
  * The play timeline, where
@@ -336,6 +359,9 @@ function stepSizeForRewind(imove, delay) {
  * @param {number} location  The location to rewind back to
  */
 let rewindToMove = function (location) {
+    // Do any actions that need to be done before control functions, such as
+    // removing the outline
+    setupForControls();
 
     if (location > imove) {
         throw "Rewinding, so new location must be before current";
@@ -347,7 +373,7 @@ let rewindToMove = function (location) {
     // Build the board at the desired location and display it
     // Remember that we start all over from the original grid
     // and add all the moves up to the current location
-    let newgrid = updateGridFromMoves(originalgrid, moves, location);
+    let newgrid = updateGridFromMoves(originalgrid, moves, location, outlined);
 
     return newgrid;
 };
@@ -387,15 +413,19 @@ var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 var speedSlider = document.querySelector(".slider");
 var pauseButton = document.getElementById("pauseButton");
+var sudokuSolverMethod = document.getElementById("playSudokuSolver");
+var backtrackSolverMethod = document.getElementById("solverDemoBacktrack");
+
+var playOrRewind = populator;
 
 let method = 'backtracking';
-let boxit = true;
 var moves = [];
 let timeId;
 let imove = 0;
 let running = false;
 let ANIMATION_SPEED = speedSlider.value;
 let delay = 10 ** (3 - ANIMATION_SPEED / 100);           // default delay
+let outlined = false;
 
 // Create dictionaries to hold all the possible messages for display
 let methodSpecificMsgsForDomain = {
@@ -405,13 +435,9 @@ let methodSpecificMsgsForDomain = {
 
 let stepMethodMsg = {
     'backtracking': "<p>Solving the outlined square with backtracking.</p><p>If there is more than one value in the domain, backtracking tries one, makes a note of the others, and then moves on to the next box.<p>This continues until it encounters an empty square, and then it backs up.</p><p>Click 'Step' again to keep going.",
-    'ac3': "<p>Solving the outlined square with AC-3.</p><p>AC-3 solves any boxes with only one value in the domain first. After that it recomputes the domain.</p><p>If all incomplete boxes have more than one value in the domain, it uses backtracking to try out a value from the domain of a square.</p>"
+    'ac3': "<p>Solving the outlined square with AC-3.</p><p>AC-3 solves any boxes with only one value in the domain first. After solving a box, the domains of all the boxes that depend on it are recomputed.</p><p>If all incomplete boxes have more than one value in the domain, it uses backtracking to try out a value from the domain of a square.</p>"
 }
 
-
-// If a box has more than one value, it uses that value. If a box has mulitple values, it tries first one, and later might try another. If a box is empty, that means there is no possible value for the domain, so when backtracking gets to that box, it will back up to the last box it guessed a value for.
-
-// <p>Backtracking solves the puzzle by trying out a value from the domain of each square, starting from the upper left.</p>
 
 // Set up the default grid after the DOM content is loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -453,7 +479,7 @@ document.querySelector("#dropdownpuzzle").addEventListener("change", function ()
 document.querySelector("#solverDemoBacktrack").addEventListener("click", function () {
     method = 'backtracking';
     refreshControls();
-    clearDomainFromTableForRunning();
+    setupForControls();
     runBacktrackSolver();
 });
 
@@ -462,17 +488,16 @@ document.querySelector("#solverDemoBacktrack").addEventListener("click", functio
 document.querySelector("#playSudokuSolver").addEventListener("click", function () {
     method = 'ac3';
     refreshControls();
-    clearDomainFromTableForRunning();
+    setupForControls();
 
     // Highlight the button for the selected solver, and put the other back to normal
-    // TODO: Do this by adding a class instead!
-    let solverMethod = document.getElementById("playSudokuSolver");
-    solverMethod.style.setProperty("background-color", "rgb(17, 49, 30)"); //"rgb(17, 49, 30)");
-    solverMethod.style.setProperty("border", "4px solid yellow"); // rgb(25, 75, 45)");
-
-    let nonsolverMethod = document.getElementById("solverDemoBacktrack");
-    nonsolverMethod.style.setProperty("background-color", "rgb(25, 75, 45)");
-    nonsolverMethod.style.setProperty("border", "1px solid rgb(17, 49, 30)");
+    //let solverMethod = document.getElementById("playSudokuSolver");
+    //solverMethod.classList.add("selectedsolver");
+    sudokuSolverMethod.classList.add("selectedsolver");
+    
+    //let nonsolverMethod = document.getElementById("solverDemoBacktrack");
+    //nonsolverMethod.classList.remove("selectedsolver");
+    backtrackSolverMethod.classList.remove("selectedsolver");
 
     // Reset the state of play and the board
     playReset();
@@ -532,7 +557,7 @@ speedSlider.addEventListener('click', () => {
  * @param dynamicParameter
  * @param {number} interval
  */
- function createInterval(f, dynamicParameter, interval) { 
+function createInterval(f, dynamicParameter, interval) { 
     return setInterval(function() { 
         f(dynamicParameter); 
     }, interval); 
@@ -542,7 +567,7 @@ speedSlider.addEventListener('click', () => {
 // Event listener for the play button
 playButton.addEventListener("click", function () {
     // Unlight all control buttons and highlight the button of interest
-    clearDomainFromTableForRunning();
+    setupForControls();
     refreshControls();
     playButton.classList.add('selected');
 
@@ -576,7 +601,7 @@ playButton.addEventListener("click", function () {
     timeId = createInterval(populator, moves, delay)
 
     // Set playOrRewind to the populator for play, so the slider can use it to control the speed
-    var playOrRewind = populator;
+    playOrRewind = populator;
 });
 
 
@@ -587,7 +612,7 @@ playButton.addEventListener("click", function () {
 rewindButton.addEventListener("click", function () {
 
     // Unlight all control buttons and highlight the button of interest
-    clearDomainFromTableForRunning();
+    setupForControls();
     refreshControls();
     rewindButton.classList.add("selected");
 
@@ -643,14 +668,18 @@ rewindButton.addEventListener("click", function () {
     timeId = createInterval(depopulator, moves, delay)
 
     // Set playOrRewind to the depopulator for rewinding, so the slider can change the speed
-    var playOrRewind = depopulator;
+    playOrRewind = depopulator;
 });
 
 
 // Event listener for the forward to end button >>|
 forwardToEndButton.addEventListener("click", async function () {
+
+    // Stop play if any
+    clearInterval(timeId);
+
     // Unlight all buttons and highlight the button of interest
-    clearDomainFromTableForRunning();
+    setupForControls();
     refreshControls();
     forwardToEndButton.classList.add("selected");
 
@@ -658,8 +687,6 @@ forwardToEndButton.addEventListener("click", async function () {
     let state = document.querySelector(".state");
     state.innerHTML = "<p>Working on completing the puzzle. Please wait.</p>";
 
-    // Stop play if any
-    clearInterval(timeId);
     running = true;
 
     // Fill in board to end. This can take some time, so return a promise and 
@@ -686,6 +713,8 @@ forwardToEndButton.addEventListener("click", async function () {
     running = false;
     forwardToEndButton.classList.remove("selected");
 
+    // From rewindtobeg
+    
 });
 
 
@@ -693,7 +722,7 @@ forwardToEndButton.addEventListener("click", async function () {
 // Event listener for the rewind to beginning button |<<
 rewindToBegButton.addEventListener("click", async function () {
     // Unlight all buttons and highlight the button of interest
-    clearDomainFromTableForRunning();
+    setupForControls();
     refreshControls();
     rewindToBegButton.classList.add("selected");
 
@@ -724,7 +753,7 @@ rewindToBegButton.addEventListener("click", async function () {
 
 // Event listener for the pause button
 pauseButton.addEventListener("click", function () {
-
+    running = false;
     // Unlight all buttons and highlight the button of interest
     refreshControls();
     pauseButton.classList.add("selected");
@@ -800,20 +829,6 @@ function clearDomainFromTable() {
 }
 
 
-/**
- * For running operations that should not show the domain, when the
- * domain is on. Check if the domain button is on and, if so, turn it off
- * and remove the domain from the display board
- */
-function clearDomainFromTableForRunning() {
-    let button = document.getElementById("showDomainButton");
-    if (button.value === "ON") {
-        button.value = "OFF";
-        //TODO: better way to do the following?
-        showDomainButton.classList.remove("selected");
-        clearDomainFromTable();
-    }
-}
 
 
 /**
@@ -907,7 +922,6 @@ stepBackButton.addEventListener("click", function () {
 
     // Unlight all control buttons and highlight the button of interest
     refreshControls();
-    //clearDomainFromTableForRunning()
 
     stepBackButton.classList.add("selected");
 

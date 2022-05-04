@@ -120,13 +120,23 @@ td {
 
 
 
+/* Selected for solver-type buttons */
+.selectedsolver {
+   margin-left: 3px;
+   margin-right: 3px;
+   margin-bottom: 3px;
+   padding: 7px 9px 7px 9px;
+   border: 2px solid yellow;
+   outline: 1px solid rgb(17, 49, 30);
+}
+
 /* Control button overrides for standard button  */
 .controlButton {
    margin-left: 3px;
    margin-right: 3px;
    margin-bottom: 20px;
    padding: 4px 4px;
-   border: 2px solid; /*rgba(25, 75, 45, 0.693) rgb(242, 238, 255); */
+   border: 2px solid;
    border-color: rgb(39, 116, 70);
    outline: 1px solid rgb(17, 49, 30);
 }
