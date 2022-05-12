@@ -304,16 +304,17 @@ async function mmWalkthrough(){
     gamePause = true;
     flipButtons();
 
+    reset.addEventListener('click',()=>{
+        clearWalkthrough();
+    });
+
     //make the max value table
     mm_max = createMaxElement();
     //grab the max value table
     let max_children = mm_max.children;
     let table = max_children[2];
 
-    let further_explanation = document.createElement('p');
-    further_explanation.style.display = 'none';
-    further_explanation.style.width = "250px";
-    mm_max.appendChild(further_explanation);
+
 
     //make a button to step through the table
     let next_step = document.createElement('button');
@@ -334,24 +335,11 @@ async function mmWalkthrough(){
 
     //if they want to return to the game
     return_to_game.addEventListener('click',()=>{
-        //undo the last move
-        if(col>0){
-            undoMove(col-1);
-        }
-        //allow the human to make moves
-        gamePause = false;
-        //reset the walkthorugh 
-        resetWalkthrough();
-        //display the "show walkthrough" button
-        walkthrough_button.style.display = "block";
-        //hide the walkthrough
-        walkthrough.style.display = "none";
-
-        //if it is the computer's turn and they're playing automatically, continue the game
-        if(currentPlayer == 1 && computerMode == 'auto'){
-            return makeMove(computer.makeMove());
-        }
-        return;
+            //undo the last move
+            if(col>0){
+                undoMove(col-1);
+            }
+        clearWalkthrough();
     });
 
     //step through the max value table
@@ -408,10 +396,6 @@ async function mmWalkthrough(){
 
         //if you've evaluated the last column, update the button
         if(col >= board[0].length){
-            further_explanation.style.display = 'block';
-            further_explanation.textContent = `The minimax algorithm has determined 
-                that the best move the ${players[currentPlayer][2]} player can get is
-                to play in column ${maxCol}, since this will result in a board with the highest score.`;
             if(currentPlayer==1){
                 next_step.textContent = "Make Computer Move"
             }
@@ -428,6 +412,24 @@ async function mmWalkthrough(){
     });
 
     return;
+}
+
+function clearWalkthrough(){
+
+        //allow the human to make moves
+        gamePause = false;
+        //reset the walkthorugh 
+        resetWalkthrough();
+        //display the "show walkthrough" button
+        walkthrough_button.style.display = "block";
+        //hide the walkthrough
+        walkthrough.style.display = "none";
+
+        //if it is the computer's turn and they're playing automatically, continue the game
+        if(currentPlayer == 1 && computerMode == 'auto'){
+            return makeMove(computer.makeMove());
+        }
+        return;
 }
 
 /**
@@ -513,8 +515,6 @@ async function mmWalkthrough2(){
     let min_children = mm_min.children;
     let table = min_children[2];
     let explanation = min_children[1];
-    let furtherExplanation = document.createElement('p');
-    mm_min.appendChild(furtherExplanation);
     
 
 
@@ -544,7 +544,6 @@ async function mmWalkthrough2(){
 
         //before returning, undo the move made in the last column
         undoMove(6);
-        furtherExplanation.textContent = `Min will play in column ${minCol} as that will minimize the score of their opponent.`
 
         return [minScore,minCol];
     }
@@ -553,8 +552,7 @@ async function mmWalkthrough2(){
     tempVals = await getMinScore(minScore,minCol,explanation);
     minScore = tempVals[0];
     minCol = tempVals[1];
-    furtherExplanation.textContent = `Min will play in column ${minCol} as that will 
-    <br> minimize the score of their opponent.`
+    
     explanation.textContent = `Returning minimum score ${minScore} in column ${minCol}`;
     return minScore;
 }

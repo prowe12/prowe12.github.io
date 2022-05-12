@@ -174,11 +174,15 @@ td{
     /* background: rgb(255, 91, 91); */
     cursor: grab;
 }
+.automaticplay{
+    width: 100%;
+    font-size: 12px;
+}
 .next-move{
     display: block;
     margin: auto;
     border: 1px solid black;
-    width: 40%;
+    width: 50%;
     text-align: center;
     background: rgb(255, 91, 91);
     cursor: grab;
@@ -198,7 +202,7 @@ td{
     display: block;
     text-align: center;
     width: 100%;
-    background: white;
+    /* background: white; */
     border: 1px solid black;
 }
 
