@@ -120,49 +120,7 @@
             This cycle continues until the scores reach the computer player, who first temporarily played a tile. 
             The computer determines which tile placement resulted in a board with the maximum score, and plays this tile in the real game.
         </p>
-        <h5> Now, for an Example!</h5>
-        <p>
-            Let's make believe that we are playing Connect Two, a game eerily similar to Connect Four except there are only 2 columns to choose from!
-            Aside from that, the same rules apply to both games -- the opponent is trying to minimize the board score, and the computer is trying to maximize the board score.
-            In this game, we set our depth to 3, and the computer plays first!
-        </p>
-        <p>
-            "What happens If I play in column 1?" Asks the computer to their opponent as they pretend to drop a tile in column 1. The depth is currently 1.
-            <br>
-            <br>
-            "Well, lets see.." says the opponent. "If you were to play in column 1, what would happen if I played in column 1 as well?" As they say this, they pretend to 
-            drop a tile into column 1. The depth is now 2.
-            <br>
-            <br>
-            "Hmm.. If you do that, then I would have two options: I could drop my tile in column 1 again -- " the computer pretends to drop another tile 
-            in column 1 which sets the depth to 3, our maximum depth, then evaluates the current board. " -- which would result in me having a score of 6 and you having a score of -3. Or,
-            I could drop my tile in column 2 this time -- " the computer pretends to drop a tile in column 2 which again sets the depth to 3, then evaluates the current board. " -- which would result
-            in me having a score of 101! And you would only have a score of -3. So, I would say that if you played in column 1, I would play in column 2."
-            <br>
-            <br>
-            "Ahh," says the opponent, making a mental note that if they play in column 1, the board score would most likely be 98. 
-            "And what would you do if I were to play in column 2?" At this point, the opponent pretends to drop a tile in column 2. The depth is once again 2.
-            <br>
-            <br>
-            The computer thinks. "If you played in column 2, I would once again be faced with a choice: column 1 or column 2?" The computer pretends to drop a tile in column 1. 
-            The depth is now 3, which is the maximum depth, so the computer evaluates the board.
-            "It seems that if I play in column 1, I would have a score of 103, and you would have a measly -1 points in comparison. Let's check for column 2..."
-            The computer pretends to drop the tile into column 2 now, and evaluates the board once again. "If I play in column 2, I would have a score of 104, and you would have a score of -1.
-            So if you played in column 2, I would probably play in column 2."
-            <br>
-            <br>
-            "Alright," says the opponent, making a mental note that if they play in column 2, the board score would most likely be 103,
-            "with all this in mind, I've decided that if you play in column 1, I will also play in column 1."
-            <br>
-            <br>
-            The computer grins. "And what," they ask, "might you do if I were to play in column 2?"
-            <br>
-            <br>
-            The two players have the same discussion once again, and ultimately determine that the scores would be about the same.
-            <br>
-            <br>
-            With this in mind, the computer confidently drops their tile into column 1 and the game begins.
-           </p>
+        
 
         <h3>Evaluation Heuristic</h3>
         <p>The evaluation heuristic is used to measure the current score on the board.
