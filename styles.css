@@ -4,6 +4,10 @@
 /* light blue: rgb(200, 225, 250) */
 /* rgb(25, 75, 45) */
 
+/* nav bar */
+#nav {
+   z-index: 500;
+}
 
 /* Styling of nav bar list */
 /* Perhaps some of the below is not used? */

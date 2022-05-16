@@ -5,7 +5,6 @@
 #grid-container-puzzle {
    display: grid;
    justify-content: space-evenly;
-   /* grid-template-columns: 33% 33% 33%; */
    grid-template-columns: repeat(auto-fill, 380px);
    grid-template-rows: auto;
    max-width: 1200px;
@@ -112,13 +111,10 @@ td {
    color: orange;
 }
 
-
 .sudokubox.boxborder {
    /* Add a border to outline the square */
    border: solid 2px blue;
 }
-
-
 
 /* Selected for solver-type buttons */
 .selectedsolver {
@@ -141,14 +137,12 @@ td {
    outline: 1px solid rgb(17, 49, 30);
 }
 
-
 /* Selected buttons */
 .selected {
    padding: 4px 4px;
    border: 2px solid yellow;
    outline: 1px solid rgb(17, 49, 30);
 }
-
 
 /* Styling for the slider needs to be done for every browser */
 /* First remove the auto-styling */
@@ -160,13 +154,13 @@ input[type="range"]{
    appearance: none;
    border: none;
    border-radius: 30px;
- }
- input[type="range"]::-moz-focus-outer {
+}
+input[type="range"]::-moz-focus-outer {
      border: 0;
- }
- input[type="range"]:hover {
+}
+input[type="range"]:hover {
    outline: none;
- }
+}
  
 /* Chrome */
 input[type="range"]::-webkit-slider-thumb {
@@ -178,6 +172,7 @@ input[type="range"]::-webkit-slider-thumb {
    border-radius: 30px;  /* makes it a circle */
    outline: none;
 }
+
 /* Styling the track */
 input[type="range"]::-webkit-slider-runnable-track {
    background: gray;
@@ -215,25 +210,24 @@ input[type="range"]::-ms-fill-lower {
    border-radius: 30px;
    border: none;
 }
+
 input[type="range"]::-ms-fill-upper {  
    background-color: #ccc;
    border-radius: 30px;
    border: none;
    height: 100%;
 }
- 
- 
 
 /* DOES THE FOLLOWING DO ANYTHING??? */
 
 /* tooltip style */
- .tooltip {
+.tooltip {
    position:relative;
    padding: 30px 0;
    
- }
- 
- .tooltip .tooltiptext {
+}
+
+.tooltip .tooltiptext {
    visibility: hidden;
    width: 100px;
    background-color: #f38080;
@@ -245,13 +239,13 @@ input[type="range"]::-ms-fill-upper {
    z-index: 1;
    top: -5px;
    left:calc(50% - 50px);
- }
+}
  
- .tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext {
    visibility: visible;
- }
+}
  
- .tooltip .tooltiptext::after {
+.tooltip .tooltiptext::after {
    content: "";
    position: absolute;
    top: 100%;
@@ -260,6 +254,6 @@ input[type="range"]::-ms-fill-upper {
    border-width: 5px;
    border-style: solid;
    border-color: #f38080 transparent transparent transparent;
- }
+}
  
 

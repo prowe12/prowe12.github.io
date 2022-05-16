@@ -1,16 +1,10 @@
-# {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
+
+/* The nav bar takes up vertical space, so we have to move the rest of the page down */
 h1{
+    padding-top: 2em;
     text-align: center;
 }
-
-/* h3{
-    text-align: center;
-} */
 
 .player-turn{
     text-align: center;
@@ -19,7 +13,7 @@ h1{
 .flex-container{
     display: flex;
     flex-direction: row;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     padding: 5px;
@@ -33,24 +27,18 @@ h1{
 
 .game{
     position: relative;
-    border-collapse:collapse;
+    border-collapse: collapse;
     top: 10px;
-    /* left: 30%; */
-    /* transform: translate(-50%); */
     width: 432px;
     height: 492px;
     margin: 5px;
-    /* display: inline-block; */
-    /* border: 1px solid black; */
 }
 
 #evaluate-board{
     background: blue; 
     position: relative;
-    border-collapse:collapse;
+    border-collapse: collapse;
     top: 10px;
-    /* left: 30%; */
-    /* transform: translate(-50%); */
     width: 315px;
     height: 270px;
     margin: 5px;
@@ -63,22 +51,12 @@ h1{
     border-width: 0 3px 3px 0;
     display: inline-block;
     padding: 3px;
-  }
-  
-
-
-/* #walkthrough-max-table{
-    position: relative;
-    color: 'white';
-    background-color: 'white';
-    width: 80%;
-    padding: 5px;
-    border: 1px black;
-} */
+}
 
 #arrow-container{
     border-radius: 25%;
 }
+
 .mm-walkthrough table{
     color: black;
     border-collapse: collapse;
@@ -88,15 +66,16 @@ h1{
     padding: 5px;
     border: solid 1px black;
 }
+
 .mm-walkthrough tr{
     border: solid 1px black;
 }
+
 .mm-walkthrough td{
     color: black;
     border: solid 1px black;
     text-align: center;
 }
-
 
 .row{
     background-color: blue;
@@ -108,7 +87,6 @@ td{
 }
 
 #board{
-    /* background: rgb(1, 1, 255); */
     border-collapse: collapse;
 }
 
@@ -129,10 +107,9 @@ td{
     background:blue;
     display: block;
     font-size: 0;
-    /* border: 1px solid black; */
-    /* border-radius: 50%; */
     cursor: grab;
 }
+
 .slot2{
     position: relative;
     width: 45px;
@@ -140,44 +117,38 @@ td{
     background:blue;
     display: block;
     font-size: 0;
-    /* border: 1px solid black; */
-    /* border-radius: 50%; */
     cursor: grab;
 }
 
 .controls{
     position: relative;
     border-collapse: collapse;
-    /* transform: translate(-50%); */
     top: 90px;
-    /* left: 10%; */
     height: 420px;
     width: 250px;
     margin: 5px;
-    /* display: inline-block; */
 }
+
 .space{
     width: 100;
     height: 2%;
 }
+
 .reset{
-    /* position: absolute; */
     display: block;
     top: 10px;
     margin: auto;
-    /* left: 50%;  */
-    /* left: 50%; */
-    /* transform: translate(-50%); */
     border: 1px solid black;
     width: 40%;
     text-align: center;
-    /* background: rgb(255, 91, 91); */
     cursor: grab;
 }
+
 .automaticplay{
     width: 100%;
     font-size: 12px;
 }
+
 .next-move{
     display: block;
     margin: auto;
@@ -186,44 +157,26 @@ td{
     text-align: center;
     background: rgb(255, 91, 91);
     cursor: grab;
-    /* position: absolute; */
-    /* top: 10px; */
-    /* left: 50%;  */
-    /* left: 160px; */
-    /* transform: translate(-50%);
-    border: 1px solid black;
-    width: 100px;
-    text-align: center;
-    background: white;
-    cursor: grab; */
 }
 
 .slidecontainer{
     display: block;
     text-align: center;
     width: 100%;
-    /* background: white; */
     border: 1px solid black;
 }
 
 .slider{
     -webkit-appearance: none;  /* Override default CSS styles */
-    /* appearance: none; */
-    /* left: 1000px; */
     width: 80%; /* Full-width */
     height: 25%; /* Specified height */
     background: #d3d3d3; /* Grey background */
     outline: none; /* Remove outline */
-    /* opacity: 0.7; Set transparency (for mouse-over effects on hover) */
-    /* -webkit-transition: .2s; 0.2 seconds transition on hover */
-    /* transition: opacity .2s; */
 }
 
-
-
-.footer{
+/*.footer{
     position: fixed;
     left: 0;
     bottom: 0;
     text-align: left;
-}
+}*/
