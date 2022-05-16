@@ -56,6 +56,7 @@ body {
    text-align: left;
    font-family:Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
+   min-height: 100vh;
 }
 
 /* What is this for? */
@@ -164,28 +165,13 @@ img {
    flex-direction: column;
 }
 
-/* The footer
-footer {
-   flex: auto;
-   position: absolute;
-   bottom: 0;
-   width: 100%;
-   height: 6rem;
-   padding: 8px 10px;
-   background-color: rgb(242, 218, 204);
-   color: black;
-   left: 0;
-   text-align: left;
-}
- */
-
 footer{
    position: relative;
-   padding:10px; 
+   padding: 10px; 
    background-color: rgb(242, 218, 204);
    flex: auto;
    height: auto;
-   margin: -8px -8px;
+   margin: -8px;
 }
 
 /* Generics for fieldset */
