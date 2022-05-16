@@ -96,7 +96,7 @@ h1 {
    object-fit: none; 
    object-position: 58% 55%;
    border-radius: 0px 0px 0px 0px; /* Stop iphone browser showing rounded edges */
-   -webkit-border-radius: 0px;
+   /*-webkit-border-radius: 0px; */
 }
 
 #connectFourImage {
