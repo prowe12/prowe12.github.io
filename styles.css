@@ -155,17 +155,6 @@ h1 {
    margin-top: 50px;
 }
 
-/* page container */
-#page-container{
-   position: relative;
-   min-height: 100vh;
-}
-
-/* content */
-#content-wrap{
-   padding-bottom: 0rem;
-}
-
 #footerdiv {
    display: flex;
    flex-direction: column;
@@ -187,11 +176,12 @@ footer {
  */
 
 footer{
+   position: relative;
    padding:10px; 
    background-color: rgb(242, 218, 204);
    flex: auto;
    height: auto;
-   margin: -8px;
+   margin: -8px -8px;
 }
 
 /* Generics for fieldset */
