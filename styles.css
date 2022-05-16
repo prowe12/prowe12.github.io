@@ -97,6 +97,7 @@ h1 {
    height: 360px; 
    object-fit: none; 
    object-position: 58% 55%;
+   border-radius: 0px 0px 0px 0px; /* Stop iphone browser showing rounded edges */
 }
 
 #connectFourImage {
@@ -196,8 +197,4 @@ fieldset {
    margin: 0 auto;
 }
 
-/* Make images have square corners on iphone */
-img {
-   border-radius: 0px 0px 0px 0px; 
-}
 
