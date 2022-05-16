@@ -89,6 +89,10 @@ h1 {
    margin-top: 60px;
 }
 
+img {
+   border-radius: 0px 0px 0px 0px; /* Stop iphone browser showing rounded edges */
+}
+
 /* Images */
 #sudokuImage {
    width: 400px; 
