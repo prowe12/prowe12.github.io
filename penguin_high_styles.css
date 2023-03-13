@@ -1,0 +1,293 @@
+/* Color scheme */
+/* #150A41, #FFE1C8, #55003B */
+/* light blue: rgb(200, 225, 250) */
+/* rgb(25, 75, 45) */
+
+/* nav bar styling */
+#nav {
+    z-index: 500;
+    /* Prevent content from overlapping nav bar */
+
+}
+
+/* Styling of nav bar list */
+/* Perhaps some of the below is not used? */
+#nav ul {
+    display: inline;
+    list-style-type: none;
+    margin: 0px;
+    padding: 10px;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(107, 154, 180);
+}
+
+/* Orient list horizontal, not vertical */
+#nav ul li {
+    display: inline-block;
+    color: rgb(238, 252, 255);
+    padding: 10px;
+}
+
+/* Link colors in nav bar */
+#nav li>a {
+    color: rgb(238, 252, 255);
+}
+
+/* Remove underlines in the links in the nav bar */
+#nav li a:link {
+    text-decoration: none;
+}
+
+#nav li a:visited {
+    text-decoration: none;
+}
+
+#nav li a:hover {
+    text-decoration: none;
+}
+
+#nav li a:active {
+    text-decoration: none;
+}
+
+
+h1 {
+    font-size: 50px;
+    padding-top: 1.5em;
+}
+
+h2 {
+    color: rgb(44, 62, 88);
+    font-size: 20px;
+}
+
+h3 {
+    color: rgb(44, 62, 88);
+    font-size: 18px;
+}
+
+body {
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(107, 154, 180);
+    color: whitesmoke;
+    text-align: left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16;
+    min-height: 120vh;
+    margin-left: 20px;
+    line-height: 150%;
+}
+
+/* include a margin */
+.margin {
+    margin: 30px;
+}
+
+/* Make a grid for the images */
+#grid-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    border: 300px saddlebrown;
+}
+
+#grid-container>div {
+    text-align: center;
+}
+
+
+
+img {
+    border: 2px rgb(44, 62, 88);
+    border-radius: 40px;
+    border-style: solid;
+    /* Rounded edges */
+}
+
+/* Square image */
+#square {
+    border-radius: 0px;
+}
+
+
+/* Links that are play buttons  */
+.button {
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: white;
+    background-color: rgb(44, 62, 88);
+    border-color: rgb(17, 49, 30);
+}
+
+.button:disabled {
+    color: #fff;
+    background-color: rgba(25, 75, 45);
+    border-color: rgb(34, 47, 39);
+}
+
+/*TODO: Disable hover if the button is not active */
+.button:hover {
+    color: #fff;
+    background-color: rgba(25, 75, 45)
+        /*rgb(17, 49, 30);*/
+}
+
+
+
+/* Space at the bottom */
+.spacebelow {
+    margin-bottom: 100px;
+}
+
+/* Space at the top */
+.spaceabove {
+    margin-top: 50px;
+}
+
+#footerdiv {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Generics for fieldset */
+fieldset {
+    background-color: white;
+}
+
+.colorkeybox {
+    background-color: white;
+    padding: 10px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+footer {
+    position: relative;
+    padding: 10px;
+    background-color: rgb(242, 218, 204);
+    flex: auto;
+    height: auto;
+    margin-left: 20px;
+}
+
+.footer {
+    height: 60px;
+    width: 100%;
+    background-color: rgb(107, 154, 180);
+    color: rgb(83, 84, 85);
+    position: fixed;
+    bottom: 0px;
+}
+
+/* For the PENGUIN High page */
+
+/* Columns for penguin_high*/
+.column-2 {
+    width: 46%;
+    margin: 2%;
+}
+
+.column-3 {
+    width: 28%;
+    margin: 2%;
+}
+
+.row {
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: wrap;
+}
+
+
+
+/* Narrow region */
+.narrow {
+    width: 700px;
+}
+
+/* Single-space lines */
+.single {
+    line-height: normal;
+    margin-bottom: 0em;
+}
+
+
+/* For the carousel (https://programmingduck.com/articles/javascript-carousel) */
+
+.carousel {
+    --current-slide: 0;
+    /* we set position relative so absolute position works properly for the buttons */
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-button {
+    /* vertically centering the buttons */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+
+    /* basic styling */
+    padding: 0;
+    margin: 0.5rem;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.1s;
+}
+
+.carousel-button:hover {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-button_next {
+    /* The "next slide button" will be at the right */
+    right: 0;
+
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s;
+    transform: translateX(calc(-100% * var(--current-slide)));
+}
+
+.slide {
+    flex: 0 0 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .carousel-button {
+        font-size: 2rem;
+        margin: 1rem;
+
+    }
+}

@@ -106,6 +106,10 @@ img {
    /* Rounded edges */
 }
 
+/* Square image */
+#square {
+   border-radius: 0px;
+}
 
 .polar {
    background-color: rgb(107, 154, 180);
