@@ -60,13 +60,15 @@ h1 {
    padding-top: 2em;
 }
 
+
 body {
    background-image: url('pictures/escudero_2017_antartic_research_group_crop.jpg');
    background-size: cover;
    display: flex;
    flex-direction: column;
    background-color: rgb(238, 252, 255);
-   color: rgb(214, 200, 175);
+   color: rgb(43, 42, 42);
+   /*rgb(214, 200, 175);*/
    text-align: left;
    font-family: Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
