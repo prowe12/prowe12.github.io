@@ -1,16 +1,3 @@
-# Code that is need but was not written by me,
-# available through ECMWF, here:
-# https://confluence.ecmwf.int/display/CKB/ERA5%3A+compute+pressure+and+geopotential+on+model+levels%2C+geopotential+height+and+geometric+height
-compute_geopotential_on_ml.py
-
-# Obsolete code 
-obsolete
-
-# ERA5 files and intermediate file
-*.grib
-*.nc
-get_geopotentialfiles*.sh
-
 # Mac DS_STORE files
 .DS_Store
 
