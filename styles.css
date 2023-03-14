@@ -62,7 +62,6 @@ h1 {
 
 h2 {
    color: rgb(44, 62, 88);
-   padding-left: 25px;
 }
 
 
@@ -76,6 +75,10 @@ body {
    font-family: Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
    min-height: 100vh;
+   margin-left: 30px;
+}
+
+.nomargin {
    margin-left: 0px;
 }
 
@@ -98,7 +101,6 @@ body {
 }
 
 
-
 img {
    border: 2px rgb(44, 62, 88);
    border-radius: 40px;
@@ -106,43 +108,43 @@ img {
    /* Rounded edges */
 }
 
+/* Extra padding at the bottom of the final paragraph for the footer */
+.finalp {
+   margin-bottom: 4em;
+}
+
 /* Square image */
 #square {
    border-radius: 0px;
 }
 
+.research {
+   padding: 30px;
+   margin-left: 0px;
+}
+
 .polar {
    background-color: rgb(107, 154, 180);
-   margin-left: 0px;
-   padding: 25px;
    color: rgb(44, 62, 88);
 }
 
 .penguin {
    background-color: rgb(61, 79, 131);
-   margin-left: 0px;
-   padding: 25px;
    color: rgb(219, 215, 215);
 }
 
 .blackcarbon {
    background-color: rgb(53, 54, 55);
-   margin-left: 0px;
-   padding: 25px;
    color: rgb(219, 215, 215);
 }
 
 .icerough {
    background-color: rgb(168, 184, 200);
-   margin-left: 0px;
-   padding: 25px;
    color: black;
 }
 
 .md_ice {
    background-color: whitesmoke;
-   margin-left: 0px;
-   padding: 25px;
    color: black;
 }
 
@@ -223,14 +225,6 @@ fieldset {
    margin: 0 auto;
 }
 
-footer {
-   position: relative;
-   padding: 10px;
-   background-color: rgb(242, 218, 204);
-   flex: auto;
-   height: auto;
-   margin-left: 20px;
-}
 
 .footer {
    height: 60px;
