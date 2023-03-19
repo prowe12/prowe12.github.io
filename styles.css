@@ -90,10 +90,11 @@ body {
 /* Make a grid for the images */
 #grid-container {
    display: flex;
-   justify-content: space-evenly;
    flex-wrap: wrap;
    margin-bottom: 20px;
-   border: 300px saddlebrown;
+   margin-right: 0px;
+   margin-left: 0px;
+   width: 100%;
 }
 
 #grid-container>div {
@@ -101,12 +102,6 @@ body {
 }
 
 
-img {
-   border: 2px rgb(44, 62, 88);
-   border-radius: 40px;
-   border-style: solid;
-   /* Rounded edges */
-}
 
 /* Extra padding at the bottom of the final paragraph for the footer */
 .finalp {
