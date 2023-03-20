@@ -111,10 +111,7 @@ body {
 
 
 img {
-    border: 2px rgb(44, 62, 88);
-    border-radius: 40px;
-    border-style: solid;
-    /* Rounded edges */
+    border: none;
 }
 
 /* Square image */
