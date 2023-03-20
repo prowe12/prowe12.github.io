@@ -22,7 +22,7 @@
    top: 0;
    left: 0;
    width: 100%;
-   background-image: url('pictures/escudero_2017_antartic_research_group_crop.jpg');
+   background-image: url('pictures/escudero_2017_antartic_research_group_crop_old.jpg');
 }
 
 /* Orient list horizontal, not vertical */
@@ -54,39 +54,231 @@
    text-decoration: none;
 }
 
+.container img {
+   size: cover;
+   width: 100%;
+}
 
-h1 {
-   padding-top: 2em;
+/* Container holding the image and the text */
+.container {
+   color: rgb(43, 42, 42);
 }
 
 
+/* Top left text */
+.top-left {
+   position: absolute;
+   top: 80px;
+   left: 28px;
+}
+
+button {
+   padding: 0;
+   border: none;
+   background: none;
+}
+
 body {
-   background-image: url('pictures/escudero_2017_antartic_research_group_crop.jpg');
-   background-size: cover;
+   /*background-image: url('pictures/escudero_2017_antartic_research_group_crop.jpg');*/
+   /*background-size: cover;*/
+   padding-top: 2.4em;
    display: flex;
    flex-direction: column;
-   background-color: rgb(238, 252, 255);
+   background-color: white;
+   /* rgb(238, 252, 255);*/
    color: rgb(43, 42, 42);
    /*rgb(214, 200, 175);*/
    text-align: left;
    font-family: Verdana, Geneva, Tahoma, sans-serif;
    font-size: 14;
    min-height: 100vh;
-   padding-left: 20px;
+   padding-left: 0px;
+   margin-left: 0px;
+   margin-right: 0px;
+}
+
+#projects {
+   background-color: whitesmoke;
+   color: rgb(83, 84, 85);
+   padding-top: 50px;
+   padding-bottom: 30px;
+}
+
+#research {
+   background-color: rgb(107, 154, 180);
+   color: rgb(44, 62, 88);
+   padding-top: 50px;
+}
+
+#publications {
+   padding-top: 50px;
+}
+
+#datasets {
+   padding-top: 50px;
+}
+
+.margin {
+   padding-left: 25px;
+   padding-top: 10px;
+   padding-bottom: 25px;
+}
+
+.research {
+   padding: 25px;
+   margin-left: 0px;
+}
+
+.polar {
+   background-color: rgb(107, 154, 180);
+   color: rgb(44, 62, 88);
+}
+
+.penguin {
+   background-color: rgb(61, 79, 131);
+   color: rgb(219, 215, 215);
+}
+
+.blacksection {
+   background-color: rgb(53, 54, 55);
+   color: rgb(219, 215, 215);
+}
+
+.graysection {
+   background-color: rgb(168, 184, 200);
+   color: black;
+}
+
+.md_ice {
+   background-color: whitesmoke;
+   color: black;
 }
 
 
-#footerdiv {
+/* Project images */
+/* Three image containers */
+.column {
+   float: left;
+   width: 33.33%;
+}
+
+.column-one-of-two {
+   float: left;
+   width: 37.5%;
+}
+
+.column-two-of-two {
+   float: left;
+   width: 62.5%;
+}
+
+/*
+.column-one-of-two {
+   float: left;
+   width: 46.2%;
+}
+
+.column-two-of-two {
+   float: left;
+   width: 53.8%;
+}*/
+
+
+/* Images */
+/* #sudokuImage {
+   width: 400px;
+   height: 360px;
+   object-fit: none;
+   border-radius: 0px 0px 0px 0px;
+   border-style: none;
+   -webkit-border-radius: 0px;
+   object-position: 58% 55%;
+} */
+
+/* Clear floats after image containers */
+.row::after {
+   content: "";
+   clear: both;
+   display: table;
+}
+
+
+#background {
+   text-align: center;
+   width: 100%;
+   height: 400px;
+}
+
+#background>div {
+   text-align: center;
+   width: 30%;
+   height: 400px;
+   background-image: url('pictures/escudero_2017-antartic-research-group_-_7.jpg');
+   background-size: cover;
+   border: 1px solid red;
+}
+
+/* Make a grid for the images */
+#grid-container {
    display: flex;
-   flex-direction: column;
+   flex-wrap: wrap;
+   margin-bottom: 20px;
+   margin-right: 0px;
+   margin-left: 0px;
+   width: 100%;
+}
+
+#grid-container>div {
+   text-align: center;
+}
+
+
+.flexContainer {
+   display: flex;
+   /*max-height: 200px;
+   width: 10%;*/
+}
+
+.flexContainer img {
+   flex: 1;
+   width: 30%;
+   height: auto;
+}
+
+/* Make a grid for the puzzles */
+#grid-container {
+   display: flex;
+   justify-content: left;
+   flex-wrap: wrap;
+   margin-bottom: 20px;
+   margin-top: 20px;
+   width: 30%;
+}
+
+
+/* Styles for the grid for the puzzles (div elements) in the grid 
+ * and make it a flex container
+ */
+#grid-container>div {
+   text-align: center;
+   margin-bottom: 20px;
+   margin-top: 20px;
+   margin-left: 0px;
+}
+
+img {
+   border-style: none;
+   /* Stop iphone browser showing rounded edges */
+   /*border-radius: 0px 0px 0px 0px;*/
 }
 
 
 .footer {
    height: 60px;
    width: 100%;
-   background-color: black;
+   background-color: whitesmoke;
    color: rgb(83, 84, 85);
-   position: fixed;
+   /*position: fixed;*/
    bottom: 0px;
+   padding-left: 25px;
 }

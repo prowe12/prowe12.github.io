@@ -1,3 +1,6 @@
+# Folders and files to keep local only
+extras
+
 # Mac DS_STORE files
 .DS_Store
 
