@@ -116,6 +116,9 @@ body {
 
 #datasets {
    padding-top: 50px;
+   padding-bottom: 50px;
+   line-height: 2;
+
 }
 
 .margin {
@@ -127,6 +130,7 @@ body {
 .research {
    padding: 25px;
    margin-left: 0px;
+
 }
 
 .polar {
