@@ -101,7 +101,6 @@ body {
     justify-content: space-evenly;
     flex-wrap: wrap;
     margin-bottom: 20px;
-    border: 300px saddlebrown;
 }
 
 #grid-container>div {
@@ -119,6 +118,21 @@ img {
     border-radius: 0px;
 }
 
+a {
+    color: rgb(44, 62, 88);
+    text-decoration: none;
+}
+
+hr {
+    height: 3px;
+    color: rgb(0, 157, 255);
+    background-color: rgb(25, 75, 45)
+}
+
+.nsf_logo {
+    width: 150px;
+    height: 150px;
+}
 
 /* Links that are play buttons  */
 .button {
@@ -133,18 +147,16 @@ img {
     touch-action: manipulation;
     cursor: pointer;
     background-image: none;
-    border: 1px solid transparent;
     padding: 6px 10px;
     font-size: 14px;
     line-height: 1.42857143;
-    border-radius: 4px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    color: white;
+    color: whitesmoke;
     background-color: rgb(44, 62, 88);
-    border-color: rgb(17, 49, 30);
+    border: none;
 }
 
 .button:disabled {
@@ -156,8 +168,7 @@ img {
 /*TODO: Disable hover if the button is not active */
 .button:hover {
     color: #fff;
-    background-color: rgba(25, 75, 45)
-        /*rgb(17, 49, 30);*/
+    background-color: rgb(57, 77, 106);
 }
 
 
@@ -172,6 +183,10 @@ img {
     margin-top: 50px;
 }
 
+.smallspaceabove {
+    margin-top: 30px;
+}
+
 #footerdiv {
     display: flex;
     flex-direction: column;
@@ -180,11 +195,11 @@ img {
 
 /* Generics for fieldset */
 fieldset {
-    background-color: white;
+    background-color: whitesmoke;
 }
 
 .colorkeybox {
-    background-color: white;
+    background-color: whitesmoke;
     padding: 10px;
     width: 60%;
     margin: 0 auto;
@@ -227,6 +242,16 @@ footer {
     flex-wrap: wrap;
 }
 
+.column-2b {
+    width: 80%;
+    margin-left: 0px;
+}
+
+.column-2c {
+    padding-top: 25px;
+    width: 16%;
+    margin-right: 0%;
+}
 
 
 /* Narrow region */
