@@ -23,19 +23,24 @@
    left: 0;
    width: 100%;
    background-color: rgb(107, 154, 180);
+   color: black;
 }
+
 
 /* Orient list horizontal, not vertical */
 #nav ul li {
    display: inline-block;
-   color: rgb(238, 252, 255);
+   color: black;
    padding: 10px;
 }
 
 /* Link colors in nav bar */
 #nav li>a {
-   color: rgb(238, 252, 255);
+   color: black;
 }
+
+/*    rgb(238, 252, 255); */
+
 
 /* Remove underlines in the links in the nav bar */
 #nav li a:link {
