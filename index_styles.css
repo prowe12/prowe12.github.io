@@ -164,13 +164,14 @@ body {
 
 .column-one-of-two {
    float: left;
-   width: 37.5%;
+   width: 36.5%;
 }
 
 .column-two-of-two {
-   float: left;
-   width: 62.5%;
+   float: right;
+   width: 61%;
 }
+
 
 /*
 .column-one-of-two {
