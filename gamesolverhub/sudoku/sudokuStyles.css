@@ -11,7 +11,7 @@
 }
 
 /* Each solver element is in a div */
-#grid-container-puzzle > div {
+#grid-container-puzzle>div {
    text-align: center;
 }
 
@@ -21,7 +21,7 @@
    margin-right: auto;
 }
 
-fieldset > #selections {
+fieldset>#selections {
    width: 380px;
    align-items: center;
    align-content: center;
@@ -48,15 +48,20 @@ table {
    background-color: white;
 }
 
-td:nth-child(3), th:nth-child(3) {
+td:nth-child(3),
+th:nth-child(3) {
    border-right: solid 2px black;
 }
-td:nth-child(6), th:nth-child(6) {
+
+td:nth-child(6),
+th:nth-child(6) {
    border-right: solid 2px black;
 }
+
 tr:nth-child(3) {
    border-bottom: solid 2px black;
 }
+
 tr:nth-child(6) {
    border-bottom: solid 2px black;
 }
@@ -75,13 +80,13 @@ td {
 .sudokubox {
    color: gray;
    font-size: x-large;
-   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .sudokubox.domain {
    color: black;
    font-size: x-small;
-   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
    line-height: 0;
    margin-top: 0px;
    margin-bottom: 0px;
@@ -95,6 +100,7 @@ td {
    font-weight: bold;
 }
 
+
 /* styling for numbers determined with AC-3 */
 .sudokubox.AC3 {
    color: red;
@@ -107,8 +113,9 @@ td {
 .finalAC3 {
    color: blue;
 }
+
 .backtrackPlusAC3 {
-   color: orange;
+   color: #E38B29;
 }
 
 .sudokubox.boxborder {
@@ -122,9 +129,18 @@ td {
    margin-right: 3px;
    margin-bottom: 3px;
    padding: 7px 9px 7px 9px;
-   border: 2px solid yellow;
-   outline: 1px solid rgb(17, 49, 30);
+   border: 2px solid #FDEEDC;
+   outline: 1px solid #F1A661;
 }
+
+
+
+/* Color pallete - light to dark
+#FDEEDC
+#FFD8A9
+#F1A661
+#E38B29
+*/
 
 /* Control button overrides for standard button  */
 .controlButton {
@@ -133,20 +149,28 @@ td {
    margin-bottom: 20px;
    padding: 4px 4px;
    border: 2px solid;
-   border-color: rgb(39, 116, 70);
-   outline: 1px solid rgb(17, 49, 30);
+   border-color: #E38B29;
+   outline: 1px solid #E38B29;
 }
 
 /* Selected buttons */
 .selected {
    padding: 4px 4px;
-   border: 2px solid yellow;
-   outline: 1px solid rgb(17, 49, 30);
+   border: 2px solid #FDEEDC;
+   outline: 1px solid #F1A661;
+}
+
+.howto {
+   padding-top: 25px;
+   max-width: 800px;
+   align-self: center;
+   text-align: left;
+   line-height: 1.5;
 }
 
 /* Styling for the slider needs to be done for every browser */
 /* First remove the auto-styling */
-input[type="range"]{
+input[type="range"] {
    -webkit-appearance: none;
    width: 80%;
    height: 8px;
@@ -155,13 +179,15 @@ input[type="range"]{
    border: none;
    border-radius: 30px;
 }
+
 input[type="range"]::-moz-focus-outer {
-     border: 0;
+   border: 0;
 }
+
 input[type="range"]:hover {
    outline: none;
 }
- 
+
 /* Chrome */
 input[type="range"]::-webkit-slider-thumb {
    appearance: none;
@@ -169,7 +195,8 @@ input[type="range"]::-webkit-slider-thumb {
    height: 18px;
    background-color: rgb(25, 75, 45);
    cursor: pointer;
-   border-radius: 30px;  /* makes it a circle */
+   border-radius: 30px;
+   /* makes it a circle */
    outline: none;
 }
 
@@ -193,16 +220,17 @@ input[type="range"]::-moz-range-thumb {
 input[type="range"]::-moz-range-progress {
    background-color: rgb(25, 75, 45);
    height: 100%;
-   border-radius:30px;
+   border-radius: 30px;
    border: none;
 }
-input[type="range"]::-moz-range-track {  
+
+input[type="range"]::-moz-range-track {
    background-color: #ccc;
-   border-radius:30px;
+   border-radius: 30px;
    border: none;
    height: 100%;
 }
- 
+
 /* IE */
 input[type="range"]::-ms-fill-lower {
    background-color: rgb(25, 75, 45);
@@ -211,7 +239,7 @@ input[type="range"]::-ms-fill-lower {
    border: none;
 }
 
-input[type="range"]::-ms-fill-upper {  
+input[type="range"]::-ms-fill-upper {
    background-color: #ccc;
    border-radius: 30px;
    border: none;
@@ -222,9 +250,9 @@ input[type="range"]::-ms-fill-upper {
 
 /* tooltip style */
 .tooltip {
-   position:relative;
+   position: relative;
    padding: 30px 0;
-   
+
 }
 
 .tooltip .tooltiptext {
@@ -238,13 +266,13 @@ input[type="range"]::-ms-fill-upper {
    position: absolute;
    z-index: 1;
    top: -5px;
-   left:calc(50% - 50px);
+   left: calc(50% - 50px);
 }
- 
+
 .tooltip:hover .tooltiptext {
    visibility: visible;
 }
- 
+
 .tooltip .tooltiptext::after {
    content: "";
    position: absolute;
@@ -255,5 +283,3 @@ input[type="range"]::-ms-fill-upper {
    border-style: solid;
    border-color: #f38080 transparent transparent transparent;
 }
- 
-

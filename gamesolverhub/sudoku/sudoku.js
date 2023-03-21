@@ -43,7 +43,7 @@ function fileExists(urlToFile) {
  * @return  The grid of numbers; list of lists
  * @raises  NameError  If filename is not '' and does not exist
  */
-function loadStartingValues(puzzle='easy') {
+function loadStartingValues(puzzle = 'easy') {
     let grid;
 
     if (puzzle === 'random') {
@@ -196,7 +196,7 @@ function runBacktrackSolver() {
     moves = result[1]; // row, column, value, method
 
     // Write the message saying it's been solved
-    state.innerHTML = "<p>I have solved the puzzle using backtracking. You can: </p>1) Choose another puzzle or solver on the left. <p>2) Use the controls to play the solution.</p><p>3) Click 'Show the domain' to walk through an explanation of the solution.";
+    state.innerHTML = "<p><b>Suggested use</b></p><p>Use the top set of controls<br> and the speed slider to<br>move through the solution.</p>or<p></p><p>Click 'Show the domain'<br>and 'step' to step through<br>the solution.</p><br><p>Choose a new puzzle and <br>solver on the left.</p>";
 }
 
 
@@ -276,12 +276,12 @@ let populator = function (moves) {
  * Also update the grid to the current state
  */
 let steppopulator = function () {
-    if (!outlined && !(typeof moves==='undefined') && (!(typeof imove==='undefined')) && (!(typeof moves[imove]==='undefined'))) {
+    if (!outlined && !(typeof moves === 'undefined') && (!(typeof imove === 'undefined')) && (!(typeof moves[imove] === 'undefined'))) {
         // Draw a box around the next square that will be populated.
         boxborder(moves[imove][0], moves[imove][1], moves[imove][3]);
 
         // There is an outline drawn. Next time we will not draw the outline
-        outlined = true;        
+        outlined = true;
     }
     else {
         // The populator should remove the box
@@ -329,7 +329,7 @@ function stepSizeForRewind(imove, delay) {
  * domain is on. Check if the domain button is on and, if so, turn it off
  * and remove the domain from the display board. Also remove any box outlines
  */
- function setupForControls() {
+function setupForControls() {
     let button = document.getElementById("showDomainButton");
     if (button.value === "ON") {
         button.value = "OFF";
@@ -494,7 +494,7 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function (
     //let solverMethod = document.getElementById("playSudokuSolver");
     //solverMethod.classList.add("selectedsolver");
     sudokuSolverMethod.classList.add("selectedsolver");
-    
+
     //let nonsolverMethod = document.getElementById("solverDemoBacktrack");
     //nonsolverMethod.classList.remove("selectedsolver");
     backtrackSolverMethod.classList.remove("selectedsolver");
@@ -502,7 +502,7 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function (
     // Reset the state of play and the board
     playReset();
     boardReset();
-    
+
     // Print a message while we wait for the solver
     let state = document.querySelector(".state");
     state.innerHTML = "<p>You have chosen backtracking.</p><p>Please wait while I solve the puzzle.</p>";
@@ -522,7 +522,7 @@ document.querySelector("#playSudokuSolver").addEventListener("click", function (
     moves = result[1];
 
     // Write the message saying it's been solved
-    state.innerHTML = "<p>I have solved the puzzle using AC-3 and backtracking. You can: </p>1) Choose another puzzle or solver on the left. <p>2) Use the controls to play the solution.</p><p>3) Click 'Show the domain' to walk through an explanation of the solution.";
+    state.innerHTML = "<p>Solve using AC-3 and backtracking. You can: </p>1) Choose another puzzle or solver on the left. <p>2) Use the controls to play the solution.</p><p>3) Click 'Show the domain' to walk through an explanation of the solution.";
 });
 
 
@@ -557,10 +557,10 @@ speedSlider.addEventListener('click', () => {
  * @param dynamicParameter
  * @param {number} interval
  */
-function createInterval(f, dynamicParameter, interval) { 
-    return setInterval(function() { 
-        f(dynamicParameter); 
-    }, interval); 
+function createInterval(f, dynamicParameter, interval) {
+    return setInterval(function () {
+        f(dynamicParameter);
+    }, interval);
 }
 
 
@@ -691,18 +691,18 @@ forwardToEndButton.addEventListener("click", async function () {
 
     // Fill in board to end. This can take some time, so return a promise and 
     // make the rest of the code wait until it completes.
-    function fwdToEnd(){
-        return new Promise((resolve, reject)=>{
-            setTimeout(()=>{
+    function fwdToEnd() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
                 forwardToEndButton.classList.add("selected");
                 for (imove = imove; imove < moves.length; imove++) {
                     populateSquare(moves[imove][0], moves[imove][1], moves[imove][2], moves[imove][3]);
                 }
                 resolve();
-            },0);
+            }, 0);
         })
     }
-    
+
     await fwdToEnd();
 
     // Finished with solution
@@ -714,7 +714,7 @@ forwardToEndButton.addEventListener("click", async function () {
     forwardToEndButton.classList.remove("selected");
 
     // From rewindtobeg
-    
+
 });
 
 
@@ -728,17 +728,17 @@ rewindToBegButton.addEventListener("click", async function () {
 
     running = true;
 
-    function rwdToBeg(){
-        return new Promise((resolve, reject)=>{
-            setTimeout(()=>{
+    function rwdToBeg() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
                 // Stop play, reset the grid, index to moves, and control values (all globals)
                 playReset();
                 boardReset();
                 resolve();
-            },100);
+            }, 100);
         })
     }
-    
+
     await rwdToBeg();
 
     // Back at beginning
@@ -870,7 +870,7 @@ showDomainButton.addEventListener("click", function () {
     if (button.value === "ON") {
         showDomainButton.classList.add("selected");
         let msg = "<p>Showing the domain of each square.</p><p>The domain consists of all the numbers 0-9 that are not already present in the same row, column, or 3x3 square." + methodSpecificMsgsForDomain[method]
-            
+
         state.innerHTML = msg;
         explanation.innerHTML = "<p></p>";
         showdomain();
