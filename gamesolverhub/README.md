@@ -5,16 +5,14 @@ A website that demonstrates AI game solvers in action.
 
 ## Features
 * Sudoku solver: Options include backtracking and AC-3, Minimum Remaining Values heuristic and degree.
-* Connect Four solver: Minimax with heuristics.
 
-## Authors
+## Author
   - **Penny Rowe** https://github.com/prowe12
-  - **Anna Van Boven** https://github.com/annavanboven/
 
 ## License
-Copyright (C) 2022 Penny Rowe and Anna Van Boven
+Copyright (C) 2022 Penny Rowe
 
-Acknowledge use by including the statement "By Penny Rowe and Anna Van Boven - Own work, GNU GPLv3, https://github.com/prowe12/prowe12.github.io.
+Acknowledge use by including the statement "By Penny Rowe - Own work, GNU GPLv3, https://github.com/prowe12/prowe12.github.io.
 
 See the [LICENSE] LICENSE file for details.
 
