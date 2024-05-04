@@ -104,19 +104,36 @@ body {
    /*   padding-right: 10%;*/
 }
 
+.innercontainer {
+   max-width: 1000px; /* Adjust the value to your desired maximum width */
+   margin: 0 auto; /* This centers the container horizontally */
+}
+
+.hr1 {
+   color: whitesmoke;
+}
+
+.hr2 {
+   border: .5px solid rgb(103, 134, 151);
+   border-top: 0px solid rgb(107, 154, 180);
+   max-width: 85%;
+   margin: 0px;
+}
 
 #projects {
-   background-color: whitesmoke;
-   color: rgb(96, 100, 103);
    padding-top: 50px;
    padding-bottom: 30px;
 }
+/* background-color: whitesmoke;
+color: rgb(96, 100, 103); */
 
 #research {
-   background-color: rgb(89, 119, 157);
+   background-color: rgb(107, 154, 180);
    color: rgb(44, 62, 88);
    padding-top: 50px;
 }
+/* background-color: rgb(89, 119, 157);
+color: rgb(44, 62, 88); */
 
 #publications {
    padding-top: 50px;
@@ -154,10 +171,11 @@ ul {
 }
 
 .datasets {
-   background-color: rgb(167, 178, 189);
-   color: black;
    padding-bottom: 400px;
+   background-color: whitesmoke;
 }
+/* background-color: rgb(167, 178, 189);
+color: black; */
 
 .publications {
    background-color: rgb(167, 178, 189);
@@ -170,13 +188,68 @@ ul {
 }
 
 
+
+
 /* Project images */
 /* Three image containers */
-.column {
-   float: left;
-   width: 33.33%;
+
+.row {
+   display: flex;
+   flex-wrap: wrap;
+   padding: 0 4px;
+   padding-top: 10px;
+   padding-bottom: 10px;
 }
 
+/* Clear floats after image containers */
+.row::after {
+   content: "";
+   clear: both;
+   display: table;
+}
+
+ /* Create 3 columns that collapse down to one */
+.column {
+   flex: 25%;
+   max-width: 33.33%;
+}
+
+.column p {
+   max-width: 100%;
+}
+
+.column img {
+   margin-top: 8px;
+   vertical-align: middle;
+   width: 100%;
+ }
+ 
+ /* Create a 2/3 width column */
+.column2 {
+   flex: 50%;
+   max-width: 50%;
+}
+
+
+ /* Responsive layout - makes a two column-layout instead of four columns
+ @media screen and (max-width: 800px) {
+   .column {
+     flex: 50%;
+     max-width: 50%;
+   }
+ }
+  */
+ 
+  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+ @media screen and (max-width: 700px) {
+   .column {
+     flex: 100%;
+     max-width: 100%;
+   }
+ }
+
+
+ /* Different sized columns  */
 .column-one-of-two {
    float: left;
    width: 36.5%;
@@ -186,18 +259,7 @@ ul {
    float: right;
    width: 61%;
 }
-
-.row {
-   padding-top: 25px;
-   padding-bottom: 50px;
-}
-
-/* Clear floats after image containers */
-.row::after {
-   content: "";
-   clear: both;
-   display: table;
-}
+ 
 
 #background {
    text-align: center;
@@ -278,3 +340,5 @@ img {
    bottom: 0px;
    padding-left: 25px;
 }
+
+
