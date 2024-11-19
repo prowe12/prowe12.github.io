@@ -14,9 +14,6 @@
     <link rel="stylesheet" href="index_styles.css">
 </head>
 
-
-<!-- Leave some room for the nav bar -->
-
 <body>
 
 
@@ -243,35 +240,44 @@
 
 
     <div class="margin" id="projects">
-        <h2 >Projects</h2>
-
-        <div class="row">
-            <div class="column-one-of-two">
-                <!-- Clicking image shows Sudoku being solved -->
-                <button id="sudokuButton" class="puzzleBox" style="width:100%"><img
-                        src="pictures/sudoku_original_crop.jpg" id="sudokuImage" alt="Image of Sudoku puzzle"
-                        style="width:100%"></button>
-                <!--<br>-->
-                <!--<a href="gamesolverhub/sudoku.html"><button class="button">Sudoku Solver</button></a>-->
+        <div class="innercontainer">
+            <h2 >Projects</h2>        
+            <hr class="hr1">
+            <div id="blackcarbon">
+                <div class="row">
+                    <div class="column">
+                        <button id="sudokuButton" class="puzzleBox" style="width:90%"><img
+                            src="pictures/sudoku_original_crop.jpg" id="sudokuImage" alt="Image of Sudoku puzzle"
+                            style="width:100%"></button>
+                    </div>
+                    <div class="column2">
+                        <h3><a href="gamesolverhub/sudoku.html">Sudoku Solver</a></h3>
+                        <p>Uses backtracking and AC3 to solve sudoku puzzles. Created with Javascript.</p>
+                    </div>
+                </div>
             </div>
-            <div class="column-two-of-two">
-                <img src="pictures/cambio4.jpg" alt="Image of plots from Cambio" style="width:100%">
-                <!--<br>-->
-                <!--<a href="#penguin"><button class="button">Cambio climate model</button></a>-->
-            </div>
-        </div>
+            </br>
 
-        <div class="margin">
-            <ul>
-                <li><a href="gamesolverhub/sudoku.html">Sudoku Solver</a>.
-                    Uses backtracking and AC3 to solve sudoku puzzles. Created with Javascript.</li>
-                <br>
-                <li><a href="https://cambio.fly.dev">Cambio climate model</a>. Demonstrates the climate
+            <hr class="hr2">
+            <div id="blackcarbon">
+                <div class="row">
+                    <div class="column">
+                        <img src="pictures/cambio4.jpg"
+                            alt="Image of Sudoku puzzle" style="width:90%">
+                    </div>
+                    <div class="column2">
+                        <h3><a href="https://cambio.fly.dev">Cambio Climate Model</a></h3>
+                        <p>Demonstrates the climate
                     response to user-input scenarios, such as year CO2 peaks and how long it
-                    takes to decarbonize. Created using poetry, Django, python, whitenoise and gunicorn.
-                </li>
-            </ul>
+                    takes to decarbonize. Created using poetry, Django, Python, Whitenoise and Gunicorn.</p>
+                    </div>
+                </div>
+            </div>
+            </br>
+            
+
         </div>
+
     </div>
 
     <div class="datasets">
