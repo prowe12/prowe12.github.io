@@ -51,4 +51,436 @@
         </div>
     </div>
 
+
+    <div class="flex justify-center p-10 m-10">
+        <div class="prose px-10 mx-40 mt-4">
+    
+            <h2>Publications</h2>
+    
+            <p>Gorodetskaya et al., 2023, Compound drivers behind new record high temperatures and surface melt
+                at the Antarctic Peninsula in February 2022 (reference number NPJCLIMATSCI-01277), NPJ Clim. Atmos.
+                Sci., submitted.</p>
+    
+            <p>Guy, Heather, Brooks, I., Turner, D. Cox, C., Rowe, P. Shupe, M., Walden, V., and Neely, R. 2023,
+                Observations of fog-aerosol interactions over central Greenland, J. Geophys. Res. Atmos. submitted.</p>
+    
+            <p>Zou, Xun, Penny Marie Rowe, Irina Gorodetskaya, David H. Bromwich, Matthew Lazzara, Raul R. Cordero,
+                Zhenhai
+                Zhang, Brian Kawzenuk, Jason M. Cordeira, Jonathan D Wille, F. Martin Ralph, Le-sheng Bai, 2023. Strong
+                Warming over the Antarctic Peninsula during Combined Atmospheric River and Foehn Events: Contribution of
+                Shortwave Radiation and Turbulence, ESSOAr, submitted.</p>
+    
+            <p>Cordero, R.R., Sepúlveda, E., Feron, S., Damiani, A., Fernandoy, F., Neshyba, S., Rowe, P.M., Asencio,
+                V.,
+                Carrasco, J., Alfonso, J.A. and Llanillo, P., 2022. Black carbon footprint of human presence in
+                Antarctica.
+                Nature communications, 13(1), pp.1-11.</p>
+    
+            <p>Cordero, R.R., Sepúlveda, E., Feron, S., Wang, C., Damiani, A., Fernandoy, F., Neshyba, S., Rowe, P.M.,
+                Asencio, V., Carrasco, J. and Alfonso, J.A., 2022. Black carbon in the Southern Andean snowpack.
+                Environmental Research Letters, 17(4), p.044042.</p>
+    
+            <p>Richter, P., Palm, M., Weinzierl, C., Griesche, H., Rowe, P. M., and Notholt, J., 2022. A dataset of
+                microphysical cloud parameters, retrieved from Fourier-transform infrared (FTIR) emission spectra
+                measured
+                in Arctic summer 2017, Earth Syst. Sci. Data, 14, 2767-2784, https://doi.org/10.5194/essd-14-2767-2022.
+            </p>
+    
+            <p>Cordero, R.R., Feron, S., Damiani, A., Redondas, A., Carrasco, J., Sepúlveda, E., Jorquera, J.,
+                Fernandoy,
+                F., Llanillo, P., Rowe, P.M. and Seckmeyer, G., 2022. Persistent extreme ultraviolet irradiance in
+                Antarctica despite the ozone recovery onset. Scientific reports, 12(1), pp.1-10.</p>
+    
+            <p>Rowe, P.M., Walden, V.P., Brandt, R.E., Town, M.S., Hudson, S.R., and Neshyba, S. (2021). Evaluation of
+                Temperature-Dependent Complex Refractive Indices of Supercooled Liquid Water Using Downwelling Radiance
+                and
+                In-Situ Cloud Measurements at South Pole, Journal of Geophysical Research: Atmospheres, 127,
+                e2021JD035182.
+                https://doi.org/10.1029/2021JD035182.</p>
+    
+            <p>Chyhareva, A., Gorodetskaya, I., Krakovska, S., Pishniak, D., & Rowe, P. (2021). Precipitation phase
+                transition
+                in austral summer over the Antarctic Peninsula. Ukrainian Antarctic journal, (1), 32-46.</p>
+    
+            <p>Pizarro, J., Vergara, P. M., Cerda, S., Cordero, R. R., Castillo, X., Rowe, P. M., ... & Neshyba, S.
+                (2021).
+                Contaminant emissions as indicators of chemical elements in the snow along a latitudinal gradient in
+                southern Andes. Scientific reports, 11(1), 1-10.</p>
+    
+            <p>Feron, S., and Rowe, P.M. (2021) ¿Olas de calor en la Antártica? BACh <em>40</em>(2), 29-31. </p>
+    
+            <p>Sepúlveda, E., Cordero, R. R., Damiani, A., Feron, S., Pizarro, J., Zamorano, F., et al and Rowe, P. M.
+                (2021).
+                Evaluation of Antarctic Ozone Profiles derived from OMPS-LP by using Balloon-borne Ozonesondes.
+                Scientific
+                reports, 11(1), 1-11.</p>
+    
+            <p>Bromwich, D.H., et al., The Year of Polar Prediction in the Southern Hemisphere (YOPP-SH). <em>Bull.
+                    Am. Meteorol. Soc.</em>, 101.10: E1653-E1676, 2020. (<a
+                    href="https://journals.ametsoc.org/bams/article/101/10/E1653/348364/The-Year-of-Polar-Prediction-in-the-Southern">link</a>,
+                <a
+                    href="https://watermark.silverchair.com/bamsd190255.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAAqswggKnBgkqhkiG9w0BBwagggKYMIIClAIBADCCAo0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMPQCzSX6LEorATPeFAgEQgIICXhqv7U-cPoQzAnv__G_DiOHJw5_RRy7ylnLDUYgWDQxnLq4lSUZqKoiA6ilxgAcn2cNtulCTJiyE01jK2FB9usyEBdsHCNPCowigWN6sI6HByiOAPwuvKE_VTJFMxAlvb8KsO46IxGHCpy_wWWNPDx_lxdsFNOl8NlZ9plL_f93-79dmxgXgX1d_Y_W-sAdSsb11t2O0tCz3bnMDqYgOkzAUdMDdEJeJF1c9aJU_EplmLG0Mklj3Z8_bp3nXqltB2DHAcK8rP_0MvpGqD8GeD22QB5GD2nhZ3Bm0ItbShrHyFc832iCGe7wJsLBX9L968MaT2FybsofkSivTY2127JHIXg1z6ONG1IpGdRsw9TOOvEk8qfUZEsgZTWsjqmTfQFgydlsf-W_Plw_dMM3w_H00YuyPYCOq_AB0nthIbkLiDVDuaU74IperwU5Fm6NJnO-tziITkMD_8zWk2pTLDRoBuhWA2KOS8jIYf4skEjK1Bu_6RgldJT8q14O16hZWJT8DrWhj0SQeDGfIDY2s-_oexAdfANXN2wa-NFh0cAage-FspFauQkKGxE2_aZ0sz3oqBEgzqJ74BXgJM9QbQoEqHjPLOabJJUyF_Kf4kkzMAN8UW9ACDJOKr4RlIbiKDk3eusY-qV82xtYNgqHvZuYBzNAuL-mJ7N0DuJhfjJ1jwzGnpB2R3hSR70O7W0NGcX_1Rx6i4gD8-STmUELNq0PAqwOnorNYl6Meyzb1eh0K2OjkdBAjnmMuAAnceOvFfLhctS52iL0vdGmJO0DHSYzaENruRwM3IKTaRPXyYg">pdf</a>)
+            </p>
+            <p>Rowe, P. M., Fergoda, M., and Neshyba, S., Temperature-Dependent Optical Properties
+                of Liquid Water From 240 to 298 K. <em>J. Geophys. Res. Atmos.</em>,&nbsp;<em>125</em>(17),
+                e2020JD032624,
+                2020. (<a href="https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2020JD032624">link</a>)</p>
+            <p>Lubin, D. et al., AWARE: The Atmospheric Radiation Measurement (ARM) West Antarctic Radiation
+                Experiment. <em>Bull. Am. Meteorol. Soc.</em>, BAMS-D-18-0278.1, 2020. (<a
+                    href="http://doi.org/10.1175/BAMS-D-18-0278.1">link </a>, <a
+                    href="https://scholar.google.com/scholar_url?url=https://journals.ametsoc.org/doi/pdf/10.1175/BAMS-D-18-0278.1&amp;hl=en&amp;sa=T&amp;oi=ucasa&amp;ct=ufr&amp;ei=wgWmX8zSHoWWyATL14TAAw&amp;scisig=AAGBfm3FQEeY4OGBDK5WZQgL-PNWkS004g">pdf
+                </a>)</p>
+            <p>Rowe P.M., Fortmann, L., Guasco, T.L., Wright, A., Ryken, A., Sevier,
+                E., Stokes, G., Mifflin, A., Wade, R., Cheng, H., Pfalzgraff, W., Beaudoin, J., Rajbhandari,
+                I., Fox-Dobbs, K., and Neshyba, S., Integrating polar research into undergraduate curricula using
+                computational guided inquiry. <em>J. Geosci. Ed.</em>, 1-14, 2020. (<a
+                    href="https://www.tandfonline.com/doi/abs/10.1080/10899995.2020.1768004?journalCode=ujge20">link</a>)
+            </p>
+            <p>Fortmann, L., Beaudoin, J., Rajbhandari, I., Wright, A., Neshyba, S., and Rowe, P.,
+                Teaching Modules for Estimating Climate Change Impacts in Economics Courses using Computational Guided
+                Inquiry. <em>J. Econ. Educ</em>. DOI: &nbsp;10.1080/00220485.2020.1731383, 2020. (<a
+                    href="https://www.tandfonline.com/doi/abs/10.1080/00220485.2020.1731383?journalCode=vece20">link</a>)
+            </p>
+            <p>Rowe, P. M., Cox, C., Neshyba, S., &amp; Walden, V. P., Toward autonomous surface-based infrared
+                remote sensing of polar clouds: retrievals of cloud optical and microphysical properties. <em>Atmos.
+                    Meas.
+                    Tech.</em>, 12(9), 5071-5086, 2019. (<a href="http://doi.org/10.5194/amt-12-5071-2019">link </a>, <a
+                    href="https://amt.copernicus.org/articles/12/5071/2019/amt-12-5071-2019.pdf">pdf</a>)</p>
+            <p>Alfonso, J. A., Cordero, R., Rowe, P. M., et al., Elemental and Mineralogical Composition of the
+                Western Andean Snow (18°S-41°S). <em>Sci. Rep.</em>, 9(1), 1-13, 2019. (<a
+                    href="http://doi.org/10.1038/s41598-019-44516-5">link</a>).</p>
+            <p>Rowe, P. M., Cordero, R., Warren, S. G., Stewart, E., Doherty, S. J.,
+                Pankow, A., et al., Black carbon and other light-absorbing impurities in snow in the
+                Chilean Andes. <em>Sci. Rep.,</em> 9(1), 4008, 2019. (<a
+                    href="http://doi.org/10.1038/s41598-019-39312-0">link</a>)
+            </p>
+            <p>Rowe, P. M., Cheng, H., Fortmann, L., Wright, A., et al., Teaching image processing
+                in an upper level CS undergraduate class using computational guided inquiry and polar data. Journal of
+                Computing Sciences in Colleges, 34(1), 171-179, 2018. (<a
+                    href="http://doi.org/10.5555/3280489.3280517">link</a>)</p>
+            <p>Butterfield, N., Rowe, P. M., Stewart, E., Roesel, D., &amp;
+                Neshyba, S., Quantitative three-dimensional ice roughness from scanning electron microscopy. <em>J.
+                    Geophys.
+                    Res: Atmos</em>., 122(5), 3023-3041, 2017. (<a
+                    href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2016JD026094">link</a>)</p>
+            <p>Weaver, D., Strong, K., Schneider, M., Rowe, P. M., et al., Intercomparison of atmospheric water
+                vapour measurements at a Canadian High Arctic site. <em>Atmos. Meas. Tech.</em>, 10, 2851-2880, 2017.
+            </p>
+            <p>Rowe, P. M., Cox, C., &amp; Walden, V. P., Toward autonomous surface-based infrared remote sensing
+                of polar clouds: Cloud height retrievals. <em>Atmos. Meas. Tech.</em>, 9, 3641-3659, 2016. (<a
+                    href="http://doi.org/10.5194/amt-9-3641-2016">link</a>, <a
+                    href="https://amt.copernicus.org/articles/9/3641/2016/amt-9-3641-2016.pdf">pdf</a>)</p>
+            <p>Cox, C., Rowe, P. M., Neshyba, S., &amp; Walden, V. P., A synthetic data set of high-spectral
+                resolution infrared spectra for the Arctic atmosphere. <em>Earth Syst. Sci. Data</em>, 1-29, 2016. (<a
+                    href="http://doi.org/10.5194/essd-2015-40">link</a>)</p>
+            <p>Cordero, R. R., Damiani, A., Seckmeyer, G., Jorquera, J., Caballero, M., Rowe, P. M., et al., The Solar
+                Spectrum in the Atacama Desert. <em>Sci. Rep.</em>, 6, 2016.
+                (<a href="http://doi.org/10.1038/srep22457">link</a>)</p>
+            <p>Gladich, I., Oswald, A., Bowens, N. Naatz, S., Rowe, P.,
+                Roeselova, M. and Neshyba, S., Mechanism of Anisotropic Surface Self-Diffusivity at the Prismatic
+                Ice-Vapor
+                Interface, <em>Phys. Chem. Chem. Phys.</em>, 2015, <strong>17</strong>, 22947 - 22958, DOI:
+                10.1039/C5CP01330E, 2015.</p>
+            <p>Cox, C., Walden, V. P., Rowe, P. M., &amp; Shupe, M., Humidity trends imply increased sensitivity to
+                clouds in a warming Arctic. <em>Nat. Commun.</em>, 6, 10117, 2015.</p>
+            <p>Lubin, D., B.H. Kahn, M.A. Lazzara, P.M. Rowe, and V.P. Walden, Variability in AIRS-retrieved cloud
+                amount and thermodynamic phase over west versus east Antarctica influenced by the SAM, <em>Geophys. Res.
+                    Lett.</em>, 42, doi:10.1002/2014GL062285, 2015.</p>
+            <p>Cox, C., V. Walden, G.P. Compo, P.M. Rowe, M. Shupe, and K. Steffen, Downwelling longwave flux over
+                Summit, Greenland, 2010-2012: Analysis of surface-based observations and evaluation of ERA-Interim using
+                wavelets, <em>J. Geophys. Res. Atmos.</em>, 119(21), 12317-12337, doi:10.1002/2014JD021975, 2014.</p>
+            <p>Cox, C.J., Turner, D.D., Rowe, P.M. Shupe, M.D. and Walden, V.P., Cloud microphysical properties
+                retrieved from downwelling infrared radiance measurements made at Eureka, Nunavut, Canada (2006-2009),
+                <em>J. Appl. Meteor. Climatol., </em>doi: 10.1175/JAMC-D-13-0113.1, 2014.
+            </p>
+            <p>Rowe, P.M., S. Neshyba, and V.P. Walden, Radiative consequences of low-temperature infrared
+                refractive indices for supercooled water clouds, <em>Atmos. Chem. Phys., </em>13, 11925-11933, doi:
+                10.5194/acp-13-11925-2013, 2013.</p>
+            <p>Neshyba, S.P., Lowen, B., Benning, M., Lawson, A.
+                and Rowe, P.M., Roughness metrics of prismatic facets of ice. <em>J. Geophys. Res., </em>2013. (Marked
+                for
+                “Editor Highlight” on the <em>J. Geophys. Res.</em> homepage and listed in the Special Research
+                Spotlight of
+                EOS).</p>
+            <p>Shupe, M., Turner, D. D., Walden, V. P., Bennartz, R., Cadeddu, M. P., Castellani, B. B., Cox, C.,
+                D.R. Hudak, M.S. Kulie, N.B. Miller, R.R. Neely, W. Neff, P.M. Rowe, High and Dry: New Observations of
+                Tropospheric and Cloud Properties above the Greenland Ice Sheet, <em>Bull. Am. Meteorol. Soc.</em>,
+                169-186,
+                DOI 10.1175/BAMS-D-11-00249.1, 2013.</p>
+            <p>Cox, C.J., V.P. Walden, and P.M. Rowe, A comparison of the atmospheric conditions at Eureka, Canada
+                and Barrow, Alaska (2006-2008), <em>J. Geophys. Res</em>., 117, D12204 doi: 10.1029/2011JD017164, 2012.
+            </p>
+            <p>Mariani, Z, K. Strong, M. Wolff, P. Rowe, V. Walden, P.F. Fogal, T. Duck, G. Lesins, D.S. Turner, C.
+                Cox, E. Eloranta, J.R. Drummond, C. Roy, D.D. Turner, D. Hudak, and I.A. Lindenmaier, Infrared
+                measurements
+                in the Arctic using two Atmospheric Emitted Radiance Interferometers, <em>Atmos. Meas. Tech</em>., 5,
+                329-344; doi:10.5194/ amt-5-329-2012, 2012.</p>
+            <p>Rowe, P.M., S. Neshyba, and V.P. Walden, Responsivity-based criterion for accurate calibration of
+                FTIR emission spectra: Theoretical development and bandwidth estimation, <em>Optics Express</em>,
+                <strong>19
+                </strong>(7), 5930-5941; doi:10.1364/OE.19.005930, 2011.
+            </p>
+            <p>Rowe, P.M., S. Neshyba, C.J. Cox, and V.P. Walden, A responsivity-based criterion for low noise in
+                FTIR emission spectra: Identification of in-band low-responsivity wavenumbers, <em>Optics Express</em>,
+                <strong>19 </strong>(6), 5451-5463; doi: 10.1364/OE.19.005451, 2011.
+            </p>
+            <p>Walden, V.P., R.L. Tanamachi, P.M. Rowe, H.E. Revercomb, D.C. Tobin, and S.A. Ackerman, Improvements
+                in the data quality of the Interferometric Monitor of Greenhouse Gases, <em>Appl. Opt</em>.,
+                <strong>49</strong>, 520-528, doi: 10.1364/AO.49.000520, 2010.
+            </p>
+            <p>Rowe, P., and V.P. Walden, Improved measurements of the foreign-broadened continuum of water vapor
+                in the 6.3 mm band at -30°C, <em>Appl. Opt.</em>, <strong>48</strong>, 1358-1365, doi:
+                10.1364/AO.48.001358,
+                2009.</p>
+            <p>Rowe, P., L.M. Miloshevich, D.D. Turner, and V.P. Walden, Dry bias in radiosonde humidity profiles
+                over Antarctica, <em>J. Atmos. Ocean. Tech., </em><strong>25</strong>, 1529-1541, doi:
+                10.1175/2008JTECHA1009.1, 2008.</p>
+            <p>Rowe, P., V.P. Walden, and S.G. Warren,&nbsp; Measurements of the foreign-broadened continuum of
+                water vapor in the 6.3-μm band at -30 C, <em>Appl. Opt.</em>, <strong>45 </strong>(18), 4366-4382, doi:
+                10.1364/AO.45.004366, 2006.</p>
+            <p>Rowe, P. M., Measurements of the Foreign-Broadened Continuum of Water Vapor in the 6.3 micron band
+                at -30 Celsius. University of Washington, Seattle, Washington, 278 pp, 2004.</p>
+            <p class="finalp">Rathke, C, S. Neshyba, M. D. Shupe, P. Rowe, and A. Rivers, 2002: Radiative and
+                microphysical
+                properties of Arctic stratus clouds from multiangle downwelling infrared radiances, J. Geophys. Res. A.
+                107(D23), 4703, doi:10.1029/2001JD001545, 2002.</p>
+    </div>
+</div>
+
+
+<div class="flex justify-center p-10 m-10" id="timeSeries">
+    <div class="prose px-10 mx-40 mt-4">
+        <h2>Time Series</h2>
+
+    <hr class="hr1">
+    <h3>Clouds and Radiation over the Southern Ocean</h3>
+    <p>Through interactions with infrared and shortwave radiation, clouds have competing cooling and warming effects. The overall effect depends on location, date, time, and cloud properties. Working with colleagues at the Chilean
+        <a href="http://antarctica.cl/"> Antarctic Research Group</a>, we have been measuring radiation and clouds at Escudero Station, 
+        situated on King George Island in the Southern Ocean, just north of the Antarctic Peninsula, since 2017. The goal of this research 
+        is to improve our understanding of cloud and radiation processes, particularly during atmospheric rivers and
+        foehn events. This work is part of the Year of Polar Prediction (YOPP) for the Southern Hemisphere.
+        </p>
+
+        <hr class="hr2">
+        <div class="row">
+        <div class="column">
+                <img src="pictures/escudero_2017-antartic-research-group_-_7.jpg"
+                alt="Image of pyranometer at Escudero Station, Antarctica" style="width:90%">
+        </div>
+        <div class="column2">
+            <h3>Pyranometer</h3>Pyrgeometers and pyranometers are used to measure downwelling longwave radiation
+            (infrared) and shortwave radiation (sunlight). The pyranometer shown here measures shortwave radiation every minute year-round at
+            Escudero Station, just north of the Antarctic Peninsula.
+        </div>
+    </div>
+
+    <hr class="hr2">
+    <div class="row">
+        <div class="column">
+                <img src="pictures/esc_broadband_case20190204.png"
+                alt="" style="width:90%">
+        </div>
+        <div class="column2">
+            <h3>Radiation</h3>Downwelling longwave radiation and shortwave radiation at
+            Escudero Station over several days in February 2019.
+        </div>
+    </div>
+
+    <div>
+    
+    <hr class="hr2">
+        <h3>Annual cycle of radiation</h3><p>To see the how radiation over the annual cycle, it's useful to average over each month. 
+        Here we see that the monthly average longwave radiation is fairly constant over the year at Escudero Station, while the shortwave radiation
+        varies strongly with season, falling to almost zero in the Austral winter. This figure shows the average over each month, 
+        over the years 2017-2023, from the
+        ECMWF Reanaylsis product ERA5.</p> <img src="pictures/forcing_components.png" alt="Broadband flux components" style="width:50%">
+    </div>
+</div>
+</div>
+    
+
+<div class="flex justify-center p-10 m-10" id="penguin">
+    <div class="prose px-10 mx-40 mt-4">
+        <h2>Survey Statistics</h2>
+
+        <hr class="hr1">
+        <h3>Polar Education Modules</h3>
+        <p>Polar ENgagement through GUided INquiry (PENGUIN) is an NSF-funded project to develop modules that teach
+        polar
+        research through undergraduate students in a variety of courses. </p>
+
+        <hr class="hr2">
+        <div class="row">
+            <div class="column">
+                <img src="pictures/Penguin_picture.jpg" alt="Image of penguin" style="width:90%">
+            </div>
+            <div class="column2">
+                <h3>PENGUIN modules are available here:</h3>
+                <ul>
+                    <li>
+                        <a href="https://serc.carleton.edu/penguin/index.html">
+                            PENGUIN Modules</a>
+                    </li>
+                    <li> <a href="https://www.kaggle.com/code/pennyrowe/penguin/notebook">
+                            Jupyter Notebooks</a> </li>
+                    <li>
+                        <a href="penguin_high/penguin_high.html">PENGUIN modules for High
+                            School</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="hr2">
+        <div class="row">
+            <div class="column">
+                <img src="pictures/infrared_spectra.png"
+                    alt="Plot of infrared downwelling radiance spectra for Oklahoma summer and Polar winter" style="width:90%">
+            </div>
+            <div class="column2">
+                <h3>Quantum Mechanics Module</h3><p>Students examine rotational vibrational transitions in spectra
+                    and plot the greenhouse effect.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <img src="pictures/linear_regression_survey_question.png"
+                    alt="Correct and incorrect responses to statistics module survey question" style="width:90%">
+            </div>
+            <div class="column2">
+                <h3>Student surveys</h3>
+                <p>Student surveys tested statistics knowledge gains, comparing students who
+                took statistics with and without working through a PENGUIN statistics module. </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+    
+
+<div class="flex justify-center p-10 m-10" id="bayesian">
+    <div class="prose px-10 mx-40 mt-4">
+        <h2>Bayesian Statistics</h2>
+
+        <hr class="hr1">
+        <div>
+            <h3>Cloud Property Retrievals</h3>
+            <p> Algorithms such as optimal estimation for retrieving cloud properties are sensitive to instrumental
+                considerations such as calibration and instrument responsivity, sources of error such as biases,
+                noise and error in knowledge of the atmospheric state, and limited spectral resolution. Cloud property
+                retrievals include optical depth, thermodynamic phase, effective radius and cloud base-height retrieval.
+            </p>
+
+
+            <hr class="hr2">
+            <div class="row">
+                <div class="column">
+                    <img src="pictures/Fig4_scatterErrsPt5.jpg"
+                        alt="" style="width:90%">
+                </div>
+            </div>
+
+            <hr class="hr2">
+            <div class="row">
+                <div class="column">
+                    <img src="pictures/Fig7_bubbleplot4.jpg"
+                        alt="Cloud signal and error with height" style="width:90%">
+                </div>
+            </div>
+
+            <hr class="hr2">
+            <div class="row">
+                <div class="column">
+                <img src="pictures/bayes.png"
+                    alt="Plot of 2D probability distribution P(x,y), together with P(x), P(y), and P(y|x)" style="width:90%">
+                </div>
+            </div>
+
+            <hr class="hr2">
+            <div class="row">
+                <div class="column">
+                    <img src="pictures/clarra.jpg" alt="Retrieval of effective radius and optical depth using optimal estimation." style="width:90%">
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+    
+
+<div class="flex justify-center p-10 m-10" id="indexOfRefraction">
+    <div class="prose px-10 mx-40 mt-4">
+        <h2>Data Fusion</h2>
+        <hr class="hr1">
+        <div>
+            <h3>Index of Refraction</h3>
+            <p>Radiative transfer calculations of supercooled liquid cloud
+                absorption and emission of infrared radiation relies on incorporating the temperature
+                dependence of the 
+                <a href="http://webspace.pugetsound.edu/facultypages/nesh/supercooled_water_optical_constants/">
+                    complex refractive indices of supercooled water</a>.
+
+            <hr class="hr2">
+            <div class="row">
+                
+                <div class="column">
+                    <img src="pictures/fig5_k_RFN240K.jpg" alt="Imaginary part of complex refractive index of liquid water at 240 K" style="width:90%">
+                </div>
+                <div class="column2">
+                    <h3>Index of refraction of liquid water</h3>
+                    <p>This figure shows the imaginary part of the complex-valued index of refraction of liquid water,
+                        at 240 K. This result was created by interpolating and extrapolating the results from 
+                        laboratory studies at varying frequencies and temperatures.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    
+
+<div class="flex justify-center p-10 m-10" id="blackcarbon">
+    <div class="prose px-10 mx-40 mt-4">
+        <h2>Data Extrapolation</h2>
+        <hr class="hr1">
+
+        <div>
+        <h3>Black carbon</h3>
+        <p>Black carbon is an anthropogenic pollutant that decreases the albedo of ice and snow. In the Chilean
+            Andes, black carbon on glaciers enhances the melt rate. Because glaciers are an important source of
+            drinking
+            water in Chile, glacier loss is a topic of major concern. I participated in field expeditions (led by
+            Steven
+            Neshyba, in collaboration with Steve Warren of the University of Washington and Raul Cordero of the
+            University of Santiago of Chile) to sample black carbon on snow in the Chilean Andes in July 2015 and
+            2016.
+            Our group at the University of Santiago of Chile continues to measure black carbon in the Chilean Andes,
+            as well as in Antarctica.</p>
+        <p>During the summer of 2020, we expanded our black carbon measurements to include locations in
+            Colorado and on Mt. Rainier, in Washington, as part of&nbsp; a virtual summer Research Experience for
+            Undergraduates (REU) program. Two students sampled snow, while two additional students measured the
+            impurity concentrations using the Light Absorbing Measurement (LAM), developed by Prof. Carl Schmitt.</p>
+ 
+        <hr class="hr2">
+        <div class="row">
+            <div class="column">
+                <img src="pictures/black-carbon-2016-antartic-research-group_-_5_square-scaled2.jpg"
+                    alt="Image of snow sampling" style="width:90%">
+            </div>
+            <div class="column2">
+                <h3>Snow sampling</h3><p>Snow sampling involved first digging a snow pit and then collecting 
+                    samples successively deeper.</p>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+</div>
+
+
 </main>
+
