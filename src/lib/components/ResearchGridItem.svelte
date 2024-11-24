@@ -4,7 +4,7 @@
     export let imageAlt="Pyranometer at Escudero Station, Antarctica";
     export let title="Radiation";
 
-    let url = "/Research" + title;
+    export let url = "/data";
 </script>
 
 <div class="flex flex-col border-2 border-gray-300 rounded-med">
