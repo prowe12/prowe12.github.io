@@ -20,7 +20,7 @@
  * @param {}} col int
  * @return  The values in the 3x3 square
  */
-function getsquarevals(grid, row, col) {
+export function getsquarevals(grid, row, col) {
     let result = [];
     let irow = Math.floor(row / 3); // row//3; 
     let icol = Math.floor(col / 3); // col//3;
@@ -46,7 +46,7 @@ function getsquarevals(grid, row, col) {
  * @param val
  * @return  true or false
  */
-function alreadythere(grid, row, col, val){
+export function alreadythere(grid, row, col, val){
 
     // Is the value already in the row?
     // if (val in grid[row]) {
@@ -84,7 +84,7 @@ function alreadythere(grid, row, col, val){
  * @return grid
  * @return true or false
  */
-function backtrackOnly(grid, row, col, moves){
+export function backtrackOnly(grid, row, col, moves){
     let res;
     let success;
     
@@ -138,7 +138,7 @@ function backtrackOnly(grid, row, col, moves){
  * @param grid  The current numbers of the Sudoku board, list of lists
  * @return True if QC passes, else false., Message
  */
-function qualityCheck(grid){
+export function qualityCheck(grid){
     for (let row=0; row<9; row++){        //row in range(9):
         for (let col=0; col<9; col++) {   //col in range(9):
             let val = grid[row][col];
@@ -166,7 +166,7 @@ function qualityCheck(grid){
  * Notes:
  * populateSquare(irow, icol, value, numberColor='', borderColor='')
  */
-function backtracker(grid) {
+export function backtracker(grid) {
     let result;
     let msg;
     let qcResult;

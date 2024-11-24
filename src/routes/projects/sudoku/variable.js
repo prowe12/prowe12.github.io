@@ -29,7 +29,7 @@
  * @param {*} domainVals  The values in the domain
  * @param {boolean} fix  True if the value in the box is fixed.
  */
-function Variable(row, col, nside, domainVals, fix=false) {
+export function Variable(row, col, nside, domainVals, fix=false) {
     // def __init__(self, row, col, nside, val={1, 2, 3, 4, 5, 6, 7, 8, 9},
     //              fix=False):
     //     Create a new variable with the domain specified.

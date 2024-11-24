@@ -21,6 +21,11 @@
  * March 14, 2021
  */
 
+import { Variable } from './variable.js'
+import { qcBoard } from './sudoku.js'
+import { getConstraints } from './sudoku.js'
+import { reverseConstraints } from './sudoku.js'
+import { getNextUnassigned } from './getUnassignedVariable.js'
 
 /**
  * If the constraint given by xj has only one value, and if that value is present in the
@@ -29,7 +34,7 @@
  * @param {Variable} xj  Sudoku box with value that serves as constraint
  * @return  Array containing xi and true if modified, else false
 */
-function removeValues(xi, xj) { 
+export function removeValues(xi, xj) { 
     let modified = false;
     let value;
 
@@ -58,7 +63,7 @@ function removeValues(xi, xj) {
  * @param {array} grid  The Numbers in the Sudoku board, as a list of list of int
  * @return The board, an array of arrays of elements of class variable.
  */
-function getBoard(grid) {
+export function getBoard(grid) {
     let nside = grid.length;
     var board = new Array();
 
@@ -94,7 +99,7 @@ function getBoard(grid) {
  * @param board
  * @return grid
 */
-function getGrid(board) {
+export function getGrid(board) {
     let gridrow;
 
     if (board === -1) {
@@ -131,7 +136,7 @@ function getGrid(board) {
  * @return true if the board is complete, false otherwise
 */
 //TODO why would board be -1?  Why would it be undefined? Throw error instead?
-function isComplete(board) {
+export function isComplete(board) {
     let row;
     let box;
 
@@ -161,7 +166,7 @@ function isComplete(board) {
  * @param board
  * @param moves
  */
- function updateChangedMoves(board, moves){
+export function updateChangedMoves(board, moves){
     let nrows = board.length;
     let ncols = board[0].length;
 
@@ -185,7 +190,7 @@ function isComplete(board) {
  * @param constraints
  * @param moves
 */
-function backtrack(assignment, constraints, moves, unmoves) {
+export function backtrack(assignment, constraints, moves, unmoves) {
     //alert("backtrack");
     let domainVals;
     let ac3result;
@@ -276,7 +281,7 @@ function backtrack(assignment, constraints, moves, unmoves) {
  * @returns The assignment and the moves
  * @throws  Error if constraint exists for fixed values
  */
-function arcConsistency3(assignment, constraints, prefix="") {
+export function arcConsistency3(assignment, constraints, prefix="") {
     //alert("AC3");
     let inverseMoves = [];
     let ac3moves = [];
@@ -384,7 +389,7 @@ function arcConsistency3(assignment, constraints, prefix="") {
  @return {array}  Array of arrays of whether successful and moves made: [row, col, value, method]
  @throws  Error if the board is not valid
 */
-function solve(original) { 
+export function solve(original) { 
 
     let grid;
     let moves = [];
@@ -430,7 +435,7 @@ function solve(original) {
  * Helper function for debugging that prints the board
  * @param {*} board 
  */
-function printBoard(board) {
+export function printBoard(board) {
     let grid = getGrid(board);
     
     let nrows = grid.length;
@@ -451,7 +456,7 @@ function printBoard(board) {
  * @param xi  Sudoku box that is being constrained
  * @param xj  Sudoku box with value that serves as constraint
 */
-function printStuff(xi, xj) {
+export function printStuff(xi, xj) {
     console.log(`xi is at ${xi.row}, ${xi.col} with domain:`);
     console.log(xi.domain);
     console.log(`xj is at ${xj.row}, ${xj.col} with domain:`);

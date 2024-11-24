@@ -15,7 +15,7 @@
  * @throws An error if everything has already been assigned.
  * 
  */
-function getNextUnassigned(board) {
+export function getNextUnassigned(board) {
     for (let row of board) {
         for (let cell of row) {
             if (cell.getDomainSize() > 1) {
