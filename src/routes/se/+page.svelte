@@ -7,11 +7,13 @@
             description:"An interactive sudoku solver. ",
             image: "/pictures/sudoku_original_crop.jpg",
             imageAlt: "Sudoku puzzle",
+            url: "/projects/sudoku",
         },
         {   title:"Cambio",
             description:"A Webapp for modeling climate change. ",
             image: "pictures/cambio4.jpg",
             imageAlt: "Cambio Webapp dashboard where users select inputs and plot outputs.",
+            url: 'https:cambio.fly.dev',
         },
     ];
             
@@ -30,8 +32,8 @@
       <div class="mx-auto max-w-4xl flex flex-col px-6 py-4 mt-6">
       <h2 class="text-4xl flex justify-center mb-10">Software Engineering</h2>
 
-      {#each projectItems as {image, imageAlt, title, description}}
-          <ResearchItem {image} {imageAlt} {title} {description}/>
+      {#each projectItems as {image, imageAlt, title, description, url}}
+          <ResearchItem {image} {imageAlt} {title} {description} {url}/>
       {/each}
   </div>
 
