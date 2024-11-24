@@ -707,7 +707,17 @@
 
 
 <main>
-    <h1>Sudoku Solver</h1>
+    <div>
+        <div class="mx-auto max-w-4xl flex flex-col px-6 py-4 mt-6">
+        <h1 class="text-4xl flex justify-center mb-2">Sudoku Solver</h1>
+    </div>
+
+    <div>
+        <div class="mx-auto max-w-4xl px-6 py-4 mb-10 prose">
+            Under construction. Some features are not yet implemented. For fully functional code please see my
+            <a href="https://github.com/prowe12/game-solvers/tree/main/sudoku">Python Sudoku Solver</a>
+            and <a href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku" >Javascript & CSS Sudoku Solver</a>.
+        </div>
 
     <div id="grid-container-puzzle">
 
