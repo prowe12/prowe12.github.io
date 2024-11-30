@@ -709,16 +709,14 @@
 <svelte:head>
     <meta charset="utf-8" />
     <title>Sudoku Solver</title>
-    <link rel="stylesheet" href="/src/routes/projects/sudoku/styles.css">
-    <link rel="stylesheet" href="/src/routes/projects/sudoku/sudokuStyles.css">
+    <link rel="stylesheet" href="/src/routes/sudoku/styles.css">
+    <link rel="stylesheet" href="/src/routes/sudoku/sudokuStyles.css">
 </svelte:head>
 
 
 <main>
-    <div>
-        <div class="mx-auto max-w-4xl flex flex-col px-6 py-4 mt-6">
-        <h1 class="text-4xl flex justify-center mb-2">Sudoku Solver</h1>
-    </div>
+    <div class="mx-auto max-w-4xl flex flex-col px-6 py-4 mt-6">
+    <h1 class="text-4xl flex justify-center mb-2">Sudoku Solver</h1>
 
     <div class="mx-auto max-w-4xl px-6 py-4 mb-10 prose">
         Under construction. Some features are not yet implemented. For fully functional code please see my
@@ -726,116 +724,115 @@
         and <a href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku" >Javascript & CSS Sudoku Solver</a>.
     </div>
 
+
     <div class="max-w-8xl flex justify-center">
         <div id="grid-container-puzzle">
 
-        <!-- Row 1, column 1 -->
-        <div>
-            <fieldset id="selections">
-                <legend>Selections</legend>
-
-                <!-- Choose a puzzle from a drop-down list -->
-                Choose Puzzle<br>
-                <select name="puzzle" id="dropdownpuzzle" class="button">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                    <option value="evil">Evil</option>
-                    <option value="random">Random</option>
-                </select>
-                <br>
-                <br>
-
-                Choose Solver <br>
-
-                <button name="solverDemoBacktrack" id="solverDemoBacktrack" class="button">Backtracking</button>
-                <br>
-                <button name="playSudokuSolver" id="playSudokuSolver" class="button">AC-3 and Backtracking</button>
-                <br>
-
-                <!-- Add later  -->
-                <!-- Read in your own Sudoku file  -->
-                <!-- <input type="file" id="file-input">
-            <button id="read-button">Load File</button>
-            <pre id="file-contents"></pre>  -->
-
-            </fieldset>
-
-            <br> <br>
-            <div class="colorkeybox">
-                <h2>Key for colors</h2>
-                <p class="backtrack">Backtracking</p>
-                <p class="finalAC3">AC-3, solved</p>
-                <p class="backtrackPlusAC3">AC-3, value may change</p>
-            </div>
-
-        </div>
-
-        <!-- Row 1, column 2 -->
-        <div>
-            <!-- Print the Sudoku board to the screen -->
-            <!-- <div class="flex justify-center px-8 mx-8 mb-20">
-                <div class="px-4 mx-4 max-w-3xl text-xl">
-                    <p class="mb-4">Loading...</p>
-                </div>
-            </div> -->
-        
-            <table id="sudokuGraphic"></table>
-
+            <!-- Row 1, column 1 -->
             <div>
-                {#if isLoading}
-                    <div class="flex justify-center items-center w-[380px] h-[356px] bg-gray-200">
-                        <p>Loading puzzle ...</p>
-                    </div>
-                {:else}
-                    <table id="sudokuGraphic"></table>
-                {/if}
-            </div>
+                <fieldset id="selections">
+                    <legend>Selections</legend>
 
-
-            <!-- Put the fieldset in a div so we can center it -->
-            <div id="sudokuControls">
-                <fieldset id="controls">
-                    <legend>Controls</legend>
-
-                    <!-- Play Controls -->
-                    <button type="button" id="rewindToBeg" class="button controlButton">Restart</button>
-                    <button type="button" id="rewind" class="button controlButton">Rewind</button>
-                    <button type="button" id="pauseButton" class="button controlButton">Pause</button>
-                    <button type="button" id="playPause" class="button controlButton">Play</button>
-                    <button type="button" id="forwardToEnd" class="button controlButton">Finish</button>
-
-                    <!-- Slider for controlling the speed of playback -->
-                    <!-- Speed <input class="slider anim-speed" type=range min=0 max=300 value=20></input> -->
-                    <label for="speed">Speed</label>
-                    <input id="speed" class="slider anim-speed" type="range" min="0" max="300" bind:value={speed}>
-                    
-                    <p>Current speed: {speed}</p>
+                    <!-- Choose a puzzle from a drop-down list -->
+                    Choose Puzzle<br>
+                    <select name="puzzle" id="dropdownpuzzle" class="button">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="evil">Evil</option>
+                        <option value="random">Random</option>
+                    </select>
                     <br>
                     <br>
-                    <!-- Button to show the domain of each square -->
-                    <button type="button" id="showDomainButton" class="button controlButton" value="OFF">
-                        Show the domain
-                    </button>
-                    &nbsp; &nbsp;
-                    <button type="button" id="step" class="button controlButton">Step</button>
-                    <button type="button" id="stepBack" class="button controlButton">Undo</button>
+
+                    Choose Solver <br>
+
+                    <button name="solverDemoBacktrack" id="solverDemoBacktrack" class="button">Backtracking</button>
+                    <br>
+                    <button name="playSudokuSolver" id="playSudokuSolver" class="button">AC-3 and Backtracking</button>
+                    <br>
+
+                    <!-- Add later  -->
+                    <!-- Read in your own Sudoku file  -->
+                    <!-- <input type="file" id="file-input">
+                <button id="read-button">Load File</button>
+                <pre id="file-contents"></pre>  -->
+
                 </fieldset>
+
+                <br> <br>
+                <div class="colorkeybox">
+                    <h2>Key for colors</h2>
+                    <p class="backtrack">Backtracking</p>
+                    <p class="finalAC3">AC-3, solved</p>
+                    <p class="backtrackPlusAC3">AC-3, value may change</p>
+                </div>
+
             </div>
 
-        </div>
+            <!-- Row 1, column 2 -->
+            <div>
+                <!-- Print the Sudoku board to the screen -->
+                <!-- <div class="flex justify-center px-8 mx-8 mb-20">
+                    <div class="px-4 mx-4 max-w-3xl text-xl">
+                        <p class="mb-4">Loading...</p>
+                    </div>
+                </div> -->
+            
+                <table id="sudokuGraphic"></table>
 
-        <!-- Row 1, column 3 -->
-        <div>
-            <p class="state"></p>
-            <p class="explanation"></p>
+                <div>
+                    {#if isLoading}
+                        <div class="flex justify-center items-center w-[380px] h-[356px] bg-gray-200">
+                            <p>Loading puzzle ...</p>
+                        </div>
+                    {:else}
+                        <table id="sudokuGraphic"></table>
+                    {/if}
+                </div>
+
+
+                <!-- Put the fieldset in a div so we can center it -->
+                <div id="sudokuControls">
+                    <fieldset id="controls">
+                        <legend>Controls</legend>
+
+                        <!-- Play Controls -->
+                        <button type="button" id="rewindToBeg" class="button controlButton">Restart</button>
+                        <button type="button" id="rewind" class="button controlButton">Rewind</button>
+                        <button type="button" id="pauseButton" class="button controlButton">Pause</button>
+                        <button type="button" id="playPause" class="button controlButton">Play</button>
+                        <button type="button" id="forwardToEnd" class="button controlButton">Finish</button>
+
+                        <!-- Slider for controlling the speed of playback -->
+                        <!-- Speed <input class="slider anim-speed" type=range min=0 max=300 value=20></input> -->
+                        <label for="speed">Speed</label>
+                        <input id="speed" class="slider anim-speed" type="range" min="0" max="300" bind:value={speed}>
+                        
+                        <p>Current speed: {speed}</p>
+                        <br>
+                        <br>
+                        <!-- Button to show the domain of each square -->
+                        <button type="button" id="showDomainButton" class="button controlButton" value="OFF">
+                            Show the domain
+                        </button>
+                        &nbsp; &nbsp;
+                        <button type="button" id="step" class="button controlButton">Step</button>
+                        <button type="button" id="stepBack" class="button controlButton">Undo</button>
+                    </fieldset>
+                </div>
+
+            </div>
+
+            <!-- Row 1, column 3 -->
+            <div>
+                <p class="state"></p>
+                <p class="explanation"></p>
+            </div>
         </div>
     </div>
 
     <div class="spacebelow"></div>
-
-    </main>
-
 
     <div class="howto">
         <h1>How to Play</h1>
@@ -938,3 +935,364 @@
         </p>
 
     </div>
+</main>
+
+<!-- 
+<style>
+
+    /* Color scheme */
+    /* #E38B29;
+
+    label {
+    display: inline-block;
+    width: 150px;
+    }
+
+    /* Style the Header tag */
+    h1 {
+        text-align: center;
+    }
+
+    /* Make a grid for the puzzles */
+    #grid-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    }
+
+    /* Styles for the grid for the puzzles (div elements) in the grid 
+    * and make it a flex container
+    */
+    #grid-container>div {
+    text-align: center;
+    }
+
+    /* Links that are play buttons  */
+    .button {
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: white;
+    background-color: #E38B29;
+    border-color: #E38B29;
+    }
+
+
+    .button:disabled {
+    color: #fff;
+    background-color: #E38B29;
+    border-color: #E38B29;
+    }
+
+    /*TODO: Disable hover if the button is not active */
+    .button:hover {
+    color: #fff;
+    background-color: rgb(165, 108, 42);
+    }
+
+    /* Space at the bottom */
+    .spacebelow {
+    margin-bottom: 100px;
+    }
+
+    /* Generics for fieldset */
+    fieldset {
+    background-color: white;
+    }
+
+    .colorkeybox {
+    background-color: white;
+    padding: 10px;
+    width: 60%;
+    margin: 0 auto;
+    }
+
+
+    .col1 {
+    float: left;
+    width: 45%;
+    margin-right: 5%;
+    }
+
+    .row {
+    padding-top: 25px;
+    padding-bottom: 50px;
+    padding-left: 5%;
+    padding-right: 5%;
+    }
+
+    /* Clear floats after image containers */
+    .row::after {
+    content: "";
+    clear: both;
+    display: table;
+    }
+
+
+    /* Styles for Sudoku page (sudoku.html) */
+
+
+    /* A container for all the solver elements */
+    #grid-container-puzzle {
+    display: grid;
+    justify-content: space-evenly;
+    grid-template-columns: repeat(auto-fill, 380px);
+    grid-template-rows: auto;
+    max-width: 1200px;
+    }
+
+    /* Each solver element is in a div */
+    #grid-container-puzzle>div {
+    text-align: center;
+    }
+
+    /* Center the Sudoku board */
+    #sudokuGraphic {
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+    fieldset>#selections {
+    width: 380px;
+    align-items: center;
+    align-content: center;
+    padding-left: 2%;
+    }
+
+    fieldset #controls {
+    width: 380px;
+    align-items: center;
+    align-content: center;
+    padding-left: 2%;
+    }
+
+    /* Center the control fieldset */
+    #sudokuControls {
+    text-align: center;
+    width: 380px;
+    padding-top: 20px;
+    }
+
+    table {
+    border-collapse: collapse;
+    border: solid 2px black;
+    background-color: white;
+    }
+
+    td:nth-child(3),
+    th:nth-child(3) {
+    border-right: solid 2px black;
+    }
+
+    td:nth-child(6),
+    th:nth-child(6) {
+    border-right: solid 2px black;
+    }
+
+    tr:nth-child(3) {
+    border-bottom: solid 2px black;
+    }
+
+    tr:nth-child(6) {
+    border-bottom: solid 2px black;
+    }
+
+    td {
+    width: 38px;
+    height: 38px;
+    border: 1px solid gray;
+    text-align: center;
+    }
+
+    /* Default Sudoku box styling */
+    /* Ok fonts: TNR, Calibri, Courier New */
+    /* not ok fonts: Helvetica, Arial */
+    /*    Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+    .sudokubox {
+    color: gray;
+    font-size: x-large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .sudokubox.domain {
+    color: black;
+    font-size: x-small;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0%;
+    padding-bottom: 0%;
+    }
+
+    /* styling for fixed numbers (original grid) */
+    .sudokubox.fixed {
+    color: black;
+    font-weight: bold;
+    }
+
+
+    /* styling for numbers determined with AC-3 */
+    .sudokubox.AC3 {
+    color: red;
+    }
+
+    .backtrack {
+    color: green;
+    }
+
+    .finalAC3 {
+    color: blue;
+    }
+
+    .backtrackPlusAC3 {
+    color: #E38B29;
+    }
+
+    .sudokubox.boxborder {
+    /* Add a border to outline the square */
+    border: solid 2px blue;
+    }
+
+    /* Selected for solver-type buttons */
+    .selectedsolver {
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    padding: 7px 9px 7px 9px;
+    border: 2px solid #FDEEDC;
+    outline: 1px solid #F1A661;
+    }
+
+
+
+    /* Color pallete - light to dark
+    #FDEEDC
+    #FFD8A9
+    #F1A661
+    #E38B29
+    */
+
+    /* Control button overrides for standard button  */
+    .controlButton {
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-bottom: 20px;
+    padding: 4px 4px;
+    border: 2px solid;
+    border-color: #E38B29;
+    outline: 1px solid #E38B29;
+    }
+
+    /* Selected buttons */
+    .selected {
+    padding: 4px 4px;
+    border: 2px solid #FDEEDC;
+    outline: 1px solid #F1A661;
+    }
+
+    .howto {
+    padding-top: 25px;
+    max-width: 800px;
+    align-self: center;
+    text-align: left;
+    line-height: 1.5;
+    }
+
+    /* Styling for the slider needs to be done for every browser */
+    /* First remove the auto-styling */
+    input[type="range"] {
+    -webkit-appearance: none;
+    width: 80%;
+    height: 8px;
+    outline: none;
+    appearance: none;
+    border: none;
+    border-radius: 30px;
+    }
+
+    input[type="range"]::-moz-focus-outer {
+    border: 0;
+    }
+
+    input[type="range"]:hover {
+    outline: none;
+    }
+
+    /* Chrome */
+    input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background-color: rgb(25, 75, 45);
+    cursor: pointer;
+    border-radius: 30px;
+    /* makes it a circle */
+    outline: none;
+    }
+
+    /* Styling the track */
+    input[type="range"]::-webkit-slider-runnable-track {
+    background: gray;
+    border: none;
+    }
+
+    /* Firefox */
+    input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: silver;
+    cursor: pointer;
+    border-radius: 50%;
+    /*box-shadow: 1px 1px 1px rgb(25, 75, 45), 0px 0px 1px rgb(25, 75, 45);*/
+    border: 3px solid rgb(25, 75, 45);
+    }
+
+    input[type="range"]::-moz-range-progress {
+    background-color: rgb(25, 75, 45);
+    height: 100%;
+    border-radius: 30px;
+    border: none;
+    }
+
+    input[type="range"]::-moz-range-track {
+    background-color: #ccc;
+    border-radius: 30px;
+    border: none;
+    height: 100%;
+    }
+
+    /* IE */
+    input[type="range"]::-ms-fill-lower {
+    background-color: rgb(25, 75, 45);
+    height: 100%;
+    border-radius: 30px;
+    border: none;
+    }
+
+    input[type="range"]::-ms-fill-upper {
+    background-color: #ccc;
+    border-radius: 30px;
+    border: none;
+    height: 100%;
+    }
+
+</style> -->

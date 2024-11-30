@@ -50,7 +50,7 @@ export const cardItems = [
         description:"A Sudoku Solver that uses backtracking and AC3 to solve sudoku puzzles. ",
         image: "/pictures/sudoku_original_crop.jpg",
         imageAlt: "Sudoku puzzle",
-        url: "/projects/sudoku",
+        url: "/sudoku",
         label: "View site",
         tags: ["se", "ds"],
     },
