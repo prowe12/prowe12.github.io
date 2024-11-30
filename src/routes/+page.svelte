@@ -39,7 +39,7 @@
             <div class="flex flex-1 flex-col items-start justify-end">
                 <h1 class="text-[5.5rem] mb-2 font-serif leading-none">Penny Rowe</h1>
                 <h2 class="text-2xl mb-4">Software Engineer & Data Scientist</h2>
-                <p class="mr-8 hidden sm:block">Whether in Antarctica or the Pacific Northwest, Penny applies her skills in full stack engineering, programming, and math to website development and data-driven analysis.
+                <p class="mr-8 hidden sm:block">Penny builds elegant websites and powerful analysis tools. She draws on her climate science background researching polar clouds to translate complex data into compelling, impactful stories.
                 </p>
             </div>
             <div class="flex flex-1">
@@ -47,6 +47,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Whether in Antarctica or the Pacific Northwest, Penny applies her skills in full stack engineering, programming, and math to website development and data-driven analysis. -->
+
 
     <section class="flex flex-col items-center mx-auto max-w-5xl" id="projects">
         <div>
