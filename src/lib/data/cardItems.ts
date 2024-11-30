@@ -39,7 +39,7 @@ export const cardItems = [
     {   
         title: "Data Extrapolation",
         description: `Black carbon amounts over the Southern Andean snowpack are determined from extrapolating from measurements.`,
-        image: "pictures/black-carbon-2016-antartic-research-group_-_5_square-scaled2.jpg",
+        image: "/pictures/black-carbon-2016-antartic-research-group_-_5_square-scaled2.jpg",
         imageAlt: "Image of snow sampling",
         url: "#blackcarbon",
         label: "See more",
@@ -56,7 +56,7 @@ export const cardItems = [
     },
     {   title:"Cambio",
         description:"A simple climate change model that plots the results of different emissions scenarios.",
-        image: "pictures/cambio.png",
+        image: "/pictures/cambio.png",
         imageAlt: "Cambio Webapp dashboard where users select inputs and plot outputs.",
         url: "https://cambio.fly.dev",
         label: "View site",

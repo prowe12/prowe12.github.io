@@ -1,11 +1,19 @@
 
 <script lang='ts'>
+    import { base } from '$app/paths';
+
     export let image="/pictures/escudero_2017-antartic-research-group_-_7.jpg";
     export let imageAlt="Pyranometer at Escudero Station, Antarctica";
     export let title="Radiation";
     export let description="Continuous measurements of infrared and shortwave radiation to characterize the Antarctic surface energy budget.";
-    export let url = "/data";
+    export let url = "{base}/";
     export let label = "See more";
+
+    image = base + image;
+
+    if (!url.startsWith('https://')) {
+        url = base + url;
+    }
 </script>
 
 <div class="flex flex-row my-4 gap-10 border-2 border-gray-300 p-4 rounded-xl bg-white">

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import NavBar from '$lib/components/NavBar.svelte';
+    import { base } from '$app/paths';
+
+    import NavBar from '$lib/components/NavBar.svelte';
     import Card from '$lib/components/Card.svelte';
     import DatasetGridItem from '$lib/components/DatasetGridItem.svelte';
     import PublicationsList from '$lib/components/PublicationsList.svelte';
@@ -43,7 +45,7 @@
                 </p>
             </div>
             <div class="flex flex-1">
-                <img class="w-full h-full object-cover object-center border rounded-xl shadow-2xl" src="/pictures/escudero1.jpg" alt="Penny Rowe">
+                <img class="w-full h-full object-cover object-center border rounded-xl shadow-2xl" src="{base}/pictures/escudero1.jpg" alt="Penny Rowe">
             </div>
         </div>
     </section>
@@ -116,11 +118,11 @@
 
         <div class="flex gap-10 justify-center items-center">
             <button on:click={toggleRecentFolder} class="relative flex items-center justify-center">
-                <img src="../pictures/folder.webp" alt="folder" class="w-40 h-auto">
+                <img src="{base}/pictures/folder.webp" alt="folder" class="w-40 h-auto">
                 <span class="absolute text-xl">Recent</span>
             </button>
             <button on:click={toggleOldFolder} class="relative flex items-center justify-center">
-                <img src="../pictures/folder.webp" alt="folder" class="w-40 h-auto">
+                <img src="{base}/pictures/folder.webp" alt="folder" class="w-40 h-auto">
                 <span class="absolute text-xl">All</span>
             </button>
         </div>
