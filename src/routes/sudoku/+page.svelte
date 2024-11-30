@@ -1,6 +1,6 @@
 <script lang='ts'>
     import {onMount} from 'svelte';
-    import { makeEmptyGrid } from './sudoku.js'
+    // import { makeEmptyGrid } from './sudoku.js'
     import { loadStartingValues } from './sudoku.js'
     import { boardReset} from './sudoku.js'
     import { toggle} from './sudoku.js'
@@ -40,9 +40,6 @@
     let originalgrid = loadStartingValues(puzzleType);
     let currentgrid = loadStartingValues(puzzleType);
 
-    // TODO: delete, for testing
-    let isLoading = true;
-
     /**
     * Populate a box of the board and move the pointer to the next box.
     * If at the final move, quit playback
@@ -66,6 +63,19 @@
             running = false;
         };
     };
+
+    let grid = [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+    ];
+
     
     
     onMount(async () => {
@@ -81,17 +91,6 @@
         // await import('./sudoku.js'); // Calls code in solver.js
         
         // Use the imported function
-        const grid = [
-            [5, 3, 0, 0, 7, 0, 0, 0, 0],
-            [6, 0, 0, 1, 9, 5, 0, 0, 0],
-            [0, 9, 8, 0, 0, 0, 0, 6, 0],
-            [8, 0, 0, 0, 6, 0, 0, 0, 3],
-            [4, 0, 0, 8, 0, 3, 0, 0, 1],
-            [7, 0, 0, 0, 2, 0, 0, 0, 6],
-            [0, 6, 0, 0, 0, 0, 2, 8, 0],
-            [0, 0, 0, 4, 1, 9, 0, 0, 5],
-            [0, 0, 0, 0, 8, 0, 0, 7, 9]
-        ];
 
         // makeEmptyGrid(9,9);
         // populateBoard(grid);
@@ -690,10 +689,34 @@
             return newgrid;
         };
 
+
+        /**
+         * Set up the empty grid
+         * @param {number} nrows
+         * @param {number} ncols 
+         */
+        function makeEmptyGrid(nrows, ncols) {
+            let table = document.getElementById("sudokuGraphic");
+            while (table.lastChild) {
+                table.removeChild(table.lastChild);
+            }
+            for (let i = 0; i < nrows; i++) {
+                let row = document.createElement("tr");
+                row.classList.add(`row-${i}`);
+                table.appendChild(row);
+                for (let j = 0; j < ncols; j++) {
+                    // To let player play the game, make an input box as a child to the cell
+                    let col = document.createElement("td");
+                    col.classList.add(`col-${j}`);
+                    col.classList.add("sudokubox");
+                    row.appendChild(col);
+                }
+            }
+        }
+
         try {
             makeEmptyGrid(9, 9);
             populateBoard(grid);
-            isLoading = false;
             playReset();
             boardReset(puzzleType);
             moves = runBacktrackSolver(puzzleType);
@@ -709,8 +732,6 @@
 <svelte:head>
     <meta charset="utf-8" />
     <title>Sudoku Solver</title>
-    <link rel="stylesheet" href="/src/routes/sudoku/styles.css">
-    <link rel="stylesheet" href="/src/routes/sudoku/sudokuStyles.css">
 </svelte:head>
 
 
@@ -725,7 +746,7 @@
     </div>
 
 
-    <div class="max-w-8xl flex justify-center">
+    <div class="max-w-8xl flex justify-center mb-20">
         <div id="grid-container-puzzle">
 
             <!-- Row 1, column 1 -->
@@ -746,7 +767,6 @@
                     <br>
 
                     Choose Solver <br>
-
                     <button name="solverDemoBacktrack" id="solverDemoBacktrack" class="button">Backtracking</button>
                     <br>
                     <button name="playSudokuSolver" id="playSudokuSolver" class="button">AC-3 and Backtracking</button>
@@ -755,8 +775,8 @@
                     <!-- Add later  -->
                     <!-- Read in your own Sudoku file  -->
                     <!-- <input type="file" id="file-input">
-                <button id="read-button">Load File</button>
-                <pre id="file-contents"></pre>  -->
+                    <button id="read-button">Load File</button>
+                    <pre id="file-contents"></pre>  -->
 
                 </fieldset>
 
@@ -779,18 +799,18 @@
                     </div>
                 </div> -->
             
-                <table id="sudokuGraphic"></table>
 
-                <div>
-                    {#if isLoading}
-                        <div class="flex justify-center items-center w-[380px] h-[356px] bg-gray-200">
-                            <p>Loading puzzle ...</p>
-                        </div>
-                    {:else}
-                        <table id="sudokuGraphic"></table>
-                    {/if}
-                </div>
-
+                <table id="sudokuGraphic">
+                    <tbody>
+                        {#each grid as row}
+                            <tr>
+                                {#each row as cell}
+                                    <td>{cell}</td>
+                                {/each}
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
 
                 <!-- Put the fieldset in a div so we can center it -->
                 <div id="sudokuControls">
@@ -831,8 +851,6 @@
             </div>
         </div>
     </div>
-
-    <div class="spacebelow"></div>
 
     <div class="howto">
         <h1>How to Play</h1>
@@ -937,34 +955,24 @@
     </div>
 </main>
 
-<!-- 
-<style>
+<style global>
 
-    /* Color scheme */
-    /* #E38B29;
+    main {
+        display: flex;
+        flex-direction: column;
+        background-color: #FDEEDC;
+        text-align: left;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 14;
+        min-height: 100vh;
+    }
 
     label {
-    display: inline-block;
-    width: 150px;
+        display: inline-block;
+        width: 150px;
     }
 
-    /* Style the Header tag */
     h1 {
-        text-align: center;
-    }
-
-    /* Make a grid for the puzzles */
-    #grid-container {
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    }
-
-    /* Styles for the grid for the puzzles (div elements) in the grid 
-    * and make it a flex container
-    */
-    #grid-container>div {
     text-align: center;
     }
 
@@ -1008,15 +1016,27 @@
     background-color: rgb(165, 108, 42);
     }
 
-    /* Space at the bottom */
-    .spacebelow {
-    margin-bottom: 100px;
-    }
+
 
     /* Generics for fieldset */
     fieldset {
-    background-color: white;
+        background-color: white;
     }
+
+/* 
+    fieldset>#selections {
+    width: 380px;
+    align-items: center;
+    align-content: center;
+    padding-left: 2%;
+    }
+
+    fieldset #controls {
+    width: 380px;
+    align-items: center;
+    align-content: center;
+    padding-left: 2%;
+    } */
 
     .colorkeybox {
     background-color: white;
@@ -1047,252 +1067,242 @@
     }
 
 
-    /* Styles for Sudoku page (sudoku.html) */
+/* A container for all the solver elements */
+#grid-container-puzzle {
+   display: grid;
+   justify-content: space-evenly;
+   grid-template-columns: repeat(auto-fill, 380px);
+   grid-template-rows: auto;
+   max-width: 1200px;
+}
+
+/* Each solver element is in a div */
+#grid-container-puzzle>div {
+   text-align: center;
+}
+
+/* Center the Sudoku board */
+#sudokuGraphic {
+   margin-left: auto;
+   margin-right: auto;
+}
+
+/* Center the control fieldset */
+#sudokuControls {
+   text-align: center;
+   width: 380px;
+   padding-top: 20px;
+}
+
+table {
+   border-collapse: collapse;
+   border: solid 2px black;
+   background-color: white;
+}
 
 
-    /* A container for all the solver elements */
-    #grid-container-puzzle {
-    display: grid;
-    justify-content: space-evenly;
-    grid-template-columns: repeat(auto-fill, 380px);
-    grid-template-rows: auto;
-    max-width: 1200px;
-    }
+:global(td) {
+   width: 38px;
+   height: 38px;
+   border: 1px solid gray;
+   text-align: center;
+}
 
-    /* Each solver element is in a div */
-    #grid-container-puzzle>div {
-    text-align: center;
-    }
+:global(td:nth-child(3),
+th:nth-child(3)) {
+   border-right: solid 2px black;
+}
 
-    /* Center the Sudoku board */
-    #sudokuGraphic {
-    margin-left: auto;
-    margin-right: auto;
-    }
+:global(td:nth-child(6),
+th:nth-child(6)) {
+   border-right: solid 2px black;
+}
 
-    fieldset>#selections {
-    width: 380px;
-    align-items: center;
-    align-content: center;
-    padding-left: 2%;
-    }
+tr:nth-child(3) {
+   border-bottom: solid 2px black;
+}
 
-    fieldset #controls {
-    width: 380px;
-    align-items: center;
-    align-content: center;
-    padding-left: 2%;
-    }
-
-    /* Center the control fieldset */
-    #sudokuControls {
-    text-align: center;
-    width: 380px;
-    padding-top: 20px;
-    }
-
-    table {
-    border-collapse: collapse;
-    border: solid 2px black;
-    background-color: white;
-    }
-
-    td:nth-child(3),
-    th:nth-child(3) {
-    border-right: solid 2px black;
-    }
-
-    td:nth-child(6),
-    th:nth-child(6) {
-    border-right: solid 2px black;
-    }
-
-    tr:nth-child(3) {
-    border-bottom: solid 2px black;
-    }
-
-    tr:nth-child(6) {
-    border-bottom: solid 2px black;
-    }
-
-    td {
-    width: 38px;
-    height: 38px;
-    border: 1px solid gray;
-    text-align: center;
-    }
-
-    /* Default Sudoku box styling */
-    /* Ok fonts: TNR, Calibri, Courier New */
-    /* not ok fonts: Helvetica, Arial */
-    /*    Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
-    .sudokubox {
-    color: gray;
-    font-size: x-large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
-
-    .sudokubox.domain {
-    color: black;
-    font-size: x-small;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    line-height: 0;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-top: 0%;
-    padding-bottom: 0%;
-    }
-
-    /* styling for fixed numbers (original grid) */
-    .sudokubox.fixed {
-    color: black;
-    font-weight: bold;
-    }
-
-
-    /* styling for numbers determined with AC-3 */
-    .sudokubox.AC3 {
-    color: red;
-    }
-
-    .backtrack {
-    color: green;
-    }
-
-    .finalAC3 {
-    color: blue;
-    }
-
-    .backtrackPlusAC3 {
-    color: #E38B29;
-    }
-
-    .sudokubox.boxborder {
-    /* Add a border to outline the square */
-    border: solid 2px blue;
-    }
-
-    /* Selected for solver-type buttons */
-    .selectedsolver {
-    margin-left: 3px;
-    margin-right: 3px;
-    margin-bottom: 3px;
-    padding: 7px 9px 7px 9px;
-    border: 2px solid #FDEEDC;
-    outline: 1px solid #F1A661;
-    }
+tr:nth-child(6) {
+   border-bottom: solid 2px black;
+}
 
 
 
-    /* Color pallete - light to dark
-    #FDEEDC
-    #FFD8A9
-    #F1A661
-    #E38B29
-    */
+/* Default Sudoku box styling */
+/* Ok fonts: TNR, Calibri, Courier New */
+/* not ok fonts: Helvetica, Arial */
+/*    Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+:global(.sudokubox) {
+   color: gray;
+   font-size: x-large;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   width: 38px;
+   height: 38px;
+   border: 1px solid gray;
+   text-align: center;
+}
 
-    /* Control button overrides for standard button  */
-    .controlButton {
-    margin-left: 3px;
-    margin-right: 3px;
-    margin-bottom: 20px;
-    padding: 4px 4px;
-    border: 2px solid;
-    border-color: #E38B29;
-    outline: 1px solid #E38B29;
-    }
+:global(.sudokubox.domain) {
+   color: black;
+   font-size: x-small;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   line-height: 0;
+   margin-top: 0px;
+   margin-bottom: 0px;
+   padding-top: 0%;
+   padding-bottom: 0%;
+}
 
-    /* Selected buttons */
-    .selected {
-    padding: 4px 4px;
-    border: 2px solid #FDEEDC;
-    outline: 1px solid #F1A661;
-    }
+/* styling for fixed numbers (original grid) */
+:global(.sudokubox.fixed) {
+   color: black;
+   font-weight: bold;
+}
 
-    .howto {
-    padding-top: 25px;
-    max-width: 800px;
-    align-self: center;
-    text-align: left;
-    line-height: 1.5;
-    }
 
-    /* Styling for the slider needs to be done for every browser */
-    /* First remove the auto-styling */
-    input[type="range"] {
-    -webkit-appearance: none;
-    width: 80%;
-    height: 8px;
-    outline: none;
-    appearance: none;
-    border: none;
-    border-radius: 30px;
-    }
+/* styling for numbers determined with AC-3 */
+.sudokubox.AC3 {
+   color: red;
+}
 
-    input[type="range"]::-moz-focus-outer {
-    border: 0;
-    }
+.backtrack {
+   color: green;
+}
 
-    input[type="range"]:hover {
-    outline: none;
-    }
+.finalAC3 {
+   color: blue;
+}
 
-    /* Chrome */
-    input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background-color: rgb(25, 75, 45);
-    cursor: pointer;
-    border-radius: 30px;
-    /* makes it a circle */
-    outline: none;
-    }
+.backtrackPlusAC3 {
+   color: #E38B29;
+}
 
-    /* Styling the track */
-    input[type="range"]::-webkit-slider-runnable-track {
-    background: gray;
-    border: none;
-    }
+.sudokubox.boxborder {
+   /* Add a border to outline the square */
+   border: solid 2px blue;
+}
 
-    /* Firefox */
-    input[type="range"]::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    background: silver;
-    cursor: pointer;
-    border-radius: 50%;
-    /*box-shadow: 1px 1px 1px rgb(25, 75, 45), 0px 0px 1px rgb(25, 75, 45);*/
-    border: 3px solid rgb(25, 75, 45);
-    }
+/* Selected for solver-type buttons */
+.selectedsolver {
+   margin-left: 3px;
+   margin-right: 3px;
+   margin-bottom: 3px;
+   padding: 7px 9px 7px 9px;
+   border: 2px solid #FDEEDC;
+   outline: 1px solid #F1A661;
+}
 
-    input[type="range"]::-moz-range-progress {
-    background-color: rgb(25, 75, 45);
-    height: 100%;
-    border-radius: 30px;
-    border: none;
-    }
 
-    input[type="range"]::-moz-range-track {
-    background-color: #ccc;
-    border-radius: 30px;
-    border: none;
-    height: 100%;
-    }
 
-    /* IE */
-    input[type="range"]::-ms-fill-lower {
-    background-color: rgb(25, 75, 45);
-    height: 100%;
-    border-radius: 30px;
-    border: none;
-    }
+/* Color pallete - light to dark
+#FDEEDC
+#FFD8A9
+#F1A661
+#E38B29
+*/
 
-    input[type="range"]::-ms-fill-upper {
-    background-color: #ccc;
-    border-radius: 30px;
-    border: none;
-    height: 100%;
-    }
+/* Control button overrides for standard button  */
+.controlButton {
+   margin-left: 3px;
+   margin-right: 3px;
+   margin-bottom: 20px;
+   padding: 4px 4px;
+   border: 2px solid;
+   border-color: #E38B29;
+   outline: 1px solid #E38B29;
+}
 
-</style> -->
+/* Selected buttons */
+:global(.selected) {
+   padding: 4px 4px;
+   border: 2px solid #FDEEDC;
+   outline: 1px solid #F1A661;
+}
+
+.howto {
+   padding-top: 25px;
+   max-width: 800px;
+   align-self: center;
+   text-align: left;
+   line-height: 1.5;
+}
+
+/* Styling for the slider needs to be done for every browser */
+/* First remove the auto-styling */
+input[type="range"] {
+   -webkit-appearance: none;
+   width: 80%;
+   height: 8px;
+   outline: none;
+   appearance: none;
+   border: none;
+   border-radius: 30px;
+}
+
+input[type="range"]::-moz-focus-outer {
+   border: 0;
+}
+
+input[type="range"]:hover {
+   outline: none;
+}
+
+/* Chrome */
+input[type="range"]::-webkit-slider-thumb {
+   appearance: none;
+   width: 18px;
+   height: 18px;
+   background-color: rgb(25, 75, 45);
+   cursor: pointer;
+   border-radius: 30px;
+   /* makes it a circle */
+   outline: none;
+}
+
+/* Styling the track */
+input[type="range"]::-webkit-slider-runnable-track {
+   background: gray;
+   border: none;
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+   width: 18px;
+   height: 18px;
+   background: silver;
+   cursor: pointer;
+   border-radius: 50%;
+   /*box-shadow: 1px 1px 1px rgb(25, 75, 45), 0px 0px 1px rgb(25, 75, 45);*/
+   border: 3px solid rgb(25, 75, 45);
+}
+
+input[type="range"]::-moz-range-progress {
+   background-color: rgb(25, 75, 45);
+   height: 100%;
+   border-radius: 30px;
+   border: none;
+}
+
+input[type="range"]::-moz-range-track {
+   background-color: #ccc;
+   border-radius: 30px;
+   border: none;
+   height: 100%;
+}
+
+/* IE */
+input[type="range"]::-ms-fill-lower {
+   background-color: rgb(25, 75, 45);
+   height: 100%;
+   border-radius: 30px;
+   border: none;
+}
+
+input[type="range"]::-ms-fill-upper {
+   background-color: #ccc;
+   border-radius: 30px;
+   border: none;
+   height: 100%;
+}
+
+</style>
