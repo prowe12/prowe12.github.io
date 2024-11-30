@@ -1,24 +1,20 @@
-
-
-
-<nav class="bg-gray-800">
+<main class="bg-base px-4">
+<nav class="max-w-5xl mx-auto">
     <div class="mx-auto hidden sm:block">
       <div class="relative flex h-16 items-center justify-between">
 
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div class="flex shrink-0 items-center">
-                <a href="/"      class="rounded-md px-4 py-2 text-2xl font-medium text-gray-300 hover:bg-gray-700 hover:text-white" aria-current="page">Home</a>
-                <a href="/about" class="rounded-md px-4 py-2 text-2xl font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About</a>
-                <a href="/experience" class="rounded-md px-4 py-2 text-2xl font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Experience</a>
+                <a href="/" class="rounded-md py-2 text-xl pr-4 font-medium  hover:underline" aria-current="page">
+                Home</a>
             </div>
 
       </div>
  
       <!-- RHS tabs -->
       <div class="absolute inset-y-0 right-0 hidden md:flex ml-6 items-center">
-            <a href="/data" class="rounded-md px-4 py-2 text-2xl font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Data Science</a>    
-            <a href="/se" class="rounded-md px-4 py-2 text-2xl font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Software Engineering</a>
-
+        <a href="/#projects" class="rounded-md px-4 py-2 text-xl font-medium hover:underline">Projects</a>    
+        <a href="/#resume" class="rounded-md pl-4 py-2 text-xl font-medium  hover:underline">Resume</a>
         </div>
       </div>
     </div>
@@ -35,6 +31,8 @@
         </div>
     </div> -->
   </nav>
+</main>
+
 
 
 

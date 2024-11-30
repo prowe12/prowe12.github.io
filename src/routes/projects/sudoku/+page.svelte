@@ -40,6 +40,8 @@
     let originalgrid = loadStartingValues(puzzleType);
     let currentgrid = loadStartingValues(puzzleType);
 
+    // TODO: delete, for testing
+    let isLoading = true;
 
     /**
     * Populate a box of the board and move the pointer to the next box.
@@ -67,6 +69,8 @@
     
     
     onMount(async () => {
+
+
         // Load and execute the JavaScript files in order
         // await import('./boardPlot.js');
         // await import('./getUnassignedVariable.js');
@@ -650,14 +654,7 @@
             }
         }
 
-        makeEmptyGrid(9, 9);
-        populateBoard(originalgrid);
-
-        // Reset the state of play and the board
-        playReset();
-        boardReset(puzzleType);
-        moves = runBacktrackSolver(puzzleType);
-
+        
 
         /**
          * Repopulate the board back the given location (movement number)
@@ -693,6 +690,17 @@
             return newgrid;
         };
 
+        try {
+            makeEmptyGrid(9, 9);
+            populateBoard(grid);
+            isLoading = false;
+            playReset();
+            boardReset(puzzleType);
+            moves = runBacktrackSolver(puzzleType);
+        } catch (error) {
+            console.error('Error during grid setup:', error);
+        }
+
     });
 
 
@@ -712,14 +720,14 @@
         <h1 class="text-4xl flex justify-center mb-2">Sudoku Solver</h1>
     </div>
 
-    <div>
-        <div class="mx-auto max-w-4xl px-6 py-4 mb-10 prose">
-            Under construction. Some features are not yet implemented. For fully functional code please see my
-            <a href="https://github.com/prowe12/game-solvers/tree/main/sudoku">Python Sudoku Solver</a>
-            and <a href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku" >Javascript & CSS Sudoku Solver</a>.
-        </div>
+    <div class="mx-auto max-w-4xl px-6 py-4 mb-10 prose">
+        Under construction. Some features are not yet implemented. For fully functional code please see my
+        <a href="https://github.com/prowe12/game-solvers/tree/main/sudoku">Python Sudoku Solver</a>
+        and <a href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku" >Javascript & CSS Sudoku Solver</a>.
+    </div>
 
-    <div id="grid-container-puzzle">
+    <div class="max-w-8xl flex justify-center">
+        <div id="grid-container-puzzle">
 
         <!-- Row 1, column 1 -->
         <div>
@@ -766,7 +774,24 @@
         <!-- Row 1, column 2 -->
         <div>
             <!-- Print the Sudoku board to the screen -->
-            <table id="sudokuGraphic"> </table>
+            <!-- <div class="flex justify-center px-8 mx-8 mb-20">
+                <div class="px-4 mx-4 max-w-3xl text-xl">
+                    <p class="mb-4">Loading...</p>
+                </div>
+            </div> -->
+        
+            <table id="sudokuGraphic"></table>
+
+            <div>
+                {#if isLoading}
+                    <div class="flex justify-center items-center w-[380px] h-[356px] bg-gray-200">
+                        <p>Loading puzzle ...</p>
+                    </div>
+                {:else}
+                    <table id="sudokuGraphic"></table>
+                {/if}
+            </div>
+
 
             <!-- Put the fieldset in a div so we can center it -->
             <div id="sudokuControls">
