@@ -50,9 +50,6 @@
         </div>
     </section>
 
-    <!-- Whether in Antarctica or the Pacific Northwest, Penny applies her skills in full stack engineering, programming, and math to website development and data-driven analysis. -->
-
-
     <section class="flex flex-col items-center mx-auto max-w-5xl" id="projects">
         <div>
             <div class="mx-auto max-w-4xl flex flex-col px-6 py-10 mt-6">
@@ -202,8 +199,7 @@
         -->
     </section>
 
-    <section class="flex flex-col justify-center mx-auto max-w-5xl" id="penguin">
-
+    <section class="flex flex-col items-center mx-auto max-w-5xl" id="penguin">
         <div class="mx-auto max-w-4xl flex flex-col px-6 pt-20 pb-4 mt-6">
             <h2 class="text-4xl flex justify-center mb-2 font-serif">
                 Survey Analysis
@@ -222,7 +218,7 @@
             </p>
         </div>
 
-        <div class="m-10 flex flex-col items-center">
+        <div class="m-10 flex flex-col">
             <div class="w-full max-w-lg">
                 <img src="pictures/linear_regression_survey_question.png"
                     alt="Plot of correct and incorrect responses to statistics module survey question" 
@@ -234,24 +230,24 @@
             </div>
         </div>
 
-        <div class="flex flex-col justify-center items-center">
+        <div class="flex flex-col justify-center">
             <div>
                 <div class="flex-1 text-center py-4">
                     <p class="px-10 py-2 text-xl font-bold">Check out the modules:</p>
-                    <div class="p-1">
+                    <div class="py-1">
                         <a href="https://serc.carleton.edu/penguin/index.html" class="rounded-md px-10 py-2 text-xl hover:underline">PENGUIN Modules</a>
                     </div>
-                    <div class="p-1">
+                    <div class="py-1">
                         <a href="https://www.kaggle.com/code/pennyrowe/penguin/notebook" class="rounded-md px-10 py-2 text-xl hover:underline">Jupyter Notebooks</a>
                     </div>
-                    <div class="p-1">
-                        <a href="https://penguin-19615f.gitlab.io/" class="rounded-md px-10 py-2 text-xl hover:underline">PENGUIN modules for High School</a>
+                    <div class="py-1">
+                        <a href="https://penguin-19615f.gitlab.io/" class="rounded-md py-2 text-xl hover:underline">PENGUIN modules for High School</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="m-10 flex flex-col items-center">
+        <div class="m-10 flex flex-col">
             <div class="w-full max-w-lg">
                 <img src="pictures/infrared_spectra.png"
                     alt="Plot of infrared downwelling radiance spectra for Oklahoma summer and Polar winter" 
@@ -267,7 +263,7 @@
     <section class="flex flex-col items-center mx-auto max-w-5xl" id="bayesian">
         <div class="prose mt-4">
             <div class="mx-auto flex flex-col px-6 pt-4">
-                <h2 class="text-4xl flex justify-center mb-2 font-serif">Bayesian Statistics</h2>
+                <h2 class="text-4xl flex text-center justify-center mb-2 font-serif">Bayesian Statistics</h2>
                 <hr class="h-[2px] w-20 mx-auto bg-firebrick border-0">
             </div>
         </div>
@@ -322,15 +318,17 @@
         </div>     -->
     </section>
 
-    <section class="flex justify-center p-10 m-10" id="indexOfRefraction">
-        <div class="prose px-10 mx-40 mt-4">
+    <section class="flex flex-col items-center mx-auto max-w-5xl" id="indexOfRefraction">
 
 
-            <div class="mx-auto max-w-4xl flex flex-col px-6 pt-4">
-                <h2 class="text-4xl flex justify-center mb-2 font-serif">Data Fusion</h2>
-                <hr class="h-[2px] w-20 mx-auto bg-firebrick border-0">
-            </div>
-
+        <div class="mx-auto max-w-4xl flex flex-col px-6 pt-20 pb-4 mt-6">
+            <h2 class="text-4xl flex justify-center mb-2 font-serif">
+                Data Fusion
+            </h2>
+            <hr class="h-[2px] w-20 mx-auto bg-firebrick border-0">
+        </div>
+        
+        <div class="prose mt-4">
             <div>
                 <h3>Index of Refraction</h3>
                 <p>Radiative transfer calculations of supercooled liquid cloud
@@ -360,24 +358,25 @@
             </div>
         </div>
 
-        <div class="flex gap-10 mt-4">
+        <div class="flex flex-col md:flex-row gap-10 mt-4">
             <div class="flex flex-1 flex-col items-start">
                 <h2 class="text-2xl mb-4">Black Carbon</h2>
-                <p class="mr-8 mb-4">Black carbon is an anthropogenic pollutant that decreases the albedo of ice and snow, leading to increased melting in a positive feedback loop. In the Chilean Andes, black carbon on glaciers enhances the melt rate. Because glacier melt is an important source of water for households, agriculture, and energy, understanding the timing of melt as well as glacier loss is an important topic. Snow samples from the Chilean Andes, in the Antarctic, and on Mt. Rainier were used to quantify light absorption by impurities.</p>
-                <p class="mr-8 mb-4">The resulting point measurements were extrapolated over the broader region, requiring estimates of the snow area and location-dependent average insolation and cloud cover.</p>
-                <p class="mr-8 mb-4">
+                <p class="mr-8 mb-4"> Black carbon is an anthropogenic pollutant that decreases the albedo of ice and snow, leading to increased melting in a positive feedback loop. In the Chilean Andes, black carbon on glaciers enhances the melt rate. Because glacier melt is an important source of water for households, agriculture, and energy, understanding the timing of melt as well as glacier loss is an important topic. Snow samples from the Chilean Andes, in the Antarctic, and on Mt. Rainier were used to quantify light absorption by impurities.
+                </p>
+                <p class="sm:mr-8 mb-4">The resulting point measurements were extrapolated over the broader region, requiring estimates of the snow area and location-dependent average insolation and cloud cover.
+                </p>
+                <p>
                     Snow sampling involved first digging a snow pit and then collecting 
                     samples successively deeper, as shown to the right.
                 </p>
+
             </div>
 
-            <div class="flex flex-1">
-                <img class="w-full h-full object-center border rounded-xl shadow-2xl" src="pictures/black-carbon-2016-antartic-research-group_-_5_square-scaled2.jpg" 
+            <div class="flex flex-1 items-start justify-center">
+                <img class="w-full h-auto object-center border rounded-xl shadow-2xl" src="pictures/black-carbon-2016-antartic-research-group_-_5_square-scaled2.jpg" 
                 alt="Snow sampling."/>
             </div>
-
         </div>
-
     </section>
 
     <div class="pb-20">

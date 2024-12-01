@@ -6,7 +6,7 @@ export const cardItems = [
         imageAlt: "Pyranometer operating at Escudero Station, Antarctica",
         url: "#timeSeries",
         label: "See more",
-        tags: ["ds"],
+        tags: ["datascience","Python"],
     },
     {
         title: "Bayesian statistics",
@@ -15,7 +15,7 @@ export const cardItems = [
         imageAlt: "Plot of 2D probability distribution P(x,y), together with P(x), P(y), and P(y|x)",
         url: "#bayesian",
         label: "See more",
-        tags: ["ds"],
+        tags: ["datascience","Python"],
     },
     {
         title: "Survey Analysis",
@@ -24,7 +24,7 @@ export const cardItems = [
         imageAlt: "Correct and incorrect responses to statistics module survey question",
         url: "#penguin",
         label: "See more",
-        tags: ["ds"],
+        tags: ["datascience","Python"],
     },
     {
         title: "Data Fusion",
@@ -34,7 +34,7 @@ export const cardItems = [
         imageAlt: "Imaginary part of complex refractive index of liquid water at 240 K",
         url: "#indexOfRefraction",
         label: "See more",
-        tags: ["ds"],
+        tags: ["datascience", "Python"],
     },
     {   
         title: "Data Extrapolation",
@@ -43,16 +43,16 @@ export const cardItems = [
         imageAlt: "Image of snow sampling",
         url: "#blackcarbon",
         label: "See more",
-        tags: ["ds"],
+        tags: ["datascience", "Python"],
     },
     {   
         title:"Constraint Satisfaction",
-        description:"A Sudoku Solver that uses backtracking and AC3 to solve sudoku puzzles. ",
+        description:"A Sudoku Solver that uses backtracking and AC3 to solve sudoku puzzles.",
         image: "/pictures/sudoku_original_crop.jpg",
         imageAlt: "Sudoku puzzle",
         url: "/sudoku",
         label: "View site",
-        tags: ["se", "ds"],
+        tags: ["se", "datascience","Svelte","Tailwind","Typescript","frontend"],
     },
     {   title:"Cambio",
         description:"A simple climate change model that plots the results of different emissions scenarios.",
@@ -60,7 +60,7 @@ export const cardItems = [
         imageAlt: "Cambio Webapp dashboard where users select inputs and plot outputs.",
         url: "https://cambio.fly.dev",
         label: "View site",
-        tags: ["se"],
+        tags: ["se","Django","Docker","frontend","backend"],
     },
     {   title:"Penny Rowe's website",
         description:"Personal website for data science and software engineering.",
@@ -68,7 +68,7 @@ export const cardItems = [
         imageAlt: "View of this website.",
         url: "https://prowe12.github.io",
         label: "View site",
-        tags: ["se"],
+        tags: ["se","Svelte","Tailwind","Typescript","frontend"],
     },
 ];
     

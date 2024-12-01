@@ -16,13 +16,13 @@
     }
 </script>
 
-<div class="flex flex-row my-4 gap-10 border-2 border-gray-300 p-4 rounded-xl bg-white">
-    <div class="w-1/4">
+<div class="flex flex-col sm:flex-row my-4 sm:gap-10 border-2 border-gray-300 p-4 rounded-xl bg-white">
+    <div class="sm:w-1/4">
         <img src={image} alt={imageAlt} class="w-[300px] rounded-lg">
     </div>
-    <div class="w-3/4 pr-20">
+    <div class="sm:w-3/4 sm:pr-20">
         <h3 class='font-bold text-2xl my-4'>{title}</h3>
-        <p class='mb-2 text-xl'>{description}</p>
+        <p class='mb-2 text-xl hidden sm:block'>{description}</p>
         <a href={url} class="underline text-xl pb-10">{label}</a>
     </div>
 </div>
