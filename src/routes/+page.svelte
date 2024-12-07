@@ -37,7 +37,7 @@
 
 <main class="bg-base px-8">
     <section class="flex flex-col items-center mx-auto max-w-5xl" id="hero">
-        <div class="flex flex-col sm:flex-row gap-1 my-20">
+        <div class="flex flex-col sm:flex-row gap-1 mt-8 sm:mt-20 mb-20">
             <div class="flex flex-1 flex-col items-start justify-end">
                 <h1 class="text-[5.5rem] mb-2 font-serif leading-none">Penny Rowe</h1>
                 <h2 class="text-2xl mb-4">Software Engineer & Data Scientist</h2>
@@ -105,7 +105,7 @@
         </div>
     </section>
  
-    <section class="flex flex-col items-center mx-auto max-w-5xl" id="publications">
+    <section class="flex flex-col items-center mx-auto max-w-5xl pb-16" id="publications">
         
         <div class="mx-auto flex flex-col pt-4 pb-6">
             <h2 class="text-4xl flex justify-center mb-2 font-serif">Publications</h2>
@@ -146,8 +146,8 @@
         {/if}
     </section>
 
-    <section class="flex flex-col items-center mx-auto max-w-5xl" id="timeSeries">
-        <div class="prose mt-4">
+    <section class="flex flex-col items-center mx-auto max-w-5xl py-14" id="timeSeries">
+        <div class="mb-8">
             <div class="mx-auto flex flex-col px-6 pt-4">
                 <h2 class="text-4xl flex justify-center mb-2 font-serif">Time Series</h2>
                 <hr class="h-[2px] w-20 mx-auto bg-firebrick border-0">
@@ -156,7 +156,7 @@
 
         <div class="flex flex-col md:flex-row gap-8 mt-4">
             <div class="flex flex-1 flex-col items-start">
-                <h2 class="text-2xl mb-4">Radiation: Model Validation</h2>
+                <h3 class="text-2xl mb-4">Radiation: Model Validation</h3>
                 <p class="mb-4">The energy we receive from the sun, or <span class="italic">shortwave radiation</span>, depends on a lot of factors, including latitude, time of day, time of year, and how reflective the surface is. We also receive <span class="italic">longwave radiation</span> through the greenhouse effect. Clouds complicated the picture - they reflect shortwave radiation but trap longwave radiation.</p>
                 <!-- <p class="mr-8 mb-4">The amount of radiation that makes it to the surface therefore depends on a huge set of variables, some of which are fixed like location, date, and time, and some of which vary, like cloudiness and how reflective the surface is. 
                 </p> -->
@@ -214,15 +214,15 @@
         </div> -->
 
         <div>
-            <p class="text-center">Polar ENgagement through GUided INquiry (PENGUIN) is an NSF-funded project to develop modules that teach polar research to undergraduate students in a variety of courses. In this project students were surveyed before and after completing the module. The surveys were analyzed to measure changes in students self-assessment of knowledge gains and determine whether they made quantitative knowledge gains.
+            <p class="m-10">Polar ENgagement through GUided INquiry (PENGUIN) is an NSF-funded project to develop modules that teach polar research to undergraduate students in a variety of courses. In this project students were surveyed before and after completing the module. The surveys were analyzed to measure changes in students self-assessment of knowledge gains and determine whether they made quantitative knowledge gains.
             </p>
         </div>
 
-        <div class="m-10 flex flex-col">
+        <div class="flex flex-col max-w-lg">
             <div class="w-full max-w-lg">
                 <img src="pictures/linear_regression_survey_question.png"
                     alt="Plot of correct and incorrect responses to statistics module survey question" 
-                    class="w-full border rounded-xl"
+                    class="w-full border rounded-xl shadow-2xl"
                 >
                 <p class="mt-2">
                     Example of aggregated student responses to a survey question for students in statistics classes before and after taking the module (dark blue and gray in top and bottom panels), as well as for statistics students who did not work through the modules (light blue and gray in top and bottom panels). Blue indicates the correct response while gray indicates incorrect responses.
@@ -247,11 +247,12 @@
             </div>
         </div>
 
+        <!-- w-full max-w-[500px] object-contain border rounded-xl shadow-2xl" -->
         <div class="m-10 flex flex-col">
             <div class="w-full max-w-lg">
                 <img src="pictures/infrared_spectra.png"
                     alt="Plot of infrared downwelling radiance spectra for Oklahoma summer and Polar winter" 
-                    class="w-full border rounded-xl"
+                    class="w-full border rounded-xl shadow-2xl"
                 >
                 <p class="mt-2">
                     A figure from a PENGUIN module taught in Quantum Mechanics. Students examine rotational vibrational transitions in spectra and plot the greenhouse effect.
@@ -270,22 +271,18 @@
 
         <div class="flex flex-col md:flex-row gap-10 mt-4">
             <div class="flex flex-1 flex-col items-start">
-                <h2 class="text-2xl mb-4">Cloud Property Retrievals</h2>
+                <h3 class="text-2xl mb-4">Cloud Property Retrievals</h3>
                 <p class="mr-8 mb-4"> An iterative form of the Levenberg-Marquardt algorithm in a Bayesian framework is used to retrieve cloud
                 properties from measured downwelling infrared radiation.
                 </p>
                 <p>
                     The figure to the right illustrates the path of a retrieval on the contour surface starting from an initial guess for several iterations. The retrieved variables are effective radius (re), related to ice crystal size, and optical depth, related to how well the crystals transmit light. The retrieval converges at the minimium.
                 </p>
-
             </div>
-
             <div class="flex flex-1 items-start justify-center">
                 <img class="w-full h-auto object-contain border rounded-xl shadow-2xl" src="pictures/clarra.jpg" 
                 alt="Retrieval of effective radius and optical depth using optimal estimation."/>
             </div>
-
-
         </div>
 
         <!-- <p class="mr-8 mb-4">Algorithms such as optimal estimation for retrieving cloud properties are sensitive to instrumental
@@ -319,8 +316,6 @@
     </section>
 
     <section class="flex flex-col items-center mx-auto max-w-5xl" id="indexOfRefraction">
-
-
         <div class="mx-auto max-w-4xl flex flex-col px-6 pt-20 pb-4 mt-6">
             <h2 class="text-4xl flex justify-center mb-2 font-serif">
                 Data Fusion
@@ -328,9 +323,10 @@
             <hr class="h-[2px] w-20 mx-auto bg-firebrick border-0">
         </div>
         
-        <div class="prose mt-4">
+        <div class="max-w-xl">
+        <!-- <div class="prose mt-4"> -->
             <div>
-                <h3>Index of Refraction</h3>
+                <h3 class="text-2xl mb-4">Index of Refraction</h3>
                 <p>Radiative transfer calculations of supercooled liquid cloud
                     absorption and emission of infrared radiation relies on incorporating the temperature
                     dependence of the 
@@ -338,7 +334,7 @@
                         complex refractive indices of supercooled water</a>.
     
                     <div>
-                        <img src="pictures/fig5_k_RFN240K.jpg" alt="Imaginary part of complex refractive index of liquid water at 240 K" style="width:90%">
+                        <img src="pictures/fig5_k_RFN240K.jpg" alt="Imaginary part of complex refractive index of liquid water at 240 K" style="width:90%" class="border rounded-xl shadow-2xl">
                     </div>
                     <div>
                         <p>The figure shows the imaginary part of the complex-valued index of refraction of liquid water,
