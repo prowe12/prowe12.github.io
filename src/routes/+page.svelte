@@ -30,7 +30,7 @@
 
 <svelte:head>
     <meta charset="utf-8" />
-    <title>Rowe Home Page</title>
+    <title>Penny Rowe</title>
 </svelte:head>
 
 <NavBar />
