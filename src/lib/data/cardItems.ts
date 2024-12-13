@@ -48,7 +48,7 @@ export const cardItems = [
     {   
         title:"Constraint Satisfaction",
         description:"A Sudoku Solver that uses backtracking and AC3 to solve sudoku puzzles.",
-        image: "/pictures/sudoku_original_crop.jpg",
+        image: "/pictures/sudoku_looping_crop.gif",
         imageAlt: "Sudoku puzzle",
         url: "/sudoku",
         label: "View site",
