@@ -1,6 +1,5 @@
 <script lang='ts'>
     import {onMount} from 'svelte';
-    // import { makeEmptyGrid } from './sudoku.js'
     import { loadStartingValues } from './sudoku.js'
     import { boardReset} from './sudoku.js'
     import { toggle} from './sudoku.js'
@@ -8,10 +7,7 @@
     import { showdomain } from './sudoku.js'
     import { clearDomainFromTable } from './sudoku.js'
     import { solve } from './solver.js'
-    // import { runBacktrackSolver} from './sudoku.js'
-
     import { backtracker } from './backtrack.js'
- 
     import { updateGridFromMoves } from './sudoku.js'
     import { stepSizeForRewind } from './sudoku.js'
     import { boxborder } from './sudoku.js'
@@ -79,21 +75,6 @@
     
     
     onMount(async () => {
-
-
-        // Load and execute the JavaScript files in order
-        // await import('./boardPlot.js');
-        // await import('./getUnassignedVariable.js');
-        // await import('./variable.js');
-        // await import('./constraints.js');
-        // await import('./backtrack.js');
-        // await import('./solver.js');
-        // await import('./sudoku.js'); // Calls code in solver.js
-        
-        // Use the imported function
-
-        // makeEmptyGrid(9,9);
-        // populateBoard(grid);
 
         // Global variables
         let puzzleType = (document.getElementById("dropdownpuzzle") as HTMLSelectElement)?.value || 'easy';        
@@ -327,7 +308,6 @@
             playOrRewind = depopulator;
         });
         
-
         // Event listener for the forward to end button >>|
         forwardToEndButton.addEventListener("click", async function () {
 
@@ -434,7 +414,6 @@
             return moves
         }
 
-
         // Event listener for the rewind to beginning button |<<
         rewindToBegButton.addEventListener("click", async function () {
             // Unlight all buttons and highlight the button of interest
@@ -498,7 +477,7 @@
             // Highlight or unhighlight the button
             if (button.value === "ON") {
                 showDomainButton.classList.add("selected");
-                let msg = "<p>Showing the domain of each square.</p><p>The domain consists of all the numbers 0-9 that are not already present in the same row, column, or 3x3 square." + methodSpecificMsgsForDomain[method]
+                let msg = "<p>Showing the domain of each cell.</p><p>The domain consists of all the numbers 0-9 that are not already present in the same row, column, or 3x3 box." + methodSpecificMsgsForDomain[method]
 
                 state.innerHTML = msg;
                 explanation.innerHTML = "<p></p>";
@@ -506,7 +485,7 @@
             }
             else {
                 showDomainButton.classList.remove("selected");
-                state.innerHTML = "<p>Removed the domain for each square.</p>"
+                state.innerHTML = "<p>Removed the domain for each cell.</p>"
                 explanation.innerHTML = "<p></p>";
                 clearDomainFromTable(currentgrid);
             }
@@ -653,8 +632,6 @@
             }
         }
 
-        
-
         /**
          * Repopulate the board back the given location (movement number)
          * 
@@ -688,7 +665,6 @@
 
             return newgrid;
         };
-
 
         /**
          * Set up the empty grid
@@ -735,11 +711,11 @@
 </svelte:head>
 
 
-<main>
+<main class="flex flex-col bg-[#FDEEDC] text-left text-lg">
     <div class="mx-auto max-w-4xl flex flex-col px-6 py-4 mt-6">
     <h1 class="text-4xl flex justify-center mb-2">Sudoku Solver</h1>
 
-    <div class="mx-auto max-w-4xl px-6 py-4 mb-10 prose">
+    <div class="mx-auto max-w-4xl px-6 py-4 mb-10">
         Under construction. Some features are not yet implemented. For fully functional code please see my
         <a href="https://github.com/prowe12/game-solvers/tree/main/sudoku">Python Sudoku Solver</a>
         and <a href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku" >Javascript & CSS Sudoku Solver</a>.
@@ -750,27 +726,23 @@
         <div id="grid-container-puzzle">
 
             <!-- Row 1, column 1 -->
-            <div>
-                <fieldset id="selections">
+            <div class="flex flex-col">
+                <fieldset id="selections" class="mb-10 bg-white">
                     <legend>Selections</legend>
 
                     <!-- Choose a puzzle from a drop-down list -->
-                    Choose Puzzle<br>
-                    <select name="puzzle" id="dropdownpuzzle" class="button">
+                    <p>Choose Puzzle</p>
+                    <select name="puzzle" id="dropdownpuzzle" class="button pb-80">
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
                         <option value="hard">Hard</option>
                         <option value="evil">Evil</option>
                         <option value="random">Random</option>
                     </select>
-                    <br>
-                    <br>
 
-                    Choose Solver <br>
-                    <button name="solverDemoBacktrack" id="solverDemoBacktrack" class="button">Backtracking</button>
-                    <br>
-                    <button name="playSudokuSolver" id="playSudokuSolver" class="button">AC-3 and Backtracking</button>
-                    <br>
+                    <p class="mt-4">Choose Solver</p>
+                    <p><button name="solverDemoBacktrack" id="solverDemoBacktrack" class="button">Backtracking</button></p>
+                    <p><button name="playSudokuSolver" id="playSudokuSolver" class="button">AC-3 and Backtracking</button></p>
 
                     <!-- Add later  -->
                     <!-- Read in your own Sudoku file  -->
@@ -780,8 +752,11 @@
 
                 </fieldset>
 
-                <br> <br>
-                <div class="colorkeybox">
+                <!-- background-color: white;
+                padding: 10px;
+                width: 60%;
+                margin: 0 auto; -->
+                <div class="bg-white p-2 w-3/5 mx-auto">
                     <h2>Key for colors</h2>
                     <p class="backtrack">Backtracking</p>
                     <p class="finalAC3">AC-3, solved</p>
@@ -800,7 +775,7 @@
                 </div> -->
             
 
-                <table id="sudokuGraphic">
+                <table id="sudokuGraphic"    class="ml-auto mr-auto">
                     <tbody>
                         {#each grid as row}
                             <tr>
@@ -812,9 +787,8 @@
                     </tbody>
                 </table>
 
-                <!-- Put the fieldset in a div so we can center it -->
-                <div id="sudokuControls">
-                    <fieldset id="controls">
+                <div id="sudokuControls" class="pt-4">
+                    <fieldset id="controls" class="bg-white">
                         <legend>Controls</legend>
 
                         <!-- Play Controls -->
@@ -826,17 +800,18 @@
 
                         <!-- Slider for controlling the speed of playback -->
                         <!-- Speed <input class="slider anim-speed" type=range min=0 max=300 value=20></input> -->
-                        <label for="speed">Speed</label>
+
+                        <!-- display: inline-block;
+                        width: 150px; -->
+
+                        <label for="speed" class="inline-block w-36">Speed</label>
                         <input id="speed" class="slider anim-speed" type="range" min="0" max="300" bind:value={speed}>
                         
-                        <p>Current speed: {speed}</p>
-                        <br>
-                        <br>
+                        <p class="mb-4">Current speed: {speed}</p>
                         <!-- Button to show the domain of each square -->
                         <button type="button" id="showDomainButton" class="button controlButton" value="OFF">
                             Show the domain
                         </button>
-                        &nbsp; &nbsp;
                         <button type="button" id="step" class="button controlButton">Step</button>
                         <button type="button" id="stepBack" class="button controlButton">Undo</button>
                     </fieldset>
@@ -852,112 +827,54 @@
         </div>
     </div>
 
-    <div class="howto">
-        <h1>How to Play</h1>
-        <p>A Sudoku board is made up of a 9x9 grid of 81 boxes. The grid includes 9 subgrids
-            of size 3x3.
-        <p>The board starts with preset or "fixed" numbers
-            that cannot be changed. The player's task is to solve the puzzle by filling in the
-            remaining boxes.</p>
-        <p>The puzzle is solved when each of the 81 boxes contain an integer
-            between 1 and 9, and all of the integers 1-9 appear in every row, column, and
-            3x3 subgrid of the board. </p>
+    <div class="pt-4">
+        <h2 class="font-bold text-center">How to Play</h2>
+        <p class="pb-4">A Sudoku board is made up of a 9x9 grid of 81 cells. The grid includes 9 boxes of size 3x3.
+        <p class="pb-4">The board starts with preset or "fixed" numbers that cannot be changed. The player's task is to solve the puzzle by filling in the remaining boxes.</p>
+        <p class="pb-4">The puzzle is solved when each of the 81 cells contain an integer between 1 and 9, and all of the integers 1-9 appear in every row, column, and 3x3 box of the board. </p>
     </div>
 
-    <div class="howto">
-        <h1>How the Solver Works</h1>
-        <p>Sudoku is a type of Constraint Satisfaction Problem, or
-            <a href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">CSP</a>.
-            The solver uses the Arc Consistency Algorithm #3 (
-            <a href="https://en.wikipedia.org/wiki/AC-3_algorithm">AC-3</a>), and
-            <a href="https://simple.wikipedia.org/wiki/Backtracking">backtracking</a> with the
-            Minimum Remaining Values and degree heuristics.
+    <div class="pt-4">
+        <h2 class="font-bold text-center">How the Solver Works</h2>
+        <p>Sudoku is a type of Constraint Satisfaction Problem, or <a href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">CSP</a>. The solver uses the Arc Consistency Algorithm #3 (<a href="https://en.wikipedia.org/wiki/AC-3_algorithm">AC-3</a>), and <a href="https://simple.wikipedia.org/wiki/Backtracking">backtracking</a> with the Minimum Remaining Values and degree heuristics.
         </p>
     </div>
 
-    <div class="row">
-        <div class="col1">
-            <center>
-                <h3>AC-3</h3>
-            </center>
-            <p>To use AC-3, first every box of the cell is given a domain of possible integers 1-9,
-                with the exception of the boxes with fixed starting values. For fixed boxes, the domain
-                consists of the fixed value.</p>
-
-            <p>Next, a list of constraints is created for each
-                box. For example, the box at (row, column) = (1,1) must not have the same value
-                as any box in its row (e.g. the boxes at (1,1), (1,2), ... (1,9)), any box in its
-                column (i.e. (2,1), (3,1), ... (9,1)), or any box in its subgrid (i.e. (1,2), (1,3), (2,1), (2,2),
-                (2,3)
-                (3,1), (3,2), (3,3)). Leaving out repeats, these represent the 20 constraints for box (1,1).</p>
-
-            <p>AC-3 progresses by going through the list of constraints one by one. For each box x<sub>i</sub> and
-                constraining box x<sub>j</sub>, if there is a single value in the domain of x<sub>j</sub>, that
-                value is
-                removed from the domain of x<sub>i</sub>. If this causes the domain of x<sub>i</sub> to contain only
-                a
-                single value, then a new set of "reverse
-                constraints" is added to the list of constraints, to be worked through. For the reverse constraints,
-                the box that was previously x<sub>i</sub> becomes the constraining box x<sub>j</sub> for all the
-                boxes
-                that share its row,
-                column, and subgrid.</p>
-
-            <p>After all the constraints have been worked through, the puzzle may not be completely solved. Thus
-                AC-3 is not necessarily sufficient to find a solution, if one exists. In this case, another method
-                is
-                needed.</p>
+    <div class="flex flex-row gap-8 mt-8">
+        <div class="flex-1">
+            <h2 class="font-bold text-center">AC-3</h2>
+            <p class="pb-4">To use AC-3, first every cell is given a domain of possible integers 1-9, with the exception of the cells with fixed starting values. For fixed cells, the domain consists of the fixed value.</p>
+            <p class="pb-4">Next, a list of constraints is created for each cell. For example, the cell at (row, column) = (1,1) must not have the same value as any cell in its row (e.g. the cells at (1,1), (1,2), ... (1,9)), any cell in its column (i.e. (2,1), (3,1), ... (9,1)), or any cell in its box (i.e. (1,2), (1,3), (2,1), (2,2), (2,3),(3,1), (3,2), (3,3)). Leaving out repeats, these represent the 20 constraints for cell (1,1).</p>
+            <p class="pb-4">AC-3 progresses by going through the list of constraints one by one. For each cell x<sub>i</sub> and constraining box x<sub>j</sub>, if there is a single value in the domain of x<sub>j</sub>, that value is removed from the domain of x<sub>i</sub>. If this causes the domain of x<sub>i</sub> to contain only a single value, then a new set of "reverse constraints" is added to the list of constraints, to be worked through. For the reverse constraints, the box that was previously x<sub>i</sub> becomes the constraining cell x<sub>j</sub> for all the boxes that share its row, column, and subgrid.</p>
+            <p class="pb-4">After all the constraints have been worked through, the puzzle may not be completely solved. Thus AC-3 is not necessarily sufficient to find a solution, if one exists. In this case, another method is needed.</p>
         </div>
 
-        <div class="col1">
-            <center>
-                <h3>Backtracking</h3>
-            </center>
-            <p>Backtracking uses a trial-and-error approach to solve the puzzle. For an empty Sudoku box,
-                a value is selected from the domain of allowable values. These can be chosen randomly, in order, or
-                using a heuristic as described below.
-
-            <p>The guess value is placed in the box and used to constrain the boxes that share the row, column, and
-                subgrid. The process is repeated for another empty Sudoku box, new constraints are accounted for, and so
-                on.</p>
-
-            <p>This continues until either the puzzle is solved, or a box is found to have no allowable value
-                (because all values 1-9 are already present in the row, column,
-                and subgrid).</p>
-            <p> If there is no allowable value, the algorithm "backtracks" to the last box that had multiple values
-                in its domain, emptying boxes as it backs up. A different value from the domain is tried, and the
-                algorithm proceeds forward again for as long as it can. Because of the need to undo changes when the
-                algorithm backtracks, recursion is generally used.</p>
-
-            <p>Backtracking can be used alone or with another method like AC-3. For example, if AC-3 gets stuck,
-                backtracking can take over. Unlike AC-3, backtracking can almost always solve a Sudoku puzzle if it is
-                solveable.
+        <div class="flex-1">
+            <h2 class="font-bold text-center">Backtracking</h2>
+            <p class="pb-4">Backtracking uses a trial-and-error approach to solve the puzzle. For an empty cell, a value is selected from the domain of allowable values. These can be chosen randomly, in order, or using a heuristic as described below.
+            <p class="pb-4">The guess value is placed in the cell and used to constrain the cells that share the row, column, and 3x3 box. The process is repeated for another empty cell, new constraints are accounted for, and so on.</p>
+            <p class="pb-4">This continues until either the puzzle is solved, or a cell is found to have no allowable value (because all values 1-9 are already present in the row, column, and subgrid).</p>
+            <p class="pb-4">If there is no allowable value, the algorithm "backtracks" to the last cell that had multiple values in its domain, emptying cells as it backs up. A different value from the domain is tried, and the algorithm proceeds forward again for as long as it can. Because of the need to undo changes when the algorithm backtracks, recursion is generally used.</p>
+            <p class="pb-4">Backtracking can be used alone or with another method like AC-3. For example, if AC-3 gets stuck, backtracking can take over. Unlike AC-3, backtracking can almost always solve a Sudoku puzzle if it is solveable.
             </p>
         </div>
     </div>
 
-    <div class="howto">
-        <center>
-            <h3>Heuristic</h3>
-        </center>
-        <p>To speed up the solver, a heuristic can be used. A <a href="https://en.wikipedia.org/wiki/Heuristic">
-            heuristic</a> is a problem-solving technique "that is not guaranteed to be optimal, perfect, or
-            rational, but is nevertheless sufficient for reaching an immediate, short-term goal or approximation".
-            Useful heuristics for Sudoku include:
+    <div class="pt-4">
+        <h2 class="font-bold text-center">Heuristic</h2>
+        <p class="pb-4">To speed up the solver, a heuristic can be used. A <a href="https://en.wikipedia.org/wiki/Heuristic">
+        heuristic</a> is a problem-solving technique "that is not guaranteed to be optimal, perfect, or rational, but is nevertheless sufficient for reaching an immediate, short-term goal or approximation". Useful heuristics for Sudoku are as follows.
         </p>
-        <p>The Minimum Remaining Values (MRV) heuristic speeds up the sover by choosing the next box to solve by
-            identifying the box with the shortest list of allowable values.
+        <p class="pb-4">The Minimum Remaining Values (MRV) heuristic speeds up the sover by choosing the next box to solve by identifying the box with the shortest list of allowable values.
         </p>
-        <p> The degree heuristic speeds up the solver by choosing the value involved in the largest number of
-            constraints with remaining unassigned values.
+        <p class="pb-4">The degree heuristic speeds up the solver by choosing the value involved in the largest number of constraints with remaining unassigned values.
         </p>
-
     </div>
 </main>
 
 <style global>
 
-    main {
+    /* main {
         display: flex;
         flex-direction: column;
         background-color: #FDEEDC;
@@ -965,344 +882,286 @@
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 14;
         min-height: 100vh;
-    }
+    } */
 
-    label {
-        display: inline-block;
-        width: 150px;
-    }
-
-    h1 {
-    text-align: center;
-    }
-
-    /* Links that are play buttons  */
     .button {
-    display: inline-block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    background-image: none;
-    border: 1px solid transparent;
-    padding: 6px 10px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    border-radius: 4px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: white;
-    background-color: #E38B29;
-    border-color: #E38B29;
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        border: 1px solid transparent;
+        padding: 6px 10px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        border-radius: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        color: white;
+        background-color: #E38B29;
+        border-color: #E38B29;
     }
-
 
     .button:disabled {
-    color: #fff;
-    background-color: #E38B29;
-    border-color: #E38B29;
+        color: #fff;
+        background-color: #E38B29;
+        border-color: #E38B29;
     }
 
     /*TODO: Disable hover if the button is not active */
     .button:hover {
-    color: #fff;
-    background-color: rgb(165, 108, 42);
+        color: #fff;
+        background-color: rgb(165, 108, 42);
     }
-
-
-
-    /* Generics for fieldset */
-    fieldset {
-        background-color: white;
-    }
-
-/* 
-    fieldset>#selections {
-    width: 380px;
-    align-items: center;
-    align-content: center;
-    padding-left: 2%;
-    }
-
-    fieldset #controls {
-    width: 380px;
-    align-items: center;
-    align-content: center;
-    padding-left: 2%;
-    } */
-
-    .colorkeybox {
-    background-color: white;
-    padding: 10px;
-    width: 60%;
-    margin: 0 auto;
-    }
-
 
     .col1 {
-    float: left;
-    width: 45%;
-    margin-right: 5%;
+        float: left;
+        width: 45%;
+        margin-right: 5%;
     }
 
     .row {
-    padding-top: 25px;
-    padding-bottom: 50px;
-    padding-left: 5%;
-    padding-right: 5%;
+        padding-top: 25px;
+        padding-bottom: 50px;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
     /* Clear floats after image containers */
     .row::after {
-    content: "";
-    clear: both;
-    display: table;
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* A container for all the solver elements */
+    #grid-container-puzzle {
+        display: grid;
+        justify-content: space-evenly;
+        grid-template-columns: repeat(auto-fill, 380px);
+        grid-template-rows: auto;
+        max-width: 1200px;
+    }
+
+    /* Each solver element is in a div */
+    #grid-container-puzzle>div {
+        text-align: center;
+    }
+
+    /* Center the Sudoku board */
+    /* #sudokuGraphic {
+    margin-left: auto;
+    margin-right: auto;
+    } */
+
+    /* Center the control fieldset */
+    #sudokuControls {
+        text-align: center;
+        width: 380px;
+        padding-top: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        border: solid 2px black;
+        background-color: white;
     }
 
 
-/* A container for all the solver elements */
-#grid-container-puzzle {
-   display: grid;
-   justify-content: space-evenly;
-   grid-template-columns: repeat(auto-fill, 380px);
-   grid-template-rows: auto;
-   max-width: 1200px;
-}
+    :global(td) {
+        width: 38px;
+        height: 38px;
+        border: 1px solid gray;
+        text-align: center;
+    }
 
-/* Each solver element is in a div */
-#grid-container-puzzle>div {
-   text-align: center;
-}
+    :global(td:nth-child(3),th:nth-child(3)) {
+        border-right: solid 2px black;
+    }
 
-/* Center the Sudoku board */
-#sudokuGraphic {
-   margin-left: auto;
-   margin-right: auto;
-}
+    :global(td:nth-child(6),th:nth-child(6)) {
+        border-right: solid 2px black;
+    }
 
-/* Center the control fieldset */
-#sudokuControls {
-   text-align: center;
-   width: 380px;
-   padding-top: 20px;
-}
+    tr:nth-child(3) {
+        border-bottom: solid 2px black;
+    }
 
-table {
-   border-collapse: collapse;
-   border: solid 2px black;
-   background-color: white;
-}
+    tr:nth-child(6) {
+        border-bottom: solid 2px black;
+    }
 
+    /* Default Sudoku cell styling */
+    /* Ok fonts: TNR, Calibri, Courier New */
+    /* not ok fonts: Helvetica, Arial */
+    /*    Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+    :global(.sudokubox) {
+        color: gray;
+        font-size: x-large;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        width: 38px;
+        height: 38px;
+        border: 1px solid gray;
+        text-align: center;
+    }
 
-:global(td) {
-   width: 38px;
-   height: 38px;
-   border: 1px solid gray;
-   text-align: center;
-}
+    :global(.sudokubox.domain) {
+        color: black;
+        font-size: x-small;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        line-height: 0;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 0%;
+        padding-bottom: 0%;
+    }
 
-:global(td:nth-child(3),
-th:nth-child(3)) {
-   border-right: solid 2px black;
-}
+    /* styling for fixed numbers (original grid) */
+    :global(.sudokubox.fixed) {
+        color: black;
+        font-weight: bold;
+    }
 
-:global(td:nth-child(6),
-th:nth-child(6)) {
-   border-right: solid 2px black;
-}
+    .sudokubox.AC3 {
+        color: red;
+    }
 
-tr:nth-child(3) {
-   border-bottom: solid 2px black;
-}
+    .backtrack {
+        color: green;
+    }
 
-tr:nth-child(6) {
-   border-bottom: solid 2px black;
-}
+    .finalAC3 {
+        color: blue;
+    }
 
+    .backtrackPlusAC3 {
+        color: #E38B29;
+    }
 
+    /* Add a border to outline the square */
+    .sudokubox.boxborder {
+        border: solid 2px blue;
+    }
 
-/* Default Sudoku box styling */
-/* Ok fonts: TNR, Calibri, Courier New */
-/* not ok fonts: Helvetica, Arial */
-/*    Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
-:global(.sudokubox) {
-   color: gray;
-   font-size: x-large;
-   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-   width: 38px;
-   height: 38px;
-   border: 1px solid gray;
-   text-align: center;
-}
+    /* Selected for solver-type buttons */
+    .selectedsolver {
+        margin-left: 3px;
+        margin-right: 3px;
+        margin-bottom: 3px;
+        padding: 7px 9px 7px 9px;
+        border: 2px solid #FDEEDC;
+        outline: 1px solid #F1A661;
+    }
 
-:global(.sudokubox.domain) {
-   color: black;
-   font-size: x-small;
-   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-   line-height: 0;
-   margin-top: 0px;
-   margin-bottom: 0px;
-   padding-top: 0%;
-   padding-bottom: 0%;
-}
+    /* Color pallete - light to dark
+    #FDEEDC
+    #FFD8A9
+    #F1A661
+    #E38B29
+    */
 
-/* styling for fixed numbers (original grid) */
-:global(.sudokubox.fixed) {
-   color: black;
-   font-weight: bold;
-}
+    /* Control button overrides for standard button  */
+    .controlButton {
+        margin-left: 3px;
+        margin-right: 3px;
+        margin-bottom: 20px;
+        padding: 4px 4px;
+        border: 2px solid;
+        border-color: #E38B29;
+        outline: 1px solid #E38B29;
+    }
 
+    /* Selected buttons */
+    :global(.selected) {
+        padding: 4px 4px;
+        border: 2px solid #FDEEDC;
+        outline: 1px solid #F1A661;
+    }
 
-/* styling for numbers determined with AC-3 */
-.sudokubox.AC3 {
-   color: red;
-}
+    /* Styling for the slider needs to be done for every browser */
+    /* First remove the auto-styling */
+    input[type="range"] {
+        -webkit-appearance: none;
+        width: 80%;
+        height: 8px;
+        outline: none;
+        appearance: none;
+        border: none;
+        border-radius: 30px;
+    }
 
-.backtrack {
-   color: green;
-}
+    input[type="range"]::-moz-focus-outer {
+        border: 0;
+    }
 
-.finalAC3 {
-   color: blue;
-}
+    input[type="range"]:hover {
+        outline: none;
+    }
 
-.backtrackPlusAC3 {
-   color: #E38B29;
-}
+    /* Chrome */
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background-color: rgb(25, 75, 45);
+        cursor: pointer;
+        border-radius: 30px;
+        /* makes it a circle */
+        outline: none;
+    }
 
-.sudokubox.boxborder {
-   /* Add a border to outline the square */
-   border: solid 2px blue;
-}
+    /* Styling the track */
+    input[type="range"]::-webkit-slider-runnable-track {
+        background: gray;
+        border: none;
+    }
 
-/* Selected for solver-type buttons */
-.selectedsolver {
-   margin-left: 3px;
-   margin-right: 3px;
-   margin-bottom: 3px;
-   padding: 7px 9px 7px 9px;
-   border: 2px solid #FDEEDC;
-   outline: 1px solid #F1A661;
-}
+    /* Firefox */
+    input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: silver;
+        cursor: pointer;
+        border-radius: 50%;
+        /*box-shadow: 1px 1px 1px rgb(25, 75, 45), 0px 0px 1px rgb(25, 75, 45);*/
+        border: 3px solid rgb(25, 75, 45);
+    }
 
+    input[type="range"]::-moz-range-progress {
+        background-color: rgb(25, 75, 45);
+        height: 100%;
+        border-radius: 30px;
+        border: none;
+    }
 
+    input[type="range"]::-moz-range-track {
+        background-color: #ccc;
+        border-radius: 30px;
+        border: none;
+        height: 100%;
+    }
 
-/* Color pallete - light to dark
-#FDEEDC
-#FFD8A9
-#F1A661
-#E38B29
-*/
+    /* IE */
+    input[type="range"]::-ms-fill-lower {
+        background-color: rgb(25, 75, 45);
+        height: 100%;
+        border-radius: 30px;
+        border: none;
+    }
 
-/* Control button overrides for standard button  */
-.controlButton {
-   margin-left: 3px;
-   margin-right: 3px;
-   margin-bottom: 20px;
-   padding: 4px 4px;
-   border: 2px solid;
-   border-color: #E38B29;
-   outline: 1px solid #E38B29;
-}
-
-/* Selected buttons */
-:global(.selected) {
-   padding: 4px 4px;
-   border: 2px solid #FDEEDC;
-   outline: 1px solid #F1A661;
-}
-
-.howto {
-   padding-top: 25px;
-   max-width: 800px;
-   align-self: center;
-   text-align: left;
-   line-height: 1.5;
-}
-
-/* Styling for the slider needs to be done for every browser */
-/* First remove the auto-styling */
-input[type="range"] {
-   -webkit-appearance: none;
-   width: 80%;
-   height: 8px;
-   outline: none;
-   appearance: none;
-   border: none;
-   border-radius: 30px;
-}
-
-input[type="range"]::-moz-focus-outer {
-   border: 0;
-}
-
-input[type="range"]:hover {
-   outline: none;
-}
-
-/* Chrome */
-input[type="range"]::-webkit-slider-thumb {
-   appearance: none;
-   width: 18px;
-   height: 18px;
-   background-color: rgb(25, 75, 45);
-   cursor: pointer;
-   border-radius: 30px;
-   /* makes it a circle */
-   outline: none;
-}
-
-/* Styling the track */
-input[type="range"]::-webkit-slider-runnable-track {
-   background: gray;
-   border: none;
-}
-
-/* Firefox */
-input[type="range"]::-moz-range-thumb {
-   width: 18px;
-   height: 18px;
-   background: silver;
-   cursor: pointer;
-   border-radius: 50%;
-   /*box-shadow: 1px 1px 1px rgb(25, 75, 45), 0px 0px 1px rgb(25, 75, 45);*/
-   border: 3px solid rgb(25, 75, 45);
-}
-
-input[type="range"]::-moz-range-progress {
-   background-color: rgb(25, 75, 45);
-   height: 100%;
-   border-radius: 30px;
-   border: none;
-}
-
-input[type="range"]::-moz-range-track {
-   background-color: #ccc;
-   border-radius: 30px;
-   border: none;
-   height: 100%;
-}
-
-/* IE */
-input[type="range"]::-ms-fill-lower {
-   background-color: rgb(25, 75, 45);
-   height: 100%;
-   border-radius: 30px;
-   border: none;
-}
-
-input[type="range"]::-ms-fill-upper {
-   background-color: #ccc;
-   border-radius: 30px;
-   border: none;
-   height: 100%;
-}
+    input[type="range"]::-ms-fill-upper {
+        background-color: #ccc;
+        border-radius: 30px;
+        border: none;
+        height: 100%;
+    }
 
 </style>
