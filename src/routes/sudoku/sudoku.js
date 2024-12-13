@@ -191,15 +191,15 @@ export function runBacktrackSolver(puzzleType) {
 /**
  * Reset the board, but do not clear timers or alter the state of play
  */
-export function boardReset(puzzleType) {
-    let originalgrid = loadStartingValues(puzzleType);
-    makeEmptyGrid(9, 9);
-    populateBoard(originalgrid);
+// export function boardReset(puzzleType) {
+//     let originalgrid = loadStartingValues(puzzleType);
+//     makeEmptyGrid(9, 9);
+//     populateBoard(originalgrid);
 
-    // TODO: needs to be an input? And returned?
-    // global variable with the current state of the grid
-    let currentgrid = loadStartingValues(puzzleType);
-}
+//     // TODO: needs to be an input? And returned?
+//     // global variable with the current state of the grid
+//     let currentgrid = loadStartingValues(puzzleType);
+// }
 
 
 /**
@@ -394,8 +394,6 @@ function populateSquareWithDomain(irow, icol, domain, boxStyle='empty') {
     }
     domainstr += "</p>"
     
-    domain = domainstr;
-
     // Allowed values for modifiable cell properties
     let allowedBoxStyles = ['empty', 'fixed', 'backtrack', 'AC3', 'backtrackPlusAC3', 'finalAC3'];
     let allowedValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -415,17 +413,14 @@ function populateSquareWithDomain(irow, icol, domain, boxStyle='empty') {
 
     // Add the input box style class. If it is not an allowed value, use default
     box.classList.add("domain");
-
-    // Put the number in the box, unless it is zero, then keep empty
-    box.innerHTML = domain;
-
+    box.innerHTML = domainstr;
 }
 
 
 /**
  * Build the domain up from values
  * @param {number} i 
- * @param {*} domain (Probably a set)
+ * @param {*} domain (Probably a set)s
  * @returns 
  */
 export function domainBuilder(i, domain) {
@@ -837,7 +832,6 @@ export function populateSquare(irow, icol, value, boxStyle='none') {
     } 
     
     // The Sudoku cell at irow, icol
-    console.log(irow, icol, value);
     let box = document.querySelector(`.row-${irow} .col-${icol}`);
 
     // Catch if box is null
@@ -871,8 +865,8 @@ export function populateSquare(irow, icol, value, boxStyle='none') {
 
     let messages = {
         'fixed': '<p>Puzzle ready!</p><p>Choose another puzzle or choose a solver.</p>',
-        'backtrack': '<p>Solved with backtracking.</p>',
-        'backtrackPlusAC3': '<p>Solved with AC-3 during backtracking.</p>',
+        'backtrack': '<p>Solving backtracking.</p>',
+        'backtrackPlusAC3': '<p>Solving with AC-3 during backtracking.</p>',
         'finalAC3': '<p>Solving with AC-3: final solution for box.</p>',
         'AC3': '<p>Solving with AC-3.</p>',
         'none': '<p>none</p>',

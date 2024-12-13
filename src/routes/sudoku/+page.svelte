@@ -1,7 +1,6 @@
 <script lang='ts'>
     import {onMount} from 'svelte';
     import { loadStartingValues } from './sudoku.js'
-    import { boardReset} from './sudoku.js'
     import { toggle} from './sudoku.js'
     import { getDelayFromSpeed } from './sudoku.js'
     import { showdomain } from './sudoku.js'
@@ -96,17 +95,8 @@
         let ANIMATION_SPEED = speedSlider.value || 12;
         let delay = 10 ** (3 - ANIMATION_SPEED / 100);           // default delay
 
+        let table = document.getElementById("sudokuGraphic");
 
-        // // Set up the default grid after the DOM content is loaded
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     makeEmptyGrid(9, 9);
-        //     populateBoard(originalgrid);
-
-        //     // Reset the state of play and the board
-        //     playReset();
-        //     boardReset();
-        //     runBacktrackSolver(puzzleType);
-        // });
 
         /*****************************************************
             EVENT LISTENERS FOR USER GENERATED EVENTS
@@ -119,12 +109,16 @@
             // Reset the original grid and the current grid
             originalgrid = loadStartingValues(puzzleType);
             currentgrid = loadStartingValues(puzzleType);
+            grid = loadStartingValues(puzzleType);
+
+            // TODO: do we want this?
+            currentgrid = grid;
 
             // Clear the Sudoku board and populate with the values from the selected puzzle
             imove = 0;
             moves = [];
-            makeEmptyGrid(9, 9);
-            populateBoard(originalgrid);
+            // makeEmptyGrid(9, 9);
+            // populateBoard(originalgrid);
 
             // Default is Backtracking
             moves = runBacktrackSolver(puzzleType);
@@ -155,7 +149,7 @@
 
             // Reset the state of play and the board
             playReset();
-            boardReset(puzzleType);
+            // boardReset(puzzleType);
 
             // Print a message while we wait for the solver
             let state = document.querySelector(".state");
@@ -171,6 +165,9 @@
             let grid = loadStartingValues(puzzleType);
             let result = solve(grid);
             let finalgrid = grid;
+
+            // TODO Do we want this?
+            currentgrid = grid;
 
             let msg = result[0];
             moves = result[1];
@@ -248,7 +245,6 @@
         // the square before the last move occurred. So instead we have to redo all moves up to
         // that point
         rewindButton.addEventListener("click", function () {
-            console.log('rewinding');
 
             // Unlight all control buttons and highlight the button of interest
             setupForControls(currentgrid);
@@ -390,9 +386,10 @@
             let nonsolverMethod = document.getElementById("playSudokuSolver");
             nonsolverMethod.classList.remove("selectedsolver");
 
+            // TODO: commented out - no need for this
             // Reset the state of play and the board
-            playReset();
-            boardReset(puzzleType);
+            // playReset();
+            // boardReset(puzzleType);
 
             // Print a message while we wait for the solver
             let state = document.querySelector(".state");
@@ -404,6 +401,9 @@
             let grid = loadStartingValues(puzzleType);
             let result = backtracker(grid);
             let finalgrid = grid;
+
+            // TODO: do we want this?
+            currentgrid = grid;
 
             let msg = result[0];
             let moves = result[1]; // row, column, value, method
@@ -429,7 +429,12 @@
                     setTimeout(() => {
                         // Stop play, reset the grid, index to moves, and control values (all globals)
                         playReset();
-                        boardReset(puzzleType);
+                        grid = loadStartingValues(puzzleType);
+
+                        // TODO: do we want this
+                        currentgrid = grid;
+
+                        // boardReset(puzzleType);
                         resolve();
                     }, 100);
                 })
@@ -489,7 +494,6 @@
                 explanation.innerHTML = "<p></p>";
                 clearDomainFromTable(currentgrid);
             }
-
         });
 
         // Event listener for the step button, which fills in the next box only
@@ -672,7 +676,7 @@
          * @param {number} ncols 
          */
         function makeEmptyGrid(nrows, ncols) {
-            let table = document.getElementById("sudokuGraphic");
+            // let table = document.getElementById("sudokuGraphic");
             while (table.lastChild) {
                 table.removeChild(table.lastChild);
             }
@@ -681,7 +685,6 @@
                 row.classList.add(`row-${i}`);
                 table.appendChild(row);
                 for (let j = 0; j < ncols; j++) {
-                    // To let player play the game, make an input box as a child to the cell
                     let col = document.createElement("td");
                     col.classList.add(`col-${j}`);
                     col.classList.add("sudokubox");
@@ -691,10 +694,12 @@
         }
 
         try {
-            makeEmptyGrid(9, 9);
-            populateBoard(grid);
+            grid = loadStartingValues(puzzleType);
+            currentgrid = grid;
+            // makeEmptyGrid(9, 9);
+            // populateBoard(grid);
             playReset();
-            boardReset(puzzleType);
+            // boardReset(puzzleType);
             moves = runBacktrackSolver(puzzleType);
         } catch (error) {
             console.error('Error during grid setup:', error);
@@ -716,9 +721,9 @@
     <h1 class="text-4xl flex justify-center mb-2">Sudoku Solver</h1>
 
     <div class="mx-auto max-w-4xl px-6 py-4 mb-10">
-        Under construction. Some features are not yet implemented. For fully functional code please see my
-        <a href="https://github.com/prowe12/game-solvers/tree/main/sudoku">Python Sudoku Solver</a>
-        and <a href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku" >Javascript & CSS Sudoku Solver</a>.
+        Under construction. Some features are not yet implemented and bugfixes and tests are in progress. For fully functional code please see the 
+        <a class="underline" href="https://github.com/prowe12/game-solvers/tree/main/sudoku">Python Sudoku Solver</a>
+        and <a class="underline" href="https://github.com/prowe12/gamesolverhub/tree/master/sudoku">Javascript & CSS Sudoku Solver</a>.
     </div>
 
 
@@ -767,25 +772,23 @@
 
             <!-- Row 1, column 2 -->
             <div>
-                <!-- Print the Sudoku board to the screen -->
-                <!-- <div class="flex justify-center px-8 mx-8 mb-20">
-                    <div class="px-4 mx-4 max-w-3xl text-xl">
-                        <p class="mb-4">Loading...</p>
-                    </div>
-                </div> -->
-            
-
-                <table id="sudokuGraphic"    class="ml-auto mr-auto">
-                    <tbody>
-                        {#each grid as row}
-                            <tr>
-                                {#each row as cell}
-                                    <td>{cell}</td>
-                                {/each}
-                            </tr>
-                        {/each}
-                    </tbody>
-                </table>
+                {#key grid}
+                    <table id="sudokuGraphic" class="ml-auto mr-auto">
+                        <tbody>
+                            {#each grid as row, irow}
+                                <tr class="row-{irow}">
+                                    {#each row as col, icol}
+                                        {#if col>0}
+                                            <td class="sudokubox col-{icol} fix">{col}</td>
+                                        {:else}
+                                            <td class="sudokubox col-{icol}"></td>
+                                        {/if}
+                                    {/each}
+                                </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                {/key}
 
                 <div id="sudokuControls" class="pt-4">
                     <fieldset id="controls" class="bg-white">
@@ -798,17 +801,10 @@
                         <button type="button" id="playPause" class="button controlButton">Play</button>
                         <button type="button" id="forwardToEnd" class="button controlButton">Finish</button>
 
-                        <!-- Slider for controlling the speed of playback -->
-                        <!-- Speed <input class="slider anim-speed" type=range min=0 max=300 value=20></input> -->
-
-                        <!-- display: inline-block;
-                        width: 150px; -->
-
                         <label for="speed" class="inline-block w-36">Speed</label>
                         <input id="speed" class="slider anim-speed" type="range" min="0" max="300" bind:value={speed}>
-                        
                         <p class="mb-4">Current speed: {speed}</p>
-                        <!-- Button to show the domain of each square -->
+
                         <button type="button" id="showDomainButton" class="button controlButton" value="OFF">
                             Show the domain
                         </button>
@@ -1017,17 +1013,21 @@
         color: black;
         font-size: x-small;
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        line-height: 0;
+        line-height: 1;
         margin-top: 0px;
         margin-bottom: 0px;
         padding-top: 0%;
         padding-bottom: 0%;
     }
 
-    /* styling for fixed numbers (original grid) */
+    /* TODO: the class fixed causes problems, but we may not need it */
     :global(.sudokubox.fixed) {
         color: black;
         font-weight: bold;
+    }
+
+    .fix {
+        color: black;
     }
 
     .sudokubox.AC3 {

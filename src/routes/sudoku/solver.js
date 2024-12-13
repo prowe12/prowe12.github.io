@@ -240,8 +240,6 @@ export function backtrack(assignment, constraints, moves, unmoves) {
         // Keep repeating AC-3 and backtracking until we get to an impossible value
         // (empty domain). When that occurs, move onto the next trial domain value
         // The prefix to the method here is "backtrack"
-        //console.log(moves);
-        //console.log(unmoves);
         let newmoves;
         let newunmoves;
         [ac3result, newmoves, newunmoves] = arcConsistency3(tempBoard, constraints, "backtrackPlus");
@@ -367,10 +365,7 @@ export function arcConsistency3(assignment, constraints, prefix="") {
         let newInvMoves;
         [newConstraints, newInvMoves, success] = constraintChecker(assignment, newConstraints, prefix);
         inverseMoves = [].concat(inverseMoves, newInvMoves)
-        //console.log(inverseMoves);
-        //alert("");
         if (!success) { 
-            //return [-1, moves];
             return [-1, ac3moves, inverseMoves];
         }
         count ++;
@@ -447,7 +442,6 @@ export function printBoard(board) {
         for (let j=0; j<ncols; j++) {
             printrow.push(grid[i][j]);
         }
-        console.log(printrow);
     }
 }
 
